@@ -95,22 +95,26 @@ void ResidualModelPairCollisionTpl<Scalar>::calcDiff(
 
   const std::size_t nv = state_->get_nv();
 
-  // calculate the vector from the joint jointId to the collision p1, expressed
-  // in world frame
+  // calculate the jacobians of the frames of the collision pairs 
 
   Matrix6xs::J1 = pinocchio::getFrameJacobian(pin_model_, *d->pinocchio, geom_model[geom_model->collisionPairs[_pair_id].first].parentFrame,
                               pinocchio::LOCAL_WORLD_ALIGNED);
   Matrix6xs::J2 = pinocchio::getFrameJacobian(pin_model_, *d->pinocchio, geom_model[geom_model->collisionPairs[_pair_id].second].parentFrame,
                               pinocchio::LOCAL_WORLD_ALIGNED);
 
+  // getting the nearest points belonging to the collision shapes 
   Vector3s::cp1 = res.getNearestPoint1();  
   Vector3s::cp2 = res.getNearestPoint2();  
 
+  // Transport the jacobian of frame 1 into the jacobian associated to cp1
+  // Vector from frame 1 center to p1
   Vector3s::f1p1 = cp1 - *d->pinocchio.oMf[geom_model[geom_model->collisionPairs[_pair_id].first].parentFrame].translation;
   Matrix6xs::f1Mp1 = pinocchio::SE3::Identity();
   f1Mp1.translation = cp1;
   J1 = f1Mp1.actionInverse * J1
 
+  // Transport the jacobian of frame 2 into the jacobian associated to cp2
+  // Vector from frame 2 center to p2
   Vector3s::f2p2 = cp2 - *d->pinocchio.oMf[geom_model[geom_model->collisionPairs[_pair_id].second].parentFrame].translation;
   Matrix6xs::f2Mp2 = pinocchio::SE3::Identity();
   f2Mp2.translation = cp2;
