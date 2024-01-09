@@ -153,8 +153,4 @@ struct ResidualDataPairCollisionTpl : public ResidualDataAbstractTpl<_Scalar> {
 /* --- Details -------------------------------------------------------------- */
 /* --- Details -------------------------------------------------------------- */
 /* --- Details -------------------------------------------------------------- */
-#include "colmpc/residual-distance-collision.hpp"
-
 #endif  // PINOCCHIO_WITH_HPP_FCL
-
-#endif  // COLMPC_RESIDUAL_DISTANCE_COLLISION_HPP_

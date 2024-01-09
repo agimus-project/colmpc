@@ -56,13 +56,10 @@ if(BUILD_PYTHON_INTERFACE)
   set(${PY_NAME}_INSTALL_DIR ${PYTHON_SITELIB}/${PY_NAME})
 endif()
 
-add_project_dependency(ndcurves REQUIRED)
 add_project_dependency(crocoddyl REQUIRED)
-add_project_dependency(yaml-cpp REQUIRED)
 
 # Main Library
 set(${PROJECT_NAME}_HEADERS
-    include/${PROJECT_NAME}/python.hpp
     include/${PROJECT_NAME}/residual-distance-collision.hpp)
 
 set(${PROJECT_NAME}_SOURCES
@@ -72,7 +69,6 @@ add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SOURCES}
                                    ${${PROJECT_NAME}_HEADERS})
 target_include_directories(${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:include>)
 target_link_libraries(${PROJECT_NAME} PUBLIC crocoddyl::crocoddyl
-                                             ndcurves::ndcurves yaml-cpp)
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX
                                                  INSTALL_RPATH "\$ORIGIN")
 
@@ -110,9 +106,6 @@ if(BUILD_TESTING)
   find_package(Boost REQUIRED COMPONENTS unit_test_framework)
   add_subdirectory(tests)
 endif()
-
-# Benchmark
-add_subdirectory(benchmark)
 
 # Installation
 install(
