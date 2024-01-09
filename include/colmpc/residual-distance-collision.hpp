@@ -9,12 +9,22 @@
 #ifndef COLMPC_RESIDUAL_HPP_
 #define COLMPC_RESIDUAL_HPP_
 
+#include <pinocchio/algorithm/geometry.hpp>
+#include <pinocchio/algorithm/jacobian.hpp>
+#include <pinocchio/multibody/fcl.hpp>
+#include <pinocchio/algorithm/frames-derivatives.hpp>
+#include <pinocchio/algorithm/frames.hpp>
+
+#include "crocoddyl/core/utils/exception.hpp"
 #include <crocoddyl/core/residual-base.hpp>
 #include <crocoddyl/multibody/data/multibody.hpp>
 #include <crocoddyl/multibody/fwd.hpp>
 #include <crocoddyl/multibody/states/multibody.hpp>
 
-// #include "sobec/fwd.hpp"
+#include <hpp/fcl/distance.h>
+#include <hpp/fcl/collision_data.h>
+
+#include <Eigen/Core>
 
 namespace colmpc {
 using namespace crocoddyl;
@@ -31,7 +41,10 @@ struct ResidualDistanceCollisionTpl : public ResidualDataAbstractTpl<_Scalar> {
   typedef StateMultibodyTpl<Scalar> StateMultibody;
   typedef DataCollectorAbstractTpl<Scalar> DataCollectorAbstract;
   typedef pinocchio::GeometryModel GeometryModel;
-
+  typedef typename MathBase::VectorXs VectorXs;
+  typedef typename MathBase::MatrixXs MatrixXs;
+  typedef typename MathBase::Matrix6xs Matrix6xs;
+  typedef typename MathBase::Vector3s Vector3s;
   /**
    * @brief Initialize the pair collision residual model
    *
@@ -98,6 +111,7 @@ struct ResidualDistanceCollisionTpl : public ResidualDataAbstractTpl<_Scalar> {
   using Base::v_dependent_;
 
  private:
+
   typename StateMultibody::PinocchioModel
       pin_model_;  //!< Pinocchio model used for internal computations
   boost::shared_ptr<pinocchio::GeometryModel>
@@ -106,11 +120,29 @@ struct ResidualDistanceCollisionTpl : public ResidualDataAbstractTpl<_Scalar> {
       pair_id_;  //!< Index of the collision pair in geometry model
   pinocchio::JointIndex joint_id_;  //!< Index of joint on which the collision
                                     //!< body frame of the robot is attached
+  int shape1_id; //!< Geometry ID of the shape 1 
+  int shape2_id; //!< Geometry ID of the shape 2
+
+  hpp::fcl::DistanceRequest req; //!< Distance Request from hppfcl, 
+                                    //!< used to compute the distance between shapes
+  hpp::fcl::DistanceResult res; //!< Distance Result from hppfcl 
+
+  Matrix6xs::J1;
+  Matrix6xs::J2;
+  Vector3s::cp1;
+  Vector3s::cp2;
+
+  Vector3s::f1p1;
+  Matrix6xs::f1Mp1;
+
+  Vector3s::f2p2;
+  Matrix6xs::f2Mp2;
+  // const Eigen::VectorBlock<const Eigen::Ref<const VectorXs>, Eigen::Dynamic> q;
 };
  
 
 template <typename _Scalar>
-struct ResidualDataPairCollisionTpl : public ResidualDataAbstractTpl<_Scalar> {
+struct ResidualDataDistanceCollisionTpl : public ResidualDataAbstractTpl<_Scalar> {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
   typedef _Scalar Scalar;
@@ -119,11 +151,13 @@ struct ResidualDataPairCollisionTpl : public ResidualDataAbstractTpl<_Scalar> {
   typedef StateMultibodyTpl<Scalar> StateMultibody;
   typedef DataCollectorAbstractTpl<Scalar> DataCollectorAbstract;
 
+  typedef typename MathBase::VectorXs VectorXs;
+
   typedef typename MathBase::Matrix6xs Matrix6xs;
   typedef typename MathBase::Vector3s Vector3s;
 
   template <template <typename Scalar> class Model>
-  ResidualDataPairCollisionTpl(Model<Scalar> *const model,
+  ResidualDataDistanceCollisionTpl(Model<Scalar> *const model,
                                DataCollectorAbstract *const data)
       : Base(model, data),
         geometry(pinocchio::GeometryData(model->get_geometry())) {

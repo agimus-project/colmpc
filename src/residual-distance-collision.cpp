@@ -8,18 +8,7 @@
 
 #ifdef PINOCCHIO_WITH_HPP_FCL
 
-#include <pinocchio/algorithm/geometry.hpp>
-#include <pinocchio/algorithm/jacobian.hpp>
-#include <pinocchio/multibody/fcl.hpp>
-
-#include "crocoddyl/core/utils/exception.hpp"
-#include <crocoddyl/core/residual-base.hpp>
-#include <crocoddyl/multibody/data/multibody.hpp>
-#include <crocoddyl/multibody/fwd.hpp>
-#include <crocoddyl/multibody/states/multibody.hpp>
-
-#include <hpp/fcl/distance.h>
-#include <hpp/fcl/collision_data.h>
+#include <colmpc/residual-distance-collision.hpp>
 
 namespace colmpc {
 using namespace crocoddyl;
@@ -34,7 +23,7 @@ ResidualDistanceCollisionTpl<Scalar>::ResidualDistanceCollisionTpl(
       geom_model_(geom_model),
       pair_id_(pair_id),
       joint_id_(joint_id) {
-  if (static_cast<pinocchio::FrameIndex>(geom_model->collisionPairs.size()) <=
+  if (static_cast<pinocchio::FrameIndex>(geom_model_->collisionPairs.size()) <=
       pair_id) {
     throw_pretty(
         "Invalid argument: "
@@ -47,14 +36,16 @@ ResidualDistanceCollisionTpl<Scalar>::ResidualDistanceCollisionTpl(
         << "the joint index is wrong (it does not exist in the robot)");
   }
     
-    int shape1_id = geom_model->collisionPairs[_pair_id].first;
-    assert(shape1_id <= _geom_model.geometryObjects.size());
+    int shape1_id = geom_model_->collisionPairs[pair_id].first;
+    assert(shape1_id <= geom_model_.geometryObjects.size());
 
-    int shape2_id = geom_model->collisionPairs[_pair_id].second;
-    assert(shape1_id <= _geom_model.geometryObjects.size());
+    int shape2_id = geom_model_->collisionPairs[pair_id].second;
+    assert(shape1_id <= geom_model_.geometryObjects.size());
 
-    hppfcl::distanceRequest() req;
-    hppfcl::distanceResult() res; 
+    hpp::fcl::DistanceRequest req = hpp::fcl::DistanceRequest() ;
+
+    // hpp::fcl::DistanceRequest req = hpp::fcl::DistanceRequest(bool enable_nearest_points_ = true) ;
+    hpp::fcl::DistanceResult res = hpp::fcl::DistanceResult() ; 
 
 }
 
@@ -77,10 +68,10 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
                                       *geom_model_.get(), d->geometry, q);
 
 
-  data->r = hppfcl::distance(
-    geom_model.geometryObjects[shape1_id],
+  data->r = hpp::fcl::distance(
+    geom_model_->geometryObjects[shape1_id],
     d->geometry.oMg[shape1_id],
-    geom_model.geometryObjects[shape2_id],
+    geom_model_->geometryObjects[shape2_id],
     d->geometry.oMg[shape2_id],
     req,
     res
@@ -88,7 +79,7 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
 } 
 
 template <typename Scalar>
-void ResidualModelPairCollisionTpl<Scalar>::calcDiff(
+void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
     const boost::shared_ptr<ResidualDataAbstract> &data,
     const Eigen::Ref<const VectorXs> &, const Eigen::Ref<const VectorXs> &) {
   Data *d = static_cast<Data *>(data.get());
@@ -97,28 +88,28 @@ void ResidualModelPairCollisionTpl<Scalar>::calcDiff(
 
   // calculate the jacobians of the frames of the collision pairs 
 
-  Matrix6xs::J1 = pinocchio::getFrameJacobian(pin_model_, *d->pinocchio, geom_model[geom_model->collisionPairs[_pair_id].first].parentFrame,
+  Matrix6xs::J1 = pinocchio::getFrameJacobian(pin_model_, *d->pinocchio, geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first].parentFrame,
                               pinocchio::LOCAL_WORLD_ALIGNED);
-  Matrix6xs::J2 = pinocchio::getFrameJacobian(pin_model_, *d->pinocchio, geom_model[geom_model->collisionPairs[_pair_id].second].parentFrame,
+  Matrix6xs::J2 = pinocchio::getFrameJacobian(pin_model_, *d->pinocchio, geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second].parentFrame,
                               pinocchio::LOCAL_WORLD_ALIGNED);
 
   // getting the nearest points belonging to the collision shapes 
-  Vector3s::cp1 = res.getNearestPoint1();  
-  Vector3s::cp2 = res.getNearestPoint2();  
+  Vector3s::cp1 = res.nearest_points[0];  
+  Vector3s::cp2 = res.nearest_points[1];  
 
   // Transport the jacobian of frame 1 into the jacobian associated to cp1
   // Vector from frame 1 center to p1
-  Vector3s::f1p1 = cp1 - *d->pinocchio.oMf[geom_model[geom_model->collisionPairs[_pair_id].first].parentFrame].translation;
+  Vector3s::f1p1 = cp1 - *d->pinocchio.oMf[geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first].parentFrame].translation;
   Matrix6xs::f1Mp1 = pinocchio::SE3::Identity();
   f1Mp1.translation = cp1;
-  J1 = f1Mp1.actionInverse * J1
+  J1 = f1Mp1.actionInverse * J1;
 
   // Transport the jacobian of frame 2 into the jacobian associated to cp2
   // Vector from frame 2 center to p2
-  Vector3s::f2p2 = cp2 - *d->pinocchio.oMf[geom_model[geom_model->collisionPairs[_pair_id].second].parentFrame].translation;
+  Vector3s::f2p2 = cp2 - *d->pinocchio.oMf[geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second].parentFrame].translation;
   Matrix6xs::f2Mp2 = pinocchio::SE3::Identity();
   f2Mp2.translation = cp2;
-  J2 = f2Mp2.actionInverse * J2
+  J2 = f2Mp2.actionInverse * J2;
 
 
   // calculate the Jacobia
@@ -128,7 +119,7 @@ void ResidualModelPairCollisionTpl<Scalar>::calcDiff(
     }
 template <typename Scalar>
 boost::shared_ptr<ResidualDataAbstractTpl<Scalar> >
-ResidualModelPairCollisionTpl<Scalar>::createData(
+ResidualDistanceCollisionTpl<Scalar>::createData(
     DataCollectorAbstract *const data) {
   return boost::allocate_shared<Data>(Eigen::aligned_allocator<Data>(), this,
                                       data);
@@ -136,7 +127,7 @@ ResidualModelPairCollisionTpl<Scalar>::createData(
 
 template <typename Scalar>
 const pinocchio::GeometryModel &
-ResidualModelPairCollisionTpl<Scalar>::get_geometry() const {
+ResidualDistanceCollisionTpl<Scalar>::get_geometry() const {
   return *geom_model_.get();
 }
 

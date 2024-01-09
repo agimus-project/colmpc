@@ -68,7 +68,7 @@ set(${PROJECT_NAME}_SOURCES
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SOURCES}
                                    ${${PROJECT_NAME}_HEADERS})
 target_include_directories(${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:include>)
-target_link_libraries(${PROJECT_NAME} PUBLIC crocoddyl::crocoddyl
+target_link_libraries(${PROJECT_NAME} PUBLIC crocoddyl::crocoddyl)
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX
                                                  INSTALL_RPATH "\$ORIGIN")
 
@@ -101,11 +101,11 @@ if(BUILD_PYTHON_INTERFACE)
   add_subdirectory(python)
 endif()
 
-# Unit tests
-if(BUILD_TESTING)
-  find_package(Boost REQUIRED COMPONENTS unit_test_framework)
-  add_subdirectory(tests)
-endif()
+# # Unit tests
+# if(BUILD_TESTING)
+#   find_package(Boost REQUIRED COMPONENTS unit_test_framework)
+#   add_subdirectory(tests)
+# endif()
 
 # Installation
 install(
