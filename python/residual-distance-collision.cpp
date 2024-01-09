@@ -1,7 +1,9 @@
+#include <pinocchio/multibody/fwd.hpp>
+// Must be included first!
+
 #include "colmpc/residual-distance-collision.hpp"
 
 #include <eigenpy/eigenpy.hpp>
-#include <pinocchio/multibody/fwd.hpp>  // Must be included first!
 
 namespace colmpc {
 namespace python {
@@ -13,32 +15,22 @@ void exposeResidualDistanceCollision() {
 
   bp::class_<ResidualDistanceCollisionTpl<double>, bp::bases<ResidualModelAbstractTpl<double>>>(
       "ResidualDistanceCollision",
-      bp::init<boost::shared_ptr<StateMultibodyTpl<double>>, boost::shared_ptr<pinocchio::GeometryModel>,
-               pinocchio::PairIndex, pinocchio::JointIndex>(
-          bp::args("self", "state", "geom_model", "pair_id", "joint_id"),
+      bp::init<boost::shared_ptr<StateMultibodyTpl<double>>, const std::size_t, boost::shared_ptr<pinocchio::GeometryModel>,
+               const pinocchio::PairIndex, const pinocchio::JointIndex>(
+          bp::args("self", "state", "nu", "geom_model", "pair_id", "joint_id"),
           "Initialize the residual model.\n\n"
           ":param state: state of the multibody system\n"
           ":param geom_model: Pinocchio geometry model containing the collision pair\n"
           ":param pair_id: Index of the collision pair in the geometry model\n"
           ":param joint_id: Index of the nearest joint on which the collision link is attached"))
-      .def<void (ResidualDistanceCollisionTpl<double>::*)(
-          const boost::shared_ptr<ResidualDataDistanceCollisionTpl<double>>&,
-          const Eigen::Ref<const Eigen::VectorXd>&,
-          const Eigen::Ref<const Eigen::VectorXd>&)>(
+      .def(
           "calc", &ResidualDistanceCollisionTpl<double>::calc,
           bp::args("self", "data", "x", "u"),
           "Compute the residual.\n\n"
           ":param data: residual data\n"
           ":param x: time-discrete state vector\n"
           ":param u: time-discrete control input")
-      .def<void (ResidualDistanceCollisionTpl<double>::*)(
-          const boost::shared_ptr<ResidualDataDistanceCollisionTpl<double>>&,
-          const Eigen::Ref<const Eigen::VectorXd>&)>(
-          "calc", &ResidualModelAbstractTpl<double>::calc, bp::args("self", "data", "x"))
-      .def<void (ResidualDistanceCollisionTpl<double>::*)(
-          const boost::shared_ptr<ResidualDataDistanceCollisionTpl<double>>&,
-          const Eigen::Ref<const Eigen::VectorXd>&,
-          const Eigen::Ref<const Eigen::VectorXd>&)>(
+      .def(
           "calcDiff", &ResidualDistanceCollisionTpl<double>::calcDiff,
           bp::args("self", "data", "x", "u"),
           "Compute the Jacobians of the residual.\n\n"
@@ -46,11 +38,6 @@ void exposeResidualDistanceCollision() {
           ":param data: action data\n"
           ":param x: time-discrete state vector\n"
           ":param u: time-discrete control input\n")
-      .def<void (ResidualDistanceCollisionTpl<double>::*)(
-          const boost::shared_ptr<ResidualDataDistanceCollisionTpl<double>>&,
-          const Eigen::Ref<const Eigen::VectorXd>&)>(
-          "calcDiff", &ResidualModelAbstractTpl<double>::calcDiff,
-          bp::args("self", "data", "x"))
       .def("createData", &ResidualDistanceCollisionTpl<double>::createData,
            bp::with_custodian_and_ward_postcall<0, 2>(),
            bp::args("self", "data"),
