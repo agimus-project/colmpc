@@ -22,7 +22,7 @@ void exposeResidualDistanceCollision() {
           ":param pair_id: Index of the collision pair in the geometry model\n"
           ":param joint_id: Index of the nearest joint on which the collision link is attached"))
       .def<void (ResidualDistanceCollisionTpl<double>::*)(
-          const boost::shared_ptr<ResidualDataPairCollisionTpl<double>>&,
+          const boost::shared_ptr<ResidualDataDistanceCollisionTpl<double>>&,
           const Eigen::Ref<const Eigen::VectorXd>&,
           const Eigen::Ref<const Eigen::VectorXd>&)>(
           "calc", &ResidualDistanceCollisionTpl<double>::calc,
@@ -32,11 +32,11 @@ void exposeResidualDistanceCollision() {
           ":param x: time-discrete state vector\n"
           ":param u: time-discrete control input")
       .def<void (ResidualDistanceCollisionTpl<double>::*)(
-          const boost::shared_ptr<ResidualDataPairCollisionTpl<double>>&,
+          const boost::shared_ptr<ResidualDataDistanceCollisionTpl<double>>&,
           const Eigen::Ref<const Eigen::VectorXd>&)>(
           "calc", &ResidualModelAbstractTpl<double>::calc, bp::args("self", "data", "x"))
       .def<void (ResidualDistanceCollisionTpl<double>::*)(
-          const boost::shared_ptr<ResidualDataPairCollisionTpl<double>>&,
+          const boost::shared_ptr<ResidualDataDistanceCollisionTpl<double>>&,
           const Eigen::Ref<const Eigen::VectorXd>&,
           const Eigen::Ref<const Eigen::VectorXd>&)>(
           "calcDiff", &ResidualDistanceCollisionTpl<double>::calcDiff,
@@ -47,7 +47,7 @@ void exposeResidualDistanceCollision() {
           ":param x: time-discrete state vector\n"
           ":param u: time-discrete control input\n")
       .def<void (ResidualDistanceCollisionTpl<double>::*)(
-          const boost::shared_ptr<ResidualDataPairCollisionTpl<double>>&,
+          const boost::shared_ptr<ResidualDataDistanceCollisionTpl<double>>&,
           const Eigen::Ref<const Eigen::VectorXd>&)>(
           "calcDiff", &ResidualModelAbstractTpl<double>::calcDiff,
           bp::args("self", "data", "x"))
