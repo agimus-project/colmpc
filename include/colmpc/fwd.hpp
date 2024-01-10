@@ -11,7 +11,6 @@ typedef ResidualDistanceCollisionTpl<double> ResidualDistanceCollision;
 template <typename Scalar>
 class ResidualDataDistanceCollisionTpl;
 typedef ResidualDataDistanceCollisionTpl<double> ResidualDataDistanceCollision;
-}
-
+}  // namespace colmpc
 
 #endif

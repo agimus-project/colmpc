@@ -38,7 +38,7 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
   typedef _Scalar Scalar;
   typedef MathBaseTpl<Scalar> MathBase;
   typedef ResidualModelAbstractTpl<Scalar> Base;
-  typedef ResidualDataPairCollisionTpl<Scalar> Data;
+  typedef ResidualDataDistanceCollisionTpl<Scalar> Data;
   typedef ResidualDataAbstractTpl<Scalar> ResidualDataAbstract;
   typedef StateMultibodyTpl<Scalar> StateMultibody;
   typedef DataCollectorAbstractTpl<Scalar> DataCollectorAbstract;
@@ -135,10 +135,10 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
   Vector3s cp2;
 
   Vector3s f1p1;
-  Matrix6xs f1Mp1;
+  pinocchio::SE3 f1Mp1;
 
   Vector3s f2p2;
-  Matrix6xs f2Mp2;
+  pinocchio::SE3 f2Mp2;
   // const Eigen::VectorBlock<const Eigen::Ref<const VectorXs>, Eigen::Dynamic>
   // q;
 };
