@@ -30,7 +30,7 @@ namespace colmpc {
 using namespace crocoddyl;
 
 template <typename _Scalar>
-struct ResidualDistanceCollisionTpl : public ResidualDataAbstractTpl<_Scalar> {
+struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
   typedef _Scalar Scalar;
@@ -120,26 +120,26 @@ struct ResidualDistanceCollisionTpl : public ResidualDataAbstractTpl<_Scalar> {
       pair_id_;  //!< Index of the collision pair in geometry model
   pinocchio::JointIndex joint_id_;  //!< Index of joint on which the collision
                                     //!< body frame of the robot is attached
-  int shape1_id; //!< Geometry ID of the shape 1 
+  int shape1_id; //!< Geometry ID of the shape 1
   int shape2_id; //!< Geometry ID of the shape 2
 
-  hpp::fcl::DistanceRequest req; //!< Distance Request from hppfcl, 
+  hpp::fcl::DistanceRequest req; //!< Distance Request from hppfcl,
                                     //!< used to compute the distance between shapes
-  hpp::fcl::DistanceResult res; //!< Distance Result from hppfcl 
+  hpp::fcl::DistanceResult res; //!< Distance Result from hppfcl
 
-  Matrix6xs::J1;
-  Matrix6xs::J2;
-  Vector3s::cp1;
-  Vector3s::cp2;
+  Matrix6xs J1;
+  Matrix6xs J2;
+  Vector3s cp1;
+  Vector3s cp2;
 
-  Vector3s::f1p1;
-  Matrix6xs::f1Mp1;
+  Vector3s f1p1;
+  Matrix6xs f1Mp1;
 
-  Vector3s::f2p2;
-  Matrix6xs::f2Mp2;
+  Vector3s f2p2;
+  Matrix6xs f2Mp2;
   // const Eigen::VectorBlock<const Eigen::Ref<const VectorXs>, Eigen::Dynamic> q;
 };
- 
+
 
 template <typename _Scalar>
 struct ResidualDataDistanceCollisionTpl : public ResidualDataAbstractTpl<_Scalar> {
