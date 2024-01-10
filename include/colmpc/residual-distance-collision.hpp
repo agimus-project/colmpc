@@ -188,4 +188,5 @@ struct ResidualDataDistanceCollisionTpl
 /* --- Details -------------------------------------------------------------- */
 /* --- Details -------------------------------------------------------------- */
 /* --- Details -------------------------------------------------------------- */
+#include "colmpc/residual-distance-collision.hxx"
 #endif  // PINOCCHIO_WITH_HPP_FCL

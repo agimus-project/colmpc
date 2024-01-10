@@ -6,6 +6,8 @@
 // All rights reserved.
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef COLMPC_RESIDUAL_HXX_
+#define COLMPC_RESIDUAL_HXX_
 #ifdef PINOCCHIO_WITH_HPP_FCL
 
 #include "colmpc/residual-distance-collision.hpp"
@@ -146,4 +148,5 @@ ResidualDistanceCollisionTpl<Scalar>::get_geometry() const {
 
 }  // namespace colmpc
 
+#endif  // PINOCCHIO_WITH_HPP_FCL
 #endif  // PINOCCHIO_WITH_HPP_FCL

@@ -58,12 +58,11 @@ add_project_dependency(crocoddyl REQUIRED)
 # Main Library
 set(${PROJECT_NAME}_HEADERS
     include/${PROJECT_NAME}/fwd.hpp
-    include/${PROJECT_NAME}/residual-distance-collision.hpp)
+    include/${PROJECT_NAME}/residual-distance-collision.hpp
+    include/${PROJECT_NAME}/residual-distance-collision.hxx)
 
-set(${PROJECT_NAME}_SOURCES src/residual-distance-collision.cpp)
-
-add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SOURCES}
-                                   ${${PROJECT_NAME}_HEADERS})
+add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_HEADERS})
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:include>)
 target_link_libraries(${PROJECT_NAME} PUBLIC crocoddyl::crocoddyl)
 if(UNIX)
