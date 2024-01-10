@@ -9,8 +9,8 @@
 #ifndef COLMPC_RESIDUAL_HPP_
 #define COLMPC_RESIDUAL_HPP_
 
-#include <pinocchio/fwd.hpp>
-// include pinocchio first
+#include "colmpc/fwd.hpp"
+// include fwd first
 
 #include <hpp/fcl/collision_data.h>
 #include <hpp/fcl/distance.h>

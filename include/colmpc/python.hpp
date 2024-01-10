@@ -1,8 +1,8 @@
 #ifndef __colmpc_python__
 #define __colmpc_python__
 
-#include <pinocchio/fwd.hpp>
-// include pinocchio first
+#include "colmpc/fwd.hpp"
+// include fwd first
 #include <eigenpy/eigenpy.hpp>
 
 namespace colmpc {

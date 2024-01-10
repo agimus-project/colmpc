@@ -57,6 +57,7 @@ add_project_dependency(crocoddyl REQUIRED)
 
 # Main Library
 set(${PROJECT_NAME}_HEADERS
+    include/${PROJECT_NAME}/fwd.hpp
     include/${PROJECT_NAME}/residual-distance-collision.hpp)
 
 set(${PROJECT_NAME}_SOURCES src/residual-distance-collision.cpp)
