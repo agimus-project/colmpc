@@ -59,17 +59,16 @@ add_project_dependency(crocoddyl REQUIRED)
 set(${PROJECT_NAME}_HEADERS
     include/${PROJECT_NAME}/residual-distance-collision.hpp)
 
-set(${PROJECT_NAME}_SOURCES
-    src/residual-distance-collision.cpp)
+set(${PROJECT_NAME}_SOURCES src/residual-distance-collision.cpp)
 
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SOURCES}
                                    ${${PROJECT_NAME}_HEADERS})
 target_include_directories(${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:include>)
 target_link_libraries(${PROJECT_NAME} PUBLIC crocoddyl::crocoddyl)
 if(UNIX)
-    get_relative_rpath(${CMAKE_INSTALL_LIBDIR} ${PROJECT_NAME}_INSTALL_RPATH)
-    set_target_properties(${PROJECT_NAME} PROPERTIES INSTALL_RPATH
-        "${${PROJECT_NAME}_INSTALL_RPATH}")
+  get_relative_rpath(${CMAKE_INSTALL_LIBDIR} ${PROJECT_NAME}_INSTALL_RPATH)
+  set_target_properties(
+    ${PROJECT_NAME} PROPERTIES INSTALL_RPATH "${${PROJECT_NAME}_INSTALL_RPATH}")
 endif()
 
 if(SUFFIX_SO_VERSION)
@@ -81,11 +80,8 @@ if(BUILD_PYTHON_INTERFACE)
   add_subdirectory(python)
 endif()
 
-# # Unit tests
-# if(BUILD_TESTING)
-#   find_package(Boost REQUIRED COMPONENTS unit_test_framework)
-#   add_subdirectory(tests)
-# endif()
+# # Unit tests if(BUILD_TESTING) find_package(Boost REQUIRED COMPONENTS
+# unit_test_framework) add_subdirectory(tests) endif()
 
 # Installation
 install(

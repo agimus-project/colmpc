@@ -1,14 +1,11 @@
-set(${PY_NAME}_SOURCES
-    main.cpp
-    residual-distance-collision.cpp
-)
+set(${PY_NAME}_SOURCES main.cpp residual-distance-collision.cpp)
 
 add_library(${PY_NAME}_pywrap SHARED ${${PY_NAME}_SOURCES})
 target_link_libraries(${PY_NAME}_pywrap PUBLIC ${PROJECT_NAME} eigenpy::eigenpy)
 set_target_properties(
   ${PY_NAME}_pywrap
   PROPERTIES PREFIX ""
-  OUTPUT_NAME ${PY_NAME}
+             OUTPUT_NAME ${PY_NAME}
              SUFFIX ${PYTHON_EXT_SUFFIX})
 if(UNIX)
   get_relative_rpath(${${PY_NAME}_INSTALL_DIR} ${PY_NAME}_INSTALL_RPATH)

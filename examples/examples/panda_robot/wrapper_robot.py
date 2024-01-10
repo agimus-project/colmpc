@@ -112,26 +112,26 @@ class RobotWrapper:
             geometric_models_reduced[1],
         )
 
-        # Modifying the collision model to add the capsules 
+        # Modifying the collision model to add the capsules
         rdata = self._model_reduced.createData()
         cdata = self._collision_model_reduced.createData()
         q0 = pin.neutral(self._model_reduced)
-        
+
         # Updating the models
         pin.framesForwardKinematics(self._model_reduced, rdata, q0)
         pin.updateGeometryPlacements(
             self._model_reduced, rdata, self._collision_model_reduced, cdata, q0
         )
-                
+
         # Adding the capsules to the collision model
-        
+
         collision_model_reduced_copy = self._collision_model_reduced.copy()
 
         # Replacing the cylinders by capsules
         if self._capsule:
             list_names_capsules = []
             for i, geometry_object in enumerate(collision_model_reduced_copy.geometryObjects):
-                
+
                 if isinstance(geometry_object.geometry, hppfcl.Sphere):
                     self._collision_model_reduced.removeGeometryObject(geometry_object.name)
                 # Only selecting the cylinders
@@ -170,39 +170,39 @@ class RobotWrapper:
                     geometry_object.disableCollision = True
             except:
                 pass
-            # Getting rid of the cylinders in cmodel            
+            # Getting rid of the cylinders in cmodel
             if isinstance(geometry_object.geometry, hppfcl.Cylinder):
                 self._collision_model_reduced.removeGeometryObject(geometry_object.name)
-        
-        
-        # For some reasons, the following cylinders aren't removed with the loop from before.                 
+
+
+        # For some reasons, the following cylinders aren't removed with the loop from before.
         # self._collision_model_reduced.removeGeometryObject("panda2_link0_sc_0")
         # self._collision_model_reduced.removeGeometryObject('panda2_link7_sc_3')
         # self._collision_model_reduced.removeGeometryObject('panda2_link5_sc_0')
         # self._collision_model_reduced.removeGeometryObject('panda2_link4_sc_0')
-        # self._collision_model_reduced.removeGeometryObject('panda2_link2_sc_0')             
-        
+        # self._collision_model_reduced.removeGeometryObject('panda2_link2_sc_0')
+
         if self._auto_col:
             self._collision_model_reduced.addAllCollisionPairs()
-            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_link2_capsule37"),self._collision_model_reduced.getGeometryId("panda2_link6_capsule22") ))        
-            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_link4_capsule31"),self._collision_model_reduced.getGeometryId("panda2_link6_capsule22") ))        
-            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_link4_capsule31"),self._collision_model_reduced.getGeometryId("panda2_link5_capsule28") ))        
-            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_link4_capsule31"),self._collision_model_reduced.getGeometryId("panda2_link5_capsule25") ))        
-            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_link4_capsule31"),self._collision_model_reduced.getGeometryId("panda2_link3_capsule34") ))        
-            self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_leftfinger_0"),self._collision_model_reduced.getGeometryId("panda2_link6_capsule22") )) 
-            self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_leftfinger_0"),self._collision_model_reduced.getGeometryId("panda2_link6_capsule22") )) 
-            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_leftfinger_0"),self._collision_model_reduced.getGeometryId("support_link_0") )) 
-            
-            
+            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_link2_capsule37"),self._collision_model_reduced.getGeometryId("panda2_link6_capsule22") ))
+            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_link4_capsule31"),self._collision_model_reduced.getGeometryId("panda2_link6_capsule22") ))
+            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_link4_capsule31"),self._collision_model_reduced.getGeometryId("panda2_link5_capsule28") ))
+            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_link4_capsule31"),self._collision_model_reduced.getGeometryId("panda2_link5_capsule25") ))
+            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_link4_capsule31"),self._collision_model_reduced.getGeometryId("panda2_link3_capsule34") ))
+            self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_leftfinger_0"),self._collision_model_reduced.getGeometryId("panda2_link6_capsule22") ))
+            self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_leftfinger_0"),self._collision_model_reduced.getGeometryId("panda2_link6_capsule22") ))
+            # self._collision_model_reduced.addCollisionPair(pin.CollisionPair(self._collision_model_reduced.getGeometryId("panda2_leftfinger_0"),self._collision_model_reduced.getGeometryId("support_link_0") ))
+
+
         pin.removeCollisionPairs(self._model_reduced, self._collision_model_reduced, self._srdf_model_path)
-            
+
         return (
             self._model_reduced,
             self._collision_model_reduced,
             self._visual_model_reduced,
         )
 
-        
+
 
 
 if __name__ == "__main__":
@@ -230,7 +230,7 @@ if __name__ == "__main__":
     vis = MeshcatVis.visualize(robot_model=rmodel, robot_visual_model=vmodel, robot_collision_model=cmodel)
     vis[0].display(pin.neutral(rmodel))
     pin.computeCollisions(rmodel, rdata, cmodel, cdata, pin.neutral(rmodel), False)
-    for k in range(len(cmodel.collisionPairs)): 
+    for k in range(len(cmodel.collisionPairs)):
         cr = cdata.collisionResults[k]
         cp = cmodel.collisionPairs[k]
         print("collision pair:",cp.first,",",cp.second,"- collision:","Yes" if cr.isCollision() else "No")

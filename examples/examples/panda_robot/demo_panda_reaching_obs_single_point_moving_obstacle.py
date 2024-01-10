@@ -145,7 +145,7 @@ for k, theta in enumerate(theta_list):
     # Solving the problem
     ddp.solve(XS_init, US_init)
     results[str(theta)] = ddp.xs.tolist()
-    
+
     XS_init = ddp.xs.tolist()
     US_init = ddp.us.tolist()
 

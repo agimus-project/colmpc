@@ -30,7 +30,7 @@ pairs_to_avoid = (
     ("panda2_link0_sc", "panda2_link2_sc"),
     ("panda2_link1_sc","panda2_link2_sc"),
     ("panda2_link1_sc","panda2_link3_sc"),
-    ("panda2_link2_sc","panda2_link3_sc"), 
+    ("panda2_link2_sc","panda2_link3_sc"),
     ("panda2_link3_sc","panda2_link4_sc"),
     ("panda2_link3_sc","panda2_link5_sc"),
     ("panda2_link4_sc","panda2_link5_sc"),
@@ -42,9 +42,9 @@ pairs_to_avoid = (
     ("panda2_link6_sc","panda2_leftfinger"),
     ("panda2_link7_sc","panda2_leftfinger"),
     ("panda2_hand_sc","panda2_leftfinger"),
-    ("panda2_link6_sc","panda2_rightfinger"), 
+    ("panda2_link6_sc","panda2_rightfinger"),
     ("panda2_link7_sc","panda2_rightfinger"),
-    ("panda2_hand_sc","panda2_rightfinger"), 
+    ("panda2_hand_sc","panda2_rightfinger"),
     ("panda2_leftfinger","panda2_rightfinger"),
 )
 
@@ -405,7 +405,7 @@ def check_limits(rmodel : pin.Model,rdata : pin.Data,  Q : np.ndarray, CHECK_POS
         _type_: _description_
     """
     # Going through all the configurations in Q
-    
+
     pos_respect = True
     vel_respect = True
     accel_respect = True
@@ -435,10 +435,10 @@ def check_limits(rmodel : pin.Model,rdata : pin.Data,  Q : np.ndarray, CHECK_POS
                 if abs(vel) > vel_max:
                     vel_respect = False
                     vel_defect.append(vel)
-                    k_vel_defect.append(k * rmodel.nq + ii)  
+                    k_vel_defect.append(k * rmodel.nq + ii)
         if CHECK_ACCEL:
             if k == int(len(Q)/rmodel.nq) -2:
-                break       
+                break
             q_k_next = get_q_iter_from_Q(Q, k+1, rmodel.nq)
             q_k_next_next = get_q_iter_from_Q(Q, k+2, rmodel.nq)
             vel_k = q_k_next - q_k
@@ -451,10 +451,10 @@ def check_limits(rmodel : pin.Model,rdata : pin.Data,  Q : np.ndarray, CHECK_POS
                 if abs(a) > abs(a_max):
                     accel_respect = True
                     accel_defect.append(vel)
-                    k_accel_deffect.append(k * rmodel.nq + ii)  
+                    k_accel_deffect.append(k * rmodel.nq + ii)
 
-    return "Respect the limits of positions ?",pos_respect, "values of the defect :", pos_defect, "positions of the defect", k_pos_defect,"Respect the limits of speed ?", vel_respect,"values of the defect :", vel_defect,"positions of the defect", k_vel_defect,"Respect the limits of accel ?", accel_respect,"values of the defect :", accel_defect,"positions of the defect", accel_defect 
-                
+    return "Respect the limits of positions ?",pos_respect, "values of the defect :", pos_defect, "positions of the defect", k_pos_defect,"Respect the limits of speed ?", vel_respect,"values of the defect :", vel_defect,"positions of the defect", k_vel_defect,"Respect the limits of accel ?", accel_respect,"values of the defect :", accel_defect,"positions of the defect", accel_defect
+
 # def check_auto_collisions(rmodel : pin.Model, rdata : pin.Data, cmodel : pin.GeometryModel, cdata : pin.Data):
 #     """Check whether the model is in auto-collision.
 
@@ -469,7 +469,7 @@ def check_limits(rmodel : pin.Model,rdata : pin.Data,  Q : np.ndarray, CHECK_POS
 #         ("panda2_link0_sc", "panda2_link2_sc"),
 #         ("panda2_link1_sc","panda2_link2_sc"),
 #         ("panda2_link1_sc","panda2_link3_sc"),
-#         ("panda2_link2_sc","panda2_link3_sc"), 
+#         ("panda2_link2_sc","panda2_link3_sc"),
 #         ("panda2_link3_sc","panda2_link4_sc"),
 #         ("panda2_link3_sc","panda2_link5_sc"),
 #         ("panda2_link4_sc","panda2_link5_sc"),
@@ -481,27 +481,27 @@ def check_limits(rmodel : pin.Model,rdata : pin.Data,  Q : np.ndarray, CHECK_POS
 #         ("panda2_link6_sc","panda2_leftfinger"),
 #         ("panda2_link7_sc","panda2_leftfinger"),
 #         ("panda2_hand_sc","panda2_leftfinger"),
-#         ("panda2_link6_sc","panda2_rightfinger"), 
+#         ("panda2_link6_sc","panda2_rightfinger"),
 #         ("panda2_link7_sc","panda2_rightfinger"),
-#         ("panda2_hand_sc","panda2_rightfinger"), 
+#         ("panda2_hand_sc","panda2_rightfinger"),
 #         ("panda2_leftfinger","panda2_rightfinger"),
 #     )
 #     oMg_list = []
 #     geometry_objects_name = []
-#     geometry_objects_geom = [] 
+#     geometry_objects_geom = []
 #     collision_pairs = []
 #     # Distance request for pydiffcol
 #     req, req_diff = select_strategy("first_order_gaussian")
 #     res = pydiffcol.DistanceResult()
 #     res_diff = pydiffcol.DerivativeResult()
-        
+
 #     for oMg, geometry_objects in zip(cdata.oMg, cmodel.geometryObjects):
 #         # Only selecting the cylinders
 #         if isinstance(geometry_objects.geometry, hppfcl.Cylinder):
 #             oMg_list.append(oMg)
 #             geometry_objects_name.append(geometry_objects.name[:-2])
 #             geometry_objects_geom.append(geometry_objects.geometry)
-    
+
 #     # Going through all the geometry objects of the collision model
 #     for oMg, geometry_objects in zip(cdata.oMg, cmodel.geometryObjects):
 #         # Only selecting the cylinders
@@ -513,14 +513,14 @@ def check_limits(rmodel : pin.Model,rdata : pin.Data,  Q : np.ndarray, CHECK_POS
 #                         oMg_ref,
 #                         hppfcl.Capsule(geometry_objects.geometry.radius,geometry_objects.geometry.halfLength),
 #                         oMg,
-#                         req, 
+#                         req,
 #                         res
 #                     )
 #                     if dist < 0:
 #                         collision_pairs.append((geometry_objects.name, geometry_objects_name_ref))
-    
+
 #     return collision_pairs
-    
+
 def rgbToHex(color):
     if len(color) == 4:
         c = color[:3]
@@ -537,7 +537,7 @@ def meshcat_material(r, g, b, a):
     material.color = int(r * 255) * 256**2 + int(g * 255) * 256 + int(b * 255)
     material.opacity = a
     return material
-    
+
 
 # Building the meshcat materials
 red = meshcat_material(RED[0], RED[1], RED[2], RED[3])
@@ -545,7 +545,7 @@ green = meshcat_material(GREEN[0], GREEN[1], GREEN[2], GREEN[3])
 yellow = meshcat_material(YELLOW[0], YELLOW[1], YELLOW[2], YELLOW[3])
 blue = meshcat_material(BLUE[0], BLUE[1], BLUE[2], BLUE[3])
 
-    
+
 if __name__ == "__main__":
     import example_robot_data as robex
 

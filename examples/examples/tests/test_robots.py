@@ -395,4 +395,3 @@ if __name__ == "__main__":
         # Making sure the shapes are spheres
         assert isinstance(shape1.geometry, hppfcl.Sphere)
         assert isinstance(shape2.geometry, hppfcl.Sphere)
-

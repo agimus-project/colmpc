@@ -213,7 +213,7 @@ def dist(q):
 
     shape1_placement = cdata.oMg[shape1_id]
     shape2_placement = cdata.oMg[shape2_id]
-    
+
     # try:
     #     distance = hppfcl.distance(
     #         shape1.geometry,
@@ -306,7 +306,7 @@ def derivative_distance_sphere_sphere_florent():
 def derivative_distance_sphere_sphere_analytics():
     """
     Distance derivatives found with the analytical demonstration of the derivative of distance with regards to the translation of the closest point of the shape 1.
-    
+
     Returns:
         distance derivative: distance derivative between shape 1 & shape 2
     """
@@ -409,9 +409,9 @@ if __name__ == "__main__":
     # Hppfcl distance result & request
     req = hppfcl.DistanceRequest()
     res = hppfcl.DistanceResult()
-    
+
     ### DISTANCE & DERIVATIVES
-    
+
         # Computing the distance between shape 1 & shape 2 at q0 & comparing with the distance anatically computed
     print(f"dist(q) : {dist(q):.6f}")
     dist2 = np.linalg.norm(shape1_placement.translation - shape2_placement.translation)
@@ -439,4 +439,3 @@ if __name__ == "__main__":
         assert isinstance(shape2.geometry, hppfcl.Sphere)
 
     test()
-

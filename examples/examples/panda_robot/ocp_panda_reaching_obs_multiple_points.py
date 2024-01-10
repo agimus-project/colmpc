@@ -74,10 +74,10 @@ class OCPPandaReachingColWithMultipleCol:
 
         # Making sure that the frame exists
         assert self._endeff_frame <= len(self._rmodel.frames)
-        
+
         # Collision pair id
         k = 0
-        
+
         # Making sure that the pair of collision exists
         assert k <= len(self._cmodel.collisionPairs)
 
@@ -152,7 +152,7 @@ class OCPPandaReachingColWithMultipleCol:
             self._state, self._actuation.nu
         )
             # Creating the residual
-            
+
         for col_idx in range(len(self._cmodel.collisionPairs)):
             obstacleDistanceResidual = ResidualCollision(
                 self._state, self._cmodel, self._cdata, col_idx
@@ -171,7 +171,7 @@ class OCPPandaReachingColWithMultipleCol:
             self._terminalConstraintModelManager.addConstraint("col_term_" + str(col_idx), constraint)
 
         # Bounds costs
-        
+
                 # Cost for self-collision
         maxfloat = sys.float_info.max
         xlb = np.concatenate(
@@ -198,12 +198,12 @@ class OCPPandaReachingColWithMultipleCol:
         self._runningCostModel.addCost(
             "gripperPoseRM", goalTrackingCost, self._WEIGHT_GRIPPER_POSE
         )
-        # self._runningCostModel.addCost("limitCostRM", limitCost, self._WEIGHT_LIMIT)    
+        # self._runningCostModel.addCost("limitCostRM", limitCost, self._WEIGHT_LIMIT)
         self._terminalCostModel.addCost("stateReg", xRegCost, self._WEIGHT_xREG)
         self._terminalCostModel.addCost(
             "gripperPose", goalTrackingCost, self._WEIGHT_GRIPPER_POSE
         )
-        # self._terminalCostModel.addCost("limitCost", limitCost, self._WEIGHT_LIMIT)    
+        # self._terminalCostModel.addCost("limitCost", limitCost, self._WEIGHT_LIMIT)
 
         # Create Differential Action Model (DAM), i.e. continuous dynamics and cost functions
         self._running_DAM = crocoddyl.DifferentialActionModelFreeFwdDynamics(
@@ -244,16 +244,16 @@ class OCPPandaReachingColWithMultipleCol:
 
         # Define mim solver with inequalities constraints
         ddp = mim_solvers.SolverCSQP(problem)
-        
+
         # Merit function
         ddp.use_filter_line_search = False
-        
+
         # Parameters of the solver
         ddp.termination_tolerance = 1e-3
         ddp.max_qp_iters = 500
         ddp.eps_abs = 1e-6
         ddp.eps_rel = 0
-        
+
         ddp.with_callbacks = True
 
         return ddp

@@ -72,10 +72,10 @@ class OCPPandaReachingColWithSingleCol:
 
         # Making sure that the frame exists
         assert self._endeff_frame <= len(self._rmodel.frames)
-        
+
         # Collision pair id
         k = 0
-        
+
         # Making sure that the pair of collision exists
         assert k <= len(self._cmodel.collisionPairs)
 
@@ -216,16 +216,16 @@ class OCPPandaReachingColWithSingleCol:
 
         # Define mim solver with inequalities constraints
         ddp = mim_solvers.SolverCSQP(problem)
-        
+
         # Merit function
         ddp.use_filter_line_search = False
-        
+
         # Parameters of the solver
         ddp.termination_tolerance = 1e-3
         ddp.max_qp_iters = 1000
         ddp.eps_abs = 1e-6
         ddp.eps_rel = 0
-        
+
         ddp.with_callbacks = True
 
         return ddp

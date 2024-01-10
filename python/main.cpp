@@ -9,5 +9,4 @@ BOOST_PYTHON_MODULE(sobec_pywrap) {
   eigenpy::enableEigenPy();
   eigenpy::enableEigenPySpecific<Eigen::VectorXi>();
   colmpc::python::exposeResidualDistanceCollision();
-
 }
