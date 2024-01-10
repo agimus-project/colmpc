@@ -56,23 +56,26 @@ endif()
 add_project_dependency(crocoddyl REQUIRED)
 
 # Main Library
-set(${PROJECT_NAME}_HEADERS
+set(${PROJECT_NAME}_cpp_HEADERS
     include/${PROJECT_NAME}/fwd.hpp
     include/${PROJECT_NAME}/residual-distance-collision.hpp
     include/${PROJECT_NAME}/residual-distance-collision.hxx)
 
-add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_HEADERS})
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-target_include_directories(${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:include>)
-target_link_libraries(${PROJECT_NAME} PUBLIC crocoddyl::crocoddyl)
+add_library(${PROJECT_NAME}_cpp SHARED ${${PROJECT_NAME}_cpp_HEADERS})
+set_target_properties(${PROJECT_NAME}_cpp PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories(${PROJECT_NAME}_cpp
+                           PUBLIC $<INSTALL_INTERFACE:include>)
+target_link_libraries(${PROJECT_NAME}_cpp PUBLIC crocoddyl::crocoddyl)
 if(UNIX)
-  get_relative_rpath(${CMAKE_INSTALL_LIBDIR} ${PROJECT_NAME}_INSTALL_RPATH)
+  get_relative_rpath(${CMAKE_INSTALL_LIBDIR} ${PROJECT_NAME}_cpp_INSTALL_RPATH)
   set_target_properties(
-    ${PROJECT_NAME} PROPERTIES INSTALL_RPATH "${${PROJECT_NAME}_INSTALL_RPATH}")
+    ${PROJECT_NAME}_cpp PROPERTIES INSTALL_RPATH
+                                   "${${PROJECT_NAME}_cpp_INSTALL_RPATH}")
 endif()
 
 if(SUFFIX_SO_VERSION)
-  set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${PROJECT_VERSION})
+  set_target_properties(${PROJECT_NAME}_cpp PROPERTIES SOVERSION
+                                                       ${PROJECT_VERSION})
 endif()
 
 # Python Bindings
@@ -85,7 +88,7 @@ endif()
 
 # Installation
 install(
-  TARGETS ${PROJECT_NAME}
+  TARGETS ${PROJECT_NAME}_cpp
   EXPORT ${TARGETS_EXPORT_NAME}
   DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(FILES package.xml DESTINATION share/${PROJECT_NAME})

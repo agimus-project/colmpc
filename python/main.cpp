@@ -1,6 +1,6 @@
 #include "colmpc/python.hpp"
 
-BOOST_PYTHON_MODULE(sobec_pywrap) {
+BOOST_PYTHON_MODULE(colmpc) {
   namespace bp = boost::python;
 
   bp::import("pinocchio");
