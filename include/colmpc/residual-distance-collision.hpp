@@ -9,6 +9,9 @@
 #ifndef COLMPC_RESIDUAL_HPP_
 #define COLMPC_RESIDUAL_HPP_
 
+#include <pinocchio/fwd.hpp>
+// include pinocchio first
+
 #include <pinocchio/algorithm/geometry.hpp>
 #include <pinocchio/algorithm/jacobian.hpp>
 #include <pinocchio/multibody/fcl.hpp>

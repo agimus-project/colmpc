@@ -1,13 +1,13 @@
 #ifndef __colmpc_python__
 #define __colmpc_python__
 
-#include <eigenpy/eigenpy.hpp>
 #include <pinocchio/fwd.hpp>
+// include pinocchio first
+#include <eigenpy/eigenpy.hpp>
 
 namespace colmpc {
 namespace python {
 
-void exposeStdContainers();
 void exposeResidualDistanceCollision();
 
 }  // namespace python

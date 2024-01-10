@@ -8,7 +8,7 @@
 
 #ifdef PINOCCHIO_WITH_HPP_FCL
 
-#include <colmpc/residual-distance-collision.hpp>
+#include "colmpc/residual-distance-collision.hpp"
 
 namespace colmpc {
 using namespace crocoddyl;

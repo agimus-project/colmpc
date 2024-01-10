@@ -1,6 +1,5 @@
 set(${PY_NAME}_SOURCES
     main.cpp
-    std-containers.cpp
     residual-distance-collision.cpp
 )
 

@@ -1,9 +1,5 @@
-#include <pinocchio/multibody/fwd.hpp>
-// Must be included first!
-
+#include "colmpc/python.hpp"
 #include "colmpc/residual-distance-collision.hpp"
-
-#include <eigenpy/eigenpy.hpp>
 
 namespace colmpc {
 namespace python {
