@@ -128,9 +128,8 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
 
   // calculate the Jacobia
   // compute the residual derivatives
-  d->Rx.topLeftCorner(3, nv) =
-      res.normal / res.min_distance *
-      (J1.template topRows<3>() - J2.template topRows<3>());
+  const auto diff = J1.template topRows<3>() - J2.template topRows<3>();
+  d->Rx.topLeftCorner(3, nv) = res.normal / res.min_distance * diff.transpose();
 }
 template <typename Scalar>
 boost::shared_ptr<ResidualDataAbstractTpl<Scalar> >
