@@ -121,24 +121,7 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
       pair_id_;  //!< Index of the collision pair in geometry model
   pinocchio::JointIndex joint_id_;  //!< Index of joint on which the collision
                                     //!< body frame of the robot is attached
-  int shape1_id;                    //!< Geometry ID of the shape 1
-  int shape2_id;                    //!< Geometry ID of the shape 2
 
-  hpp::fcl::DistanceRequest
-      req;  //!< Distance Request from hppfcl,
-            //!< used to compute the distance between shapes
-  hpp::fcl::DistanceResult res;  //!< Distance Result from hppfcl
-
-  Matrix6xs J1;
-  Matrix6xs J2;
-  Vector3s cp1;
-  Vector3s cp2;
-
-  Vector3s f1p1;
-  pinocchio::SE3 f1Mp1;
-
-  Vector3s f2p2;
-  pinocchio::SE3 f2Mp2;
   // const Eigen::VectorBlock<const Eigen::Ref<const VectorXs>, Eigen::Dynamic>
   // q;
 };
@@ -155,7 +138,6 @@ struct ResidualDataDistanceCollisionTpl
   typedef DataCollectorAbstractTpl<Scalar> DataCollectorAbstract;
 
   typedef typename MathBase::VectorXs VectorXs;
-
   typedef typename MathBase::Matrix6xs Matrix6xs;
   typedef typename MathBase::Vector3s Vector3s;
 
@@ -163,6 +145,8 @@ struct ResidualDataDistanceCollisionTpl
   ResidualDataDistanceCollisionTpl(Model<Scalar> *const model,
                                    DataCollectorAbstract *const data)
       : Base(model, data),
+        J1(6, model->get_state()->get_nv()),
+        J2(6, model->get_state()->get_nv()),
         geometry(pinocchio::GeometryData(model->get_geometry())) {
     // Check that proper shared data has been passed
     DataCollectorMultibodyTpl<Scalar> *d =
@@ -174,6 +158,10 @@ struct ResidualDataDistanceCollisionTpl
     }
     // Avoids data casting at runtime
     pinocchio = d->pinocchio;
+
+    J1.fill(0);
+    J2.fill(0);
+    
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
@@ -181,6 +169,26 @@ struct ResidualDataDistanceCollisionTpl
   using Base::Ru;
   using Base::Rx;
   using Base::shared;
+
+  int shape1_id;                    //!< Geometry ID of the shape 1
+  int shape2_id;                    //!< Geometry ID of the shape 2
+
+  hpp::fcl::DistanceRequest req;  //!< Distance Request from hppfcl,
+            //!< used to compute the distance between shapes
+  hpp::fcl::DistanceResult res;  //!< Distance Result from hppfcl
+
+  Matrix6xs J1;
+  Matrix6xs J2;
+  Vector3s cp1;
+  Vector3s cp2;
+
+  Vector3s f1p1;
+  pinocchio::SE3 f1Mp1;
+
+  Vector3s f2p2;
+  pinocchio::SE3 f2Mp2;
+
+
 };
 
 }  // namespace colmpc
