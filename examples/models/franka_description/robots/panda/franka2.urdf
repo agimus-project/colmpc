@@ -150,7 +150,14 @@
     </visual>
   </link>
   <!-- Gazebo requires a joint to a link called "world" for statically mounted robots -->
-  <link name="world"/>
+  <link name="world">
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+ 
   <joint name="world_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <parent link="world"/>
@@ -214,6 +221,11 @@
         <sphere radius="0.09"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>    
   </link>
   <!-- fixed joint between both sub-links -->
   <joint name="panda2_link0_sc_joint" type="fixed">
@@ -249,6 +261,11 @@
         <sphere radius="0.09"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
   </link>
   <!-- fixed joint between both sub-links -->
   <joint name="panda2_link1_sc_joint" type="fixed">
@@ -293,6 +310,11 @@
         <sphere radius="0.09"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
   </link>
   <!-- fixed joint between both sub-links -->
   <joint name="panda2_link2_sc_joint" type="fixed">
@@ -337,6 +359,11 @@
         <sphere radius="0.09"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
   </link>
   <!-- fixed joint between both sub-links -->
   <joint name="panda2_link3_sc_joint" type="fixed">
@@ -381,6 +408,11 @@
         <sphere radius="0.09"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
   </link>
   <!-- fixed joint between both sub-links -->
   <joint name="panda2_link4_sc_joint" type="fixed">
@@ -443,6 +475,11 @@
         <sphere radius="0.055"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
   </link>
   <!-- fixed joint between both sub-links -->
   <joint name="panda2_link5_sc_joint" type="fixed">
@@ -487,6 +524,11 @@
         <sphere radius="0.08"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
   </link>
   <!-- fixed joint between both sub-links -->
   <joint name="panda2_link6_sc_joint" type="fixed">
@@ -549,6 +591,11 @@
         <sphere radius="0.06"/>
       </geometry>
     </collision>
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
   </link>
   <!-- fixed joint between both sub-links -->
   <joint name="panda2_link7_sc_joint" type="fixed">
@@ -565,7 +612,14 @@
     <safety_controller k_position="100.0" k_velocity="40.0" soft_lower_limit="-2.8973" soft_upper_limit="2.8973"/>
     <dynamics D="1" K="7000" damping="0.003" friction="0.0" mu_coulomb="0" mu_viscous="16"/>
   </joint>
-  <link name="panda2_link8"/>
+  <link name="panda2_link8">
+      <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  
   <joint name="panda2_joint8" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0.107"/>
     <parent link="panda2_link7"/>
@@ -586,6 +640,11 @@
   </link>
   <!-- sub-link defining coarse geometries of real robot's internal self-collision -->
   <link name="panda2_hand_sc">
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
   </link>
   <!-- fixed joint between both sub-links -->
   <joint name="panda2_hand_sc_joint" type="fixed">
@@ -594,7 +653,14 @@
     <child link="panda2_hand_sc"/>
   </joint>
   <!-- Define the hand_tcp frame -->
-  <link name="panda2_hand_tcp"/>
+  <link name="panda2_hand_tcp">
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+
   <joint name="panda2_hand_tcp_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0.1034"/>
     <parent link="panda2_hand"/>
@@ -687,7 +753,14 @@
     <mimic joint="panda2_finger_joint1"/>
     <dynamics damping="0.3"/>
   </joint>
-  <link name="panda2_ref_camera_link"/>
+  <link name="panda2_ref_camera_link">
+      <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+   
   <joint name="panda2_ref_camera_joint" type="fixed">
     <parent link="panda2_hand"/>
     <child link="panda2_ref_camera_link"/>
@@ -705,7 +778,14 @@
     <parent link="panda2_ref_camera_link"/>
     <child link="camera_bottom_screw_frame"/>
   </joint>
-  <link name="camera_bottom_screw_frame"/>
+  <link name="camera_bottom_screw_frame">
+      <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+   
   <joint name="camera_link_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0.010600000000000002 0.0175 0.0125"/>
     <parent link="camera_bottom_screw_frame"/>
@@ -731,7 +811,13 @@
     <parent link="camera_link"/>
     <child link="camera_depth_frame"/>
   </joint>
-  <link name="camera_depth_frame"/>
+  <link name="camera_depth_frame">
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>    
   <joint name="camera_depth_optical_joint" type="fixed">
     <origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
     <parent link="camera_depth_frame"/>
@@ -744,39 +830,78 @@
     <parent link="camera_link"/>
     <child link="camera_infra1_frame"/>
   </joint>
-  <link name="camera_infra1_frame"/>
+  <link name="camera_infra1_frame">
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
   <joint name="camera_infra1_optical_joint" type="fixed">
     <origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
     <parent link="camera_infra1_frame"/>
     <child link="camera_infra1_optical_frame"/>
   </joint>
-  <link name="camera_infra1_optical_frame"/>
+  <link name="camera_infra1_optical_frame">
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
   <!-- camera right IR joints and links -->
   <joint name="camera_infra2_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 -0.05 0"/>
     <parent link="camera_link"/>
     <child link="camera_infra2_frame"/>
   </joint>
-  <link name="camera_infra2_frame"/>
+  <link name="camera_infra2_frame">
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+
   <joint name="camera_infra2_optical_joint" type="fixed">
     <origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
     <parent link="camera_infra2_frame"/>
     <child link="camera_infra2_optical_frame"/>
   </joint>
-  <link name="camera_infra2_optical_frame"/>
+  <link name="camera_infra2_optical_frame">
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+
   <!-- camera color joints and links -->
   <joint name="camera_color_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0.015 0"/>
     <parent link="camera_link"/>
     <child link="camera_color_frame"/>
   </joint>
-  <link name="camera_color_frame"/>
+  <link name="camera_color_frame">
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
   <joint name="camera_color_optical_joint" type="fixed">
     <origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
     <parent link="camera_color_frame"/>
     <child link="camera_color_optical_frame"/>
   </joint>
-  <link name="camera_color_optical_frame"/>
+  <link name="camera_color_optical_frame">
+    <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+
   <!-- camera support -->
   <link name="panda2_camera_support_link">
     <inertial>
@@ -792,3 +917,4 @@
   </joint>
   <!-- wall behind the table -->
 </robot>
+
