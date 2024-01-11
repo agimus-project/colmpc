@@ -67,9 +67,6 @@ cdata = cmodel.createData()
 print(f'shape 1 : {cmodel.getGeometryId("panda2_link6_sc_2")}')
 print(f'shape 2 : {IG_OBSTACLE}')
 
-for i in range(len(cmodel.geometryObjects)):
-    print(cmodel.geometryObjects[i].name)
-
 # Generating the meshcat visualizer
 MeshcatVis = MeshcatWrapper()
 vis, meshcatVis = MeshcatVis.visualize(
@@ -82,62 +79,29 @@ vis, meshcatVis = MeshcatVis.visualize(
 ### INITIAL X0
 q0 = INITIAL_CONFIG
 x0 = np.concatenate([q0, pin.utils.zero(rmodel.nv)])
-
-### CREATING THE PROBLEM WITHOUT OBSTACLE
-problem = OCPPandaReaching(
-    rmodel,
-    cmodel,
-    TARGET_POSE,
-    T,
-    dt,
-    x0,
-    WEIGHT_GRIPPER_POSE=100,
-    WEIGHT_xREG=1e-2,
-    WEIGHT_uREG=1e-4,
+req = hppfcl.DistanceRequest()
+res = hppfcl.DistanceResult()
+q_test = np.array([ 2.02829e-01, 3.74201e-01, 3.06873e-01,-6.99667e-01,-8.18421e-02, 1.29950e+00, 1.43251e-02])
+pin.updateGeometryPlacements(rmodel, rdata, cmodel, cdata, q_test)
+print(
+    hppfcl.distance(
+        cmodel.geometryObjects[cmodel.getGeometryId("panda2_link6_sc_2")].geometry,
+        cdata.oMg[cmodel.getGeometryId("panda2_link6_sc_2")],
+        cmodel.geometryObjects[IG_OBSTACLE].geometry,
+        cdata.oMg[IG_OBSTACLE],
+        req, 
+        res
+    )
 )
-ddp = problem()
-# Solving the problem
-ddp.solve()
-
-XS_init = ddp.xs
-US_init = ddp.us
-
-vis.display(INITIAL_CONFIG)
-# input()
-# for xs in ddp.xs:
-#     vis.display(np.array(xs[:7].tolist()))
-#     time.sleep(1e-3)
-
-print("Start of the OCP with obstacle constraint")
-### CREATING THE PROBLEM WITH WARM START
-problem = OCPPandaReachingColWithSingleCol(
-    rmodel,
-    cmodel,
-    TARGET_POSE,
-    OBSTACLE_POSE,
-    OBSTACLE_RADIUS,
-    T,
-    dt,
-    x0,
-    WEIGHT_GRIPPER_POSE=100,
-    WEIGHT_xREG=1e-2,
-    WEIGHT_uREG=1e-4,
-    SAFETY_THRESHOLD=1e-2
+q_test = np.array([2.02997e-01, 3.71892e-01, 3.07120e-01,-6.98672e-01,-8.17971e-02, 1.29954e+00, 1.43237e-02])
+pin.updateGeometryPlacements(rmodel, rdata, cmodel, cdata, q_test)
+print(
+    hppfcl.distance(
+        cmodel.geometryObjects[cmodel.getGeometryId("panda2_link6_sc_2")].geometry,
+        cdata.oMg[cmodel.getGeometryId("panda2_link6_sc_2")],
+        cmodel.geometryObjects[IG_OBSTACLE].geometry,
+        cdata.oMg[IG_OBSTACLE],
+        req, 
+        res
+    )
 )
-print("creating the ocp")
-ddp = problem()
-
-print("solving the ocp")
-# Solving the problem
-ddp.solve(XS_init, US_init)
-
-print("End of the computation, press enter to display the traj if requested.")
-### DISPLAYING THE TRAJ
-while True:
-    vis.display(INITIAL_CONFIG)
-    input()
-    for xs in ddp.xs:
-        vis.display(np.array(xs[:7].tolist()))
-        time.sleep(1e-3)
-    input()
-    print("replay")

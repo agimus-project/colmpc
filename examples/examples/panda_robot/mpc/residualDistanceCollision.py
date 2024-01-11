@@ -3,9 +3,7 @@ import pinocchio as pin
 import crocoddyl
 from crocoddyl.utils import *
 import hppfcl
-np.set_printoptions(precision=5)
-np.set_printoptions(threshold=np.inf)
-np.set_printoptions(linewidth=np.inf)
+
 
 class ResidualCollision(crocoddyl.ResidualModelAbstract):
     """Class computing the residual of the collision constraint. This residual is simply the signed distance between the two closest points of the 2 shapes."""
@@ -25,7 +23,7 @@ class ResidualCollision(crocoddyl.ResidualModelAbstract):
             geom_data (_type_): Collision data of the collision model of pinocchio
             pair_id (int): ID of the collision pair
         """
-        crocoddyl.ResidualModelAbstract.__init__(self, state, 1, True, False, False)
+        crocoddyl.ResidualModelAbstract.__init__(self, state, 1, True, True, True)
 
         # Pinocchio robot model
         self._pinocchio = self.state.pinocchio
@@ -77,7 +75,6 @@ class ResidualCollision(crocoddyl.ResidualModelAbstract):
         # assert "obstacle" in self._shape2.name
 
     def calc(self, data, x, u=None):
-        # print(f"q : {x[:self._nq]}")
         data.r[:] = self.f(data, x[: self._nq])
 
     def f(self, data, q):
@@ -121,27 +118,27 @@ class ResidualCollision(crocoddyl.ResidualModelAbstract):
             self._req,
             self._res,
         )
-        # print(distance)
-
+        # print(f"q : {self.q}")
+        # print(f"shape 1 name : {self._shape1.name}")
+        # print(f"shape 2 name : {self._shape2.name}")
+        # print(f"distance : {distance}")
         return distance
 
     def calcDiff(self, data, x, u=None):
-        # print(f"q : {x[:self._nq]}")
-
         # self.calcDiff_numdiff(data, x)
         # J_n = self._J
 
         self.calcDiff_ana(data, x)
         # J_f = self._J
 
-        # J_diff = J_f - J_n
-        # print(J_diff)
+        # J_diff = J_f - J_n 
+        
         # for k in J_diff:
         #     if np.linalg.norm(k) > 1e-5:
         #         print(J_diff)
         #         print(x[:6].tolist())
-        print('-----------')
-        print(f"data.Rx[: self._nq] : {data.Rx[: self._nq]}")
+        #         print('-----------')
+
         data.Rx[: self._nq] = self._J
 
     def calcDiff_numdiff(self, data, x):
@@ -155,32 +152,21 @@ class ResidualCollision(crocoddyl.ResidualModelAbstract):
         self._distance_numdiff = fx
 
     def calcDiff_ana(self, data, x):
-        q = x[:self._nq]
-        pin.updateGeometryPlacements(
-            self._pinocchio,
-            data.shared.pinocchio,
-            self._geom_model,
-            self._geom_data,
-            q,
-        )
-        
         jacobian1 = pin.computeFrameJacobian(
             self._pinocchio,
             data.shared.pinocchio,
-            q,
+            self.q,
             self._shape1.parentFrame,
             pin.LOCAL_WORLD_ALIGNED,
         )
-        # print("python")
+
         jacobian2 = pin.computeFrameJacobian(
             self._pinocchio,
             data.shared.pinocchio,
-            q,
+            self.q,
             self._shape2.parentFrame,
             pin.LOCAL_WORLD_ALIGNED,
         )
-        # print(f"parentFrame py : {self._shape2.parentFrame} ")
-        # print(f"J2 py :{jacobian2}")
 
         # Computing the distance
         distance = hppfcl.distance(
@@ -197,23 +183,14 @@ class ResidualCollision(crocoddyl.ResidualModelAbstract):
         )
         cp1 = self._res.getNearestPoint1()
         cp2 = self._res.getNearestPoint2()
-        
-        # print("------------------")
-        # print("python : ")
-        # print(f"q : {q}")
-        # print(f"cp 1 : {cp1}")
-        # print(f"cp 2 : {cp2}")
-        # print(f"distance : {distance}")
+
         ## Transport the jacobian of frame 1 into the jacobian associated to cp1
         # Vector from frame 1 center to p1
         f1p1 = cp1 - data.shared.pinocchio.oMf[self._shape1.parentFrame].translation
-        # print(f"f1p1 py : {f1p1}")
         # The following 2 lines are the easiest way to understand the transformation
         # although not the most efficient way to compute it.
         f1Mp1 = pin.SE3(np.eye(3), f1p1)
-        
         jacobian1 = f1Mp1.actionInverse @ jacobian1
-        # print(f"J1 py :{jacobian1}")
 
         ## Transport the jacobian of frame 2 into the jacobian associated to cp2
         # Vector from frame 2 center to p2
@@ -225,7 +202,7 @@ class ResidualCollision(crocoddyl.ResidualModelAbstract):
 
         CP1_SE3 = pin.SE3.Identity()
         CP1_SE3.translation = cp1
-        # print(self._res.min_distance)
+
         CP2_SE3 = pin.SE3.Identity()
         CP2_SE3.translation = cp2
         self._J = (cp1 - cp2).T / distance @ (jacobian1[:3] - jacobian2[:3])
