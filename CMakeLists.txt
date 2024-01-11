@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 # Project properties
 set(PROJECT_NAME colmpc)
 set(PROJECT_DESCRIPTION "Collision avoidance for MPC")
-set(PROJECT_URL https://github.com/AarthuH91/${PROJECT_NAME})
+set(PROJECT_URL https://github.com/ArthuH91/${PROJECT_NAME})
 
 # Project options
 option(BUILD_PYTHON_INTERFACE "Build the python binding" ON)
