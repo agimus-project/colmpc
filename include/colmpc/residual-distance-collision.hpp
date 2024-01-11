@@ -161,7 +161,12 @@ struct ResidualDataDistanceCollisionTpl
 
     J1.fill(0);
     J2.fill(0);
-    
+    cp1.fill(0);
+    cp2.fill(0);
+    f1p1.fill(0);
+    f2p2.fill(0);
+
+
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
@@ -169,9 +174,6 @@ struct ResidualDataDistanceCollisionTpl
   using Base::Ru;
   using Base::Rx;
   using Base::shared;
-
-  int shape1_id;                    //!< Geometry ID of the shape 1
-  int shape2_id;                    //!< Geometry ID of the shape 2
 
   hpp::fcl::DistanceRequest req;  //!< Distance Request from hppfcl,
             //!< used to compute the distance between shapes
