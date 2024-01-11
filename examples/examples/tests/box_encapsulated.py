@@ -1,4 +1,4 @@
-import hppfcl 
+import hppfcl
 import pinocchio as pin
 import numpy as np
 from pinocchio.visualize import MeshcatVisualizer

@@ -69,22 +69,22 @@ def create_robot(M_target=pin.SE3.Identity()):
     # Creation of the joint 1 (a revolut around the z one)
     Mj1 = pin.SE3.Identity()  # Pose of the joint in the universe
     joint1_id = rmodel.addJoint(joint_universe, revolut_joint_z, Mj1, "joint1")
-    
+
     # Creation of the frame F1
     joint1_frame = pin.Frame("joint1_frame", joint1_id, pin.SE3.Identity(), pin.BODY)
     joint1_frame_id = rmodel.addFrame(joint1_frame, False)
-    
+
     # Creation of the shape
     joint1_shape = hppfcl.Sphere(r1)
     joint1_geom = pin.GeometryObject(
         "joint1_geom", joint1_id, joint1_frame_id, Mj1, joint1_shape)
     id_joint1_geom = gmodel.addGeometryObject(joint1_geom)
-    
-    
+
+
     # Creation of the joint 2 (a revolut one around the y axis)
     Mj2 = pin.SE3.Identity()
     Mj2.translation = np.array([0, 0, r1])
-    
+
     joint2_id = rmodel.addJoint(joint1_id, revolut_joint_y, Mj2, "joint2")
 
     # Creation of the frame F2
@@ -301,8 +301,8 @@ if __name__ == "__main__":
     target.translation = np.array([1,1,1])
     rmodel, cmodel = create_robot(target)
     # Creating the datas model
-    
-        
+
+
     ### CREATING THE OBSTACLE
     OBSTACLE_RADIUS = 1.5e-1
     OBSTACLE_POSE = pin.SE3.Identity()
@@ -319,7 +319,7 @@ if __name__ == "__main__":
 
     IG_OBSTACLE = cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)
 
-    
+
     rdata = rmodel.createData()
     cdata = cmodel.createData()
 
@@ -339,7 +339,7 @@ if __name__ == "__main__":
     shape1_id = cmodel.getGeometryId("joint2_geom")
 
     # Making sure the shape exists
-    assert shape1_id <= len(cmodel.geometryObjects) -1 
+    assert shape1_id <= len(cmodel.geometryObjects) -1
 
     # Coloring the sphere
     shape1 = cmodel.geometryObjects[shape1_id]
@@ -355,7 +355,7 @@ if __name__ == "__main__":
     shape1_placement = cdata.oMg[shape1_id]
 
     # Doing the same for the second shape.
-    shape2_id = cmodel.getGeometryId("target_geom") 
+    shape2_id = cmodel.getGeometryId("target_geom")
     assert shape2_id <= len(cmodel.geometryObjects) -1
 
     # Coloring the sphere

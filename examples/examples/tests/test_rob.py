@@ -21,11 +21,11 @@ def load_panda():
     urdf_filename = "franka2.urdf"
     urdf_model_path = join(join(model_path, "panda"), urdf_filename)
 
-    
+
     robot = pin.RobotWrapper.BuildFromURDF(
         urdf_model_path, mesh_dir, pin.JointModelFreeFlyer()
     )
-    rmodel, cmodel, vmodel 
+    rmodel, cmodel, vmodel
     q0 = pin.neutral(rmodel)
 
     rmodel, [vmodel, cmodel] = pin.buildReducedModel(

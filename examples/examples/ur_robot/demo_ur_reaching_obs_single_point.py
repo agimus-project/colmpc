@@ -118,7 +118,7 @@ problem = OCPURReachingColWithSingleCol(
 ddp = problem()
 
 XS_init = [x0] * (T+1)
-US_init = [np.zeros(rmodel.nv)] * T 
+US_init = [np.zeros(rmodel.nv)] * T
 US_init = ddp.problem.quasiStatic(XS_init[:-1])
 
 # Solving the problem

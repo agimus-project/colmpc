@@ -890,7 +890,7 @@ class TestRobotsDistanceDerivativesCapsuleSpheres(unittest.TestCase):
             res,
         )
         return distance
-    
+
     def distance_sphere_capsule(self, sphere_placement, capsule_placement):
             """Computes the signed distance between a sphere & a capsule.
 

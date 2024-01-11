@@ -1,8 +1,6 @@
-#include <eigenpy/eigenpy.hpp>
-
 #include "colmpc/python.hpp"
 
-BOOST_PYTHON_MODULE(sobec_pywrap) {
+BOOST_PYTHON_MODULE(colmpc) {
   namespace bp = boost::python;
 
   bp::import("pinocchio");
@@ -10,7 +8,5 @@ BOOST_PYTHON_MODULE(sobec_pywrap) {
   // Enabling eigenpy support, i.e. numpy/eigen compatibility.
   eigenpy::enableEigenPy();
   eigenpy::enableEigenPySpecific<Eigen::VectorXi>();
-  colmpc::python::exposeStdContainers();
   colmpc::python::exposeResidualDistanceCollision();
-
 }

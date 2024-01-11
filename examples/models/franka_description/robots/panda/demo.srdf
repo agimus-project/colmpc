@@ -117,7 +117,7 @@
                       reason="self-collision handled separately"/>
   <disable_collisions link1="panda2_link5" link2="panda2_rightfinger"
                       reason="self-collision handled separately"/>
-  
+
   <disable_collisions link1="panda2_link6" link2="panda2_link7"
                       reason="self-collision handled separately"/>
   <disable_collisions link1="panda2_link6" link2="panda2_hand"
@@ -141,7 +141,7 @@
 
   <disable_collisions link1="panda2_leftfinger" link2="panda2_rightfinger"
                       reason="self-collision handled separately"/>
-  
+
   <!-- remove collision between environment and self-collision geometries -->
 
   <disable_collisions link1="support_link" link2="panda2_link1_sc"
@@ -152,7 +152,7 @@
                       reason="handled otherwise"/>
 
   <!-- remove self-collision pairs between adjacent links -->
-  
+
   <disable_collisions link1="panda2_link0_sc" link2="panda2_link1_sc"
                       reason="adjacent"/>
   <disable_collisions link1="panda2_link0_sc" link2="panda2_link2_sc"
@@ -410,23 +410,23 @@
 
   <!-- panda1_box -->
     <disable_collisions link1="panda1_box" link2="panda2_link7_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="panda1_box" link2="panda2_link6_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="panda1_box" link2="panda2_link5_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="panda1_box" link2="panda2_link4_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="panda1_box" link2="panda2_link3_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="panda1_box" link2="panda2_link2_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="panda1_box" link2="panda2_link1_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="panda1_box" link2="panda2_link0_sc"
-                      reason="no need"/>   
+                      reason="no need"/>
     <disable_collisions link1="panda1_box" link2="camera_link"
-                      reason="no need"/>  
+                      reason="no need"/>
     <disable_collisions link1="panda1_box" link2="panda2_leftfinger"
                       reason="no need"/>
     <disable_collisions link1="panda1_box" link2="panda2_rightfinger"
@@ -444,74 +444,74 @@
     <disable_collisions link1="wall_link_1" link2="panda2_leftfinger"
                       reason="no need"/>
     <disable_collisions link1="wall_link_1" link2="panda2_rightfinger"
-                      reason="no need"/> 
+                      reason="no need"/>
     <disable_collisions link1="wall_link_1" link2="camera_link"
                       reason="no need"/>
     <disable_collisions link1="wall_link_1" link2="panda2_link7_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="wall_link_1" link2="panda2_link6_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_1" link2="panda2_link5_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_1" link2="panda2_link4_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_1" link2="panda2_link3_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="wall_link_1" link2="panda2_link2_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_1" link2="panda2_link1_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_1" link2="panda2_link0_sc"
-                      reason="no need"/>   
+                      reason="no need"/>
 
 
   <!-- wall_link_2 -->
     <disable_collisions link1="wall_link_2" link2="panda2_leftfinger"
                       reason="no need"/>
     <disable_collisions link1="wall_link_2" link2="panda2_rightfinger"
-                      reason="no need"/> 
+                      reason="no need"/>
     <disable_collisions link1="wall_link_2" link2="camera_link"
-                      reason="no need"/>       
+                      reason="no need"/>
     <disable_collisions link1="wall_link_2" link2="panda2_link7_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="wall_link_2" link2="panda2_link6_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_2" link2="panda2_link5_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_2" link2="panda2_link4_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_2" link2="panda2_link3_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="wall_link_2" link2="panda2_link2_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_2" link2="panda2_link1_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_2" link2="panda2_link0_sc"
-                      reason="no need"/>   
+                      reason="no need"/>
 
   <!-- wall_link_3 -->
     <disable_collisions link1="wall_link_3" link2="panda2_leftfinger"
                       reason="no need"/>
     <disable_collisions link1="wall_link_3" link2="panda2_rightfinger"
-                      reason="no need"/> 
+                      reason="no need"/>
     <disable_collisions link1="wall_link_3" link2="camera_link"
                       reason="no need"/>
     <disable_collisions link1="wall_link_3" link2="panda2_link7_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="wall_link_3" link2="panda2_link6_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_3" link2="panda2_link5_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_3" link2="panda2_link4_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_3" link2="panda2_link3_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="wall_link_3" link2="panda2_link2_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_3" link2="panda2_link1_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="wall_link_3" link2="panda2_link0_sc"
-                      reason="no need"/>   
+                      reason="no need"/>
 
   <!-- pedestal -->
     <disable_collisions link1="pedestal" link2="panda2_leftfinger"
@@ -519,45 +519,45 @@
     <disable_collisions link1="pedestal" link2="panda2_rightfinger"
                       reason="no need"/>
     <disable_collisions link1="pedestal" link2="camera_link"
-                      reason="no need"/>   
+                      reason="no need"/>
     <disable_collisions link1="pedestal" link2="panda2_link7_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="pedestal" link2="panda2_link6_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="pedestal" link2="panda2_link5_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="pedestal" link2="panda2_link4_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="pedestal" link2="panda2_link3_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="pedestal" link2="panda2_link2_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="pedestal" link2="panda2_link1_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="pedestal" link2="panda2_link0_sc"
-                      reason="no need"/>    
+                      reason="no need"/>
 
   <!-- camera_link -->
 
     <disable_collisions link1="camera_link" link2="panda2_link7_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="camera_link" link2="panda2_link6_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="camera_link" link2="panda2_link5_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="camera_link" link2="panda2_link4_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="camera_link" link2="panda2_link3_sc"
-                      reason="no need"/>                                                
+                      reason="no need"/>
     <disable_collisions link1="camera_link" link2="panda2_link2_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="camera_link" link2="panda2_link1_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
     <disable_collisions link1="camera_link" link2="panda2_link0_sc"
-                      reason="no need"/>            
+                      reason="no need"/>
 
-    
-   
-    
+
+
+
 
 </robot>

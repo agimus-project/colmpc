@@ -68,10 +68,10 @@ class OCPPandaReaching:
         xResidual = crocoddyl.ResidualModelState(self._state, self._x0)
         xRegCost = crocoddyl.CostModelResidual(self._state, xResidual)
 
-        # Control Regularization cost 
+        # Control Regularization cost
         uResidual = crocoddyl.ResidualModelControl(self._state)
         uRegCost = crocoddyl.CostModelResidual(self._state, uResidual)
-        
+
 
         # End effector frame cost
 
@@ -84,7 +84,7 @@ class OCPPandaReaching:
             self._state, framePlacementResidual
         )
         # Bounds costs
-        
+
                 # Cost for self-collision
         maxfloat = sys.float_info.max
         xlb = np.concatenate(
@@ -108,13 +108,13 @@ class OCPPandaReaching:
         # Adding costs to the models
         self._runningCostModel.addCost("stateReg", xRegCost, self._WEIGHT_xREG)
         self._runningCostModel.addCost("ctrlRegGrav", uRegCost, self._WEIGHT_uREG)
-        self._runningCostModel.addCost("gripperPoseRM", goalTrackingCost, self._WEIGHT_GRIPPER_POSE)    
-        # self._runningCostModel.addCost("limitCostRM", limitCost, self._WEIGHT_LIMIT)    
+        self._runningCostModel.addCost("gripperPoseRM", goalTrackingCost, self._WEIGHT_GRIPPER_POSE)
+        # self._runningCostModel.addCost("limitCostRM", limitCost, self._WEIGHT_LIMIT)
         self._terminalCostModel.addCost("stateReg", xRegCost, self._WEIGHT_xREG)
         self._terminalCostModel.addCost(
             "gripperPose", goalTrackingCost, self._WEIGHT_GRIPPER_POSE
         )
-        # self._terminalCostModel.addCost("limitCost", limitCost, self._WEIGHT_LIMIT)    
+        # self._terminalCostModel.addCost("limitCost", limitCost, self._WEIGHT_LIMIT)
 
 
         # Create Differential Action Model (DAM), i.e. continuous dynamics and cost functions
@@ -150,6 +150,6 @@ class OCPPandaReaching:
         ddp.use_filter_line_search = False
         ddp.termination_tolerance = 1e-3
         ddp.max_qp_iters = 1000
-        ddp.with_callbacks = True 
+        ddp.with_callbacks = True
 
         return ddp
