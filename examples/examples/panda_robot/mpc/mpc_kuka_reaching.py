@@ -13,7 +13,7 @@ from panda_robot_loader import PandaRobot
 from ocp_panda_reaching import OCPPandaReaching
 from ocp_panda_reaching_obs import OCPPandaReachingColWithMultipleCol
 import pybullet as p
-
+import time
 
 # # # # # # # # # # # # # # # # # # #
 ### LOAD ROBOT MODEL and SIMU ENV ### 
@@ -106,6 +106,7 @@ problem = OCPPandaReachingColWithMultipleCol(
     WEIGHT_xREG=1e-2,
     WEIGHT_xREG_TERM=1e-2,
     WEIGHT_uREG=1e-4,
+    max_qp_iter=100
 )
 ddp = problem()
 # Solve
@@ -247,7 +248,7 @@ for i in range(sim_data['N_sim']):
             WEIGHT_xREG=1e-2,
             WEIGHT_xREG_TERM=1e-2,
             WEIGHT_uREG=1e-4,
-            solv_iter = 15,
+            max_qp_iter= 15,
             callbacks=False
             )
         ddp = problem()
@@ -274,7 +275,9 @@ for i in range(sim_data['N_sim']):
         us_init = list(ddp.us[1:]) + [ddp.us[-1]] 
         
         # Solve OCP & record MPC predictions
+        start = time.process_time()
         ddp.solve(xs_init, us_init, maxiter=ocp_params['maxiter'])
+        print(time.process_time() - start)
         sim_data['state_pred'][mpc_cycle, :, :]  = np.array(ddp.xs)
         sim_data['ctrl_pred'][mpc_cycle, :, :]   = np.array(ddp.us)
         # Extract relevant predictions for interpolations

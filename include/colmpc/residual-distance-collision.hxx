@@ -24,7 +24,8 @@ ResidualDistanceCollisionTpl<Scalar>::ResidualDistanceCollisionTpl(
       pin_model_(*state->get_pinocchio()),
       geom_model_(geom_model),
       pair_id_(pair_id),
-      joint_id_(joint_id) {
+      joint_id_(joint_id)
+     {
 
   if (static_cast<pinocchio::FrameIndex>(geom_model_->collisionPairs.size()) <=
       pair_id) {
@@ -38,10 +39,6 @@ ResidualDistanceCollisionTpl<Scalar>::ResidualDistanceCollisionTpl(
         "Invalid argument: "
         << "the joint index is wrong (it does not exist in the robot)");
   }
-
-  hpp::fcl::DistanceRequest req = hpp::fcl::DistanceRequest();
-  hpp::fcl::DistanceResult res = hpp::fcl::DistanceResult();
-
 
 }
 
@@ -58,10 +55,11 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
       x.head(state_->get_nq());
   // computes the distance for the collision pair pair_id_
 
-  pinocchio::forwardKinematics(pin_model_, *(d->pinocchio),q);
+//   pinocchio::forwardKinematics(pin_model_, *(d->pinocchio),q);
   pinocchio::updateGeometryPlacements(pin_model_, *(d->pinocchio),
                                       *geom_model_.get(), d->geometry, q);
 
+// const auto M1 = toFclTransform3f(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].first]);
   d->r[0] = hpp::fcl::distance(
       geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first].geometry.get(),
       toFclTransform3f(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].first]),
@@ -99,7 +97,9 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
 
   // getting the nearest points belonging to the collision shapes
   d->cp1 = d->res.nearest_points[0];
+  // const Vector3s & cp1 = d->res.nearest_points[0];
   d->cp2 = d->res.nearest_points[1];
+//   const Eigen::Vector3s & cp2 = d->res.nearest_points[1];
 
   // Transport the jacobian of frame 1 into the jacobian associated to cp1
   // Vector from frame 1 center to p1
@@ -110,9 +110,9 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
                                              .first]
                        .parentFrame]
              .translation();
-  d->f1Mp1 = pinocchio::SE3::Identity();
+  d->f1Mp1 = pinocchio::SE3::Identity();; // = pinocchio::SE3::Identity();
   d->f1Mp1.translation(d->f1p1);
-  d->J1 = d->f1Mp1.toActionMatrixInverse() * d->J1;
+  d->J1 = d->f1Mp1.toActionMatrixInverse() * d->J1;//todo change me for simpler
   // Transport the jacobian of frame 2 into the jacobian associated to cp2
   // Vector from frame 2 center to p2
   d->f2p2 = d->cp2 -
@@ -128,9 +128,9 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
 
   // calculate the Jacobian
   // compute the residual derivatives
-  const auto diff = d->J1.template topRows<3>() - d->J2.template topRows<3>();
+  //const auto diff = d->J1.template topRows<3>() - d->J2.template topRows<3>();
   data->Rx.leftCols(nv) = - d->res.normal.transpose() * ( d->J1.template topRows<3>() - d->J2.template topRows<3>());
-
+  // std::cout << "cpp " <<data->Rx.leftCols(nv) << std::endl;
 }
 template <typename Scalar>
 boost::shared_ptr<ResidualDataAbstractTpl<Scalar> >

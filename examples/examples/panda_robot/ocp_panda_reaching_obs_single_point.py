@@ -153,19 +153,19 @@ class OCPPandaReachingColWithSingleCol:
             self._state, self._actuation.nu
         )
         # Creating the residual
-        # obstacleDistanceResidual = ResidualCollision(
-        #     self._state, self._cmodel, self._cdata, 0
-        # )
+        obstacleDistanceResidual = ResidualCollision(
+            self._state, self._cmodel, self._cdata, 0
+        )
         # print("obstacle residual : ")
         obstacleDistanceResidual2 = ResidualDistanceCollision(self._state, 7, self._cmodel, 0,6)
         # Creating the inequality constraint
         
-        # constraint = crocoddyl.ConstraintModelResidual(
-        #     self._state,
-        #     obstacleDistanceResidual,
-        #     np.array([self._SAFETY_THRESHOLD]),
-        #     np.array([np.inf]),
-        # )
+        constraint = crocoddyl.ConstraintModelResidual(
+            self._state,
+            obstacleDistanceResidual,
+            np.array([self._SAFETY_THRESHOLD]),
+            np.array([np.inf]),
+        )
         
         constraint2 = crocoddyl.ConstraintModelResidual(
             self._state,
@@ -175,11 +175,11 @@ class OCPPandaReachingColWithSingleCol:
         )
 
         # Adding the constraint to the constraint manager
-        # self._runningConstraintModelManager.addConstraint("col", constraint)
-        # self._terminalConstraintModelManager.addConstraint("col_term", constraint)
+        self._runningConstraintModelManager.addConstraint("col", constraint)
+        self._terminalConstraintModelManager.addConstraint("col_term", constraint)
         
-        self._runningConstraintModelManager.addConstraint("col2", constraint2)
-        self._terminalConstraintModelManager.addConstraint("col_term2", constraint2)
+        # self._runningConstraintModelManager.addConstraint("col2", constraint2)
+        # self._terminalConstraintModelManager.addConstraint("col_term2", constraint2)
         # Adding costs to the models
         self._runningCostModel.addCost("stateReg", xRegCost, self._WEIGHT_xREG)
         self._runningCostModel.addCost("ctrlRegGrav", uRegCost, self._WEIGHT_uREG)

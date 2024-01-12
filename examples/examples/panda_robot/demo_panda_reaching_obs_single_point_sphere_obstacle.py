@@ -39,10 +39,15 @@ cdata = cmodel.createData()
 TARGET_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, 0, 1.55]))
 TARGET_POSE.translation = np.array([0, -0.4, 1.5])
 
+TARGET_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.0, 1.5]))
+
+OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.5]))
+OBSTACLE_RADIUS = 0.5e-1
+
 ### CREATING THE OBSTACLE
-OBSTACLE_RADIUS = 1.5e-1
-OBSTACLE_POSE = pin.SE3.Identity()
-OBSTACLE_POSE.translation = np.array([0.25, -0.425, 1.5])
+# OBSTACLE_RADIUS = 1.5e-1
+# OBSTACLE_POSE = pin.SE3.Identity()
+# OBSTACLE_POSE.translation = np.array([0.25, -0.425, 1.5])
 OBSTACLE = hppfcl.Sphere(OBSTACLE_RADIUS)
 OBSTACLE_GEOM_OBJECT = pin.GeometryObject(
     "obstacle",
@@ -59,9 +64,9 @@ IG_OBSTACLE = cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)
 INITIAL_CONFIG = pin.neutral(rmodel)
 
 ### ADDING THE COLLISION PAIR BETWEEN A LINK OF THE ROBOT & THE OBSTACLE
-cmodel.geometryObjects[cmodel.getGeometryId("panda2_link6_sc_2")].meshColor = YELLOW_FULL
+cmodel.geometryObjects[cmodel.getGeometryId("panda2_link7_sc_1")].meshColor = YELLOW_FULL
 cmodel.addCollisionPair(
-    pin.CollisionPair(cmodel.getGeometryId("panda2_link6_sc_2"), IG_OBSTACLE)
+    pin.CollisionPair(cmodel.getGeometryId("panda2_link7_sc_1"), IG_OBSTACLE)
 )
 cdata = cmodel.createData()
 print(f'shape 1 : {cmodel.getGeometryId("panda2_link6_sc_2")}')
@@ -81,6 +86,7 @@ vis, meshcatVis = MeshcatVis.visualize(
 
 ### INITIAL X0
 q0 = INITIAL_CONFIG
+q0 = np.array([ 0.439,   0.9274 , 0.3113 , 0.3734 ,-0.2116,  1.1214 , 0.024])
 x0 = np.concatenate([q0, pin.utils.zero(rmodel.nv)])
 
 ### CREATING THE PROBLEM WITHOUT OBSTACLE
@@ -101,12 +107,12 @@ ddp.solve()
 
 XS_init = ddp.xs
 US_init = ddp.us
-
-vis.display(INITIAL_CONFIG)
+print(XS_init)
+vis.display(q0)
 # input()
-# for xs in ddp.xs:
-#     vis.display(np.array(xs[:7].tolist()))
-#     time.sleep(1e-3)
+for xs in ddp.xs:
+    vis.display(np.array(xs[:7].tolist()))
+    time.sleep(1e-3)
 
 print("Start of the OCP with obstacle constraint")
 ### CREATING THE PROBLEM WITH WARM START
@@ -126,6 +132,7 @@ problem = OCPPandaReachingColWithSingleCol(
 )
 print("creating the ocp")
 ddp = problem()
+# ddp.solve()
 
 print("solving the ocp")
 # Solving the problem

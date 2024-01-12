@@ -30,7 +30,7 @@ class OCPPandaReachingColWithMultipleCol:
         WEIGHT_GRIPPER_POSE_TERM = 10,
         WEIGHT_LIMIT = 1e-1,
         SAFETY_THRESHOLD=5e-3,
-        solv_iter = 10,
+        max_qp_iter = 100,
         callbacks = False,
     ) -> None:
         """Creating the class for optimal control problem of a panda robot reaching for a target while taking a collision between a given previously given shape of the robot and an obstacle into consideration.
@@ -63,7 +63,7 @@ class OCPPandaReachingColWithMultipleCol:
         self._T = T
         self._dt = dt
         self._x0 = x0
-        self._solv_iter = solv_iter
+        self._max_qp_iter = max_qp_iter
         self._callbacks = callbacks
 
         # Weights
@@ -264,7 +264,7 @@ class OCPPandaReachingColWithMultipleCol:
         
         # Parameters of the solver
         ddp.termination_tolerance = 1e-3
-        ddp.max_qp_iters =self._solv_iter
+        ddp.max_qp_iters =self._max_qp_iter
         ddp.eps_abs = 1e-6
         ddp.eps_rel = 0
         

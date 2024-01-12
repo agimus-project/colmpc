@@ -145,9 +145,12 @@ struct ResidualDataDistanceCollisionTpl
   ResidualDataDistanceCollisionTpl(Model<Scalar> *const model,
                                    DataCollectorAbstract *const data)
       : Base(model, data),
+        geometry(pinocchio::GeometryData(model->get_geometry())),
+        req(),
+        res(),
         J1(6, model->get_state()->get_nv()),
-        J2(6, model->get_state()->get_nv()),
-        geometry(pinocchio::GeometryData(model->get_geometry())) {
+        J2(6, model->get_state()->get_nv())
+ {
     // Check that proper shared data has been passed
     DataCollectorMultibodyTpl<Scalar> *d =
         dynamic_cast<DataCollectorMultibodyTpl<Scalar> *>(shared);
