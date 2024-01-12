@@ -57,7 +57,7 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
 
 //   pinocchio::forwardKinematics(pin_model_, *(d->pinocchio),q);
   pinocchio::updateGeometryPlacements(pin_model_, *(d->pinocchio),
-                                      *geom_model_.get(), d->geometry, q);
+                                      *geom_model_.get(), d->geometry);
 
 // const auto M1 = toFclTransform3f(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].first]);
   d->r[0] = hpp::fcl::distance(
@@ -96,33 +96,33 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
 
 
   // getting the nearest points belonging to the collision shapes
-  d->cp1 = d->res.nearest_points[0];
-  // const Vector3s & cp1 = d->res.nearest_points[0];
-  d->cp2 = d->res.nearest_points[1];
-//   const Eigen::Vector3s & cp2 = d->res.nearest_points[1];
+  // d->cp1 = d->res.nearest_points[0];
+  const Vector3s & cp1 = d->res.nearest_points[0];
+  // d->cp2 = d->res.nearest_points[1];
+  const Vector3s & cp2 = d->res.nearest_points[1];
 
   // Transport the jacobian of frame 1 into the jacobian associated to cp1
   // Vector from frame 1 center to p1
-  d->f1p1 = d->cp1 -
+  d->f1p1 = cp1 -
          d->pinocchio
              ->oMf[geom_model_
                        ->geometryObjects[geom_model_->collisionPairs[pair_id_]
                                              .first]
                        .parentFrame]
              .translation();
-  d->f1Mp1 = pinocchio::SE3::Identity();; // = pinocchio::SE3::Identity();
+  d->f1Mp1.setIdentity(); // = pinocchio::SE3::Identity();
   d->f1Mp1.translation(d->f1p1);
   d->J1 = d->f1Mp1.toActionMatrixInverse() * d->J1;//todo change me for simpler
   // Transport the jacobian of frame 2 into the jacobian associated to cp2
   // Vector from frame 2 center to p2
-  d->f2p2 = d->cp2 -
+  d->f2p2 = cp2 -
          d->pinocchio
              ->oMf[geom_model_
                        ->geometryObjects[geom_model_->collisionPairs[pair_id_]
                                              .second]
                        .parentFrame]
              .translation();
-  d->f2Mp2 = pinocchio::SE3::Identity();
+  d->f2Mp2.setIdentity();
   d->f2Mp2.translation(d->f2p2);
   d->J2 = d->f2Mp2.toActionMatrixInverse() * d->J2;
 

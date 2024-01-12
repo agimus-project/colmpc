@@ -178,8 +178,8 @@ class OCPPandaReachingColWithSingleCol:
         self._runningConstraintModelManager.addConstraint("col", constraint)
         self._terminalConstraintModelManager.addConstraint("col_term", constraint)
         
-        # self._runningConstraintModelManager.addConstraint("col2", constraint2)
-        # self._terminalConstraintModelManager.addConstraint("col_term2", constraint2)
+        self._runningConstraintModelManager.addConstraint("col2", constraint2)
+        self._terminalConstraintModelManager.addConstraint("col_term2", constraint2)
         # Adding costs to the models
         self._runningCostModel.addCost("stateReg", xRegCost, self._WEIGHT_xREG)
         self._runningCostModel.addCost("ctrlRegGrav", uRegCost, self._WEIGHT_uREG)
