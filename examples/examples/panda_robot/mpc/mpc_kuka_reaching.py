@@ -36,12 +36,22 @@ robot_simulator.reset_state(q0, v0)
 robot_simulator.forward_robot(q0, v0)
 print("[PyBullet] Created robot (id = "+str(robot_simulator.robotId)+")")
 
-TARGET_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.4, 1.5]))
-OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0.25, -0.425, 1.5]))
-OBSTACLE_RADIUS = 1.5e-1
+TARGET_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.4, 1.5]))
+TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.0, 1.5]))
+
+# OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.5]))
+OBSTACLE_POSE = robot_simulator.pin_robot.collision_model.geometryObjects[robot_simulator.pin_robot.collision_model.getGeometryId("obstacle")].placement
+OBSTACLE_RADIUS = 1.0e-1
 dt = 1e-2
 T = 100
 
+# MeshcatVis = MeshcatWrapper()
+# vis, meshcatVis = MeshcatVis.visualize(
+#     TARGET_POSE2,
+#     robot_model=robot_simulator.pin_robot.model,
+#     robot_collision_model=robot_simulator.pin_robot.collision_model,
+#     robot_visual_model=robot_simulator.pin_robot.visual_model,
+# )
 # # # # # # # # # # # # # # #
 ###  SETUP CROCODDYL OCP  ###
 # # # # # # # # # # # # # # #
@@ -52,7 +62,7 @@ T = 100
 problem = OCPPandaReaching(
     robot_simulator.pin_robot.model,
     robot_simulator.pin_robot.collision_model,
-    TARGET_POSE,
+    TARGET_POSE1,
     T,
     dt,
     x0,
@@ -68,20 +78,24 @@ xs_init = [x0 for i in range(T+1)]
 us_init = ddp.problem.quasiStatic(xs_init[:-1])
 # Solve
 ddp.solve(xs_init, us_init, maxiter=100)
+xs_init = ddp.xs
+us_init = ddp.us
 
+# print("press enter for the traj without obstacle")
+# input()
+# for xs in ddp.xs:
+#     vis.display(np.array(xs[:7].tolist()))
 ### CREATING THE PROBLEM WITH OBSTACLE
 
 # Obstacle cost with hard constraint
 robot_simulator.pin_robot.collision_model.addCollisionPair(
-    pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link6_sc_2"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
+    pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link7_sc_1"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
 )
-
-print(robot_simulator.pin_robot.collision_model.geometryObjects[robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link6_sc_2")].parentFrame)
 
 problem = OCPPandaReachingColWithMultipleCol(
     robot_simulator.pin_robot.model,
     robot_simulator.pin_robot.collision_model,
-    TARGET_POSE,
+    TARGET_POSE1,
     OBSTACLE_POSE,
     OBSTACLE_RADIUS,
     T,
@@ -94,13 +108,69 @@ problem = OCPPandaReachingColWithMultipleCol(
     WEIGHT_uREG=1e-4,
 )
 ddp = problem()
-
-xs_init = ddp.xs
-us_init = ddp.us
 # Solve
+# ddp.solve(xs_init, us_init, maxiter=100)
 
-ddp.solve(xs_init, us_init, maxiter=100)
+# print("press enter for the traj with obstacle")
+# input()
+# for xs in ddp.xs:
+#     vis.display(np.array(xs[:7].tolist()))
+# ### Second part of the movement
+# x01 = ddp.xs.tolist[-1]
 
+# ### CREATING THE PROBLEM WITHOUT OBSTACLE
+# problem = OCPPandaReaching(
+#     robot_simulator.pin_robot.model,
+#     robot_simulator.pin_robot.collision_model,
+#     TARGET_POSE2,
+#     T,
+#     dt,
+#     x01,
+#     WEIGHT_GRIPPER_POSE=1e2,
+#     WEIGHT_GRIPPER_POSE_TERM=1e2,
+#     WEIGHT_xREG=1e-2,
+#     WEIGHT_xREG_TERM=1e-2,
+#     WEIGHT_uREG=1e-4,
+# )
+# ddp = problem()
+
+# xs_init = [x0 for i in range(T+1)]
+# us_init = ddp.problem.quasiStatic(xs_init[:-1])
+# # Solve
+# ddp.solve(xs_init, us_init, maxiter=100)
+# xs_init = ddp.xs
+# us_init = ddp.us
+
+# print("press enter for the traj without obstacle")
+# input()
+# for xs in ddp.xs:
+#     vis.display(np.array(xs[:7].tolist()))
+    
+# ### CREATING THE PROBLEM WITH OBSTACLE
+
+# problem = OCPPandaReachingColWithMultipleCol(
+#     robot_simulator.pin_robot.model,
+#     robot_simulator.pin_robot.collision_model,
+#     TARGET_POSE,
+#     OBSTACLE_POSE,
+#     OBSTACLE_RADIUS,
+#     T,
+#     dt,
+#     x0,
+#     WEIGHT_GRIPPER_POSE=1e2,
+#     WEIGHT_GRIPPER_POSE_TERM=1e2,
+#     WEIGHT_xREG=1e-2,
+#     WEIGHT_xREG_TERM=1e-2,
+#     WEIGHT_uREG=1e-4,
+# )
+# ddp = problem()
+# # Solve
+# ddp.solve(xs_init, us_init, maxiter=100)
+
+# print("press enter for the traj without obstacle")
+# input()
+# for xs in ddp.xs:
+#     vis.display(np.array(xs[:7].tolist()))
 
 # # # # # # # # # # # #
 ###  MPC SIMULATION ###
@@ -123,12 +193,73 @@ log_rate = 100
 # Initialize simulation data 
 sim_data = mpc_utils.init_sim_data(sim_params, ocp_params, x0)
 # Display target 
-mpc_utils.display_ball(TARGET_POSE.translation, RADIUS=.05, COLOR=[1.,0.,0.,.6])
-mpc_utils.display_ball(OBSTACLE_POSE.translation, RADIUS=1.5e-1, COLOR=[1.,1.,0.,.6])
+mpc_utils.display_ball(TARGET_POSE1.translation, RADIUS=.05, COLOR=[1.,0.,0.,.6])
+mpc_utils.display_ball(TARGET_POSE2.translation, RADIUS=0.5e-1, COLOR=[1.,0.,0.,.6])
 
+mpc_utils.display_ball(OBSTACLE_POSE.translation, RADIUS=1.0e-1, COLOR=[1.,1.,0.,.6])
+
+print(f"sim_data['N_sim'] : {sim_data['N_sim']}")
 # Simulate
 mpc_cycle = 0
+TARGET_POSE = TARGET_POSE1
 for i in range(sim_data['N_sim']): 
+    
+    if i%500 == 0 and i !=0:
+        if TARGET_POSE == TARGET_POSE1:
+            TARGET_POSE = TARGET_POSE2
+        else:
+            TARGET_POSE=TARGET_POSE1
+        problem = OCPPandaReaching(
+            robot_simulator.pin_robot.model,
+            robot_simulator.pin_robot.collision_model,
+            TARGET_POSE,
+            T,
+            dt,
+            x0,
+            WEIGHT_GRIPPER_POSE=1e2,
+            WEIGHT_GRIPPER_POSE_TERM=1e2,
+            WEIGHT_xREG=1e-2,
+            WEIGHT_xREG_TERM=1e-2,
+            WEIGHT_uREG=1e-4,
+        )
+        ddp = problem()
+
+        xs_init = [x0 for i in range(T+1)]
+        us_init = ddp.problem.quasiStatic(xs_init[:-1])
+        # Solve
+        ddp.solve(xs_init, us_init, maxiter=100)
+
+        xs_init = ddp.xs.tolist()
+        us_init = ddp.us.tolist()
+        print("solving the ocp with obstacle") 
+    #     input()
+        problem = OCPPandaReachingColWithMultipleCol(
+            robot_simulator.pin_robot.model,
+            robot_simulator.pin_robot.collision_model,
+            TARGET_POSE,
+            OBSTACLE_POSE,
+            OBSTACLE_RADIUS,
+            T,
+            dt,
+            sim_data['state_mea_SIM_RATE'][i, :],
+            WEIGHT_GRIPPER_POSE=1e2,
+            WEIGHT_GRIPPER_POSE_TERM=1e2,
+            WEIGHT_xREG=1e-2,
+            WEIGHT_xREG_TERM=1e-2,
+            WEIGHT_uREG=1e-4,
+            solv_iter = 15,
+            callbacks=False
+            )
+        ddp = problem()
+    #     ddp.solve(xs_init, us_init, maxiter=100)     
+    #     problem._solv_iter = 10   
+    #     problem._callbacks = False   
+    #     ddp= problem()
+
+    #     input()
+    #     for xs in ddp.xs:
+    #         vis.display(np.array(xs[:7].tolist()))
+    #         input()
 
     if(i%log_rate==0): 
         print("\n SIMU step "+str(i)+"/"+str(sim_data['N_sim'])+"\n")

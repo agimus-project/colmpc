@@ -42,9 +42,10 @@ def load_pinocchio_robot_panda():
 
     
     ### CREATING THE SPHERE ON THE UNIVERSE
-    OBSTACLE_RADIUS = 1.5e-1
-    OBSTACLE_POSE = pin.SE3.Identity()
-    OBSTACLE_POSE.translation = np.array([0.25, -0.425, 1.5])
+    OBSTACLE_RADIUS = 1.0e-1
+    # OBSTACLE_POSE = pin.SE3.Identity()
+    # OBSTACLE_POSE.translation = np.array([0.25, -0.425, 1.5])
+    OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.5]))
     OBSTACLE = hppfcl.Sphere(OBSTACLE_RADIUS)
     OBSTACLE_GEOM_OBJECT = pin.GeometryObject(
         "obstacle",

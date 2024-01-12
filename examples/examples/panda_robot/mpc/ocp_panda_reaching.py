@@ -156,6 +156,6 @@ class OCPPandaReaching:
         ddp.use_filter_line_search = False
         ddp.termination_tolerance = 1e-3
         ddp.max_qp_iters = 1000
-        ddp.with_callbacks = False 
+        ddp.with_callbacks = True 
 
         return ddp
