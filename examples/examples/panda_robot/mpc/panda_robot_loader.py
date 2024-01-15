@@ -12,9 +12,10 @@ np.set_printoptions(precision=4, linewidth=180)
 import pin_utils, mpc_utils
 from mim_robots.pybullet.wrapper import PinBulletWrapper
 
+RED = np.array([249, 136, 126, 125]) / 255
 import pybullet
 
-def load_pinocchio_robot_panda():
+def load_pinocchio_robot_panda(capsule = False):
     """Load the robot from the models folder.
 
     Returns:
@@ -39,8 +40,40 @@ def load_pinocchio_robot_panda():
     rmodel, [vmodel, cmodel] = pin.buildReducedModel(
         rmodel, [vmodel, cmodel], [1, 9, 10], q0
     )
+    cmodel_copy = cmodel.copy()
+    list_names_capsules = []
+    if capsule:
+        for geometry_object in cmodel_copy.geometryObjects:
+            if isinstance(geometry_object.geometry, hppfcl.Sphere):
+                cmodel.removeGeometryObject(geometry_object.name)
+            # Only selecting the cylinders
+            if isinstance(geometry_object.geometry, hppfcl.Cylinder):
+                if (geometry_object.name[:-4] + "capsule") in list_names_capsules:
+                    capsule = pin.GeometryObject(
+                    geometry_object.name[:-4] + "capsule" + "1",
+                    geometry_object.parentJoint,
+                    geometry_object.parentFrame,
+                    geometry_object.placement,
+                    hppfcl.Capsule(geometry_object.geometry.radius, geometry_object.geometry.halfLength),
+                    )
+                    capsule.meshColor = RED
+                    cmodel.addGeometryObject(capsule)
+                    cmodel.removeGeometryObject(geometry_object.name)
+                    list_names_capsules.append(geometry_object.name[:-4] + "capsule" + "1" )
+                else:
+                    capsule = pin.GeometryObject(
+                    geometry_object.name[:-4] + "capsule",
+                    geometry_object.parentJoint,
+                    geometry_object.parentFrame,
+                    geometry_object.placement,
+                    hppfcl.Capsule(geometry_object.geometry.radius, geometry_object.geometry.halfLength),
+                    )
+                    capsule.meshColor = RED
+                    cmodel.addGeometryObject(capsule)
+                    cmodel.removeGeometryObject(geometry_object.name)
+                    list_names_capsules.append(geometry_object.name[:-4] + "capsule")
 
-    
+        
     ### CREATING THE SPHERE ON THE UNIVERSE
     OBSTACLE_RADIUS = 1.0e-1
     # OBSTACLE_POSE = pin.SE3.Identity()
@@ -119,7 +152,7 @@ class PandaRobot(PinBulletWrapper):
         pybullet.getBasePositionAndOrientation(self.robotId)
         
         # Create the robot wrapper in pinocchio.
-        robot_full = load_pinocchio_robot_panda()
+        robot_full = load_pinocchio_robot_panda(capsule=False)
 
         
         # Query all the joints.
