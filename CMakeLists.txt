@@ -92,3 +92,12 @@ install(
   EXPORT ${TARGETS_EXPORT_NAME}
   DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(FILES package.xml DESTINATION share/${PROJECT_NAME})
+
+install(FILES
+  include/${PROJECT_NAME}/fwd.hpp
+  include/${PROJECT_NAME}/python.hpp
+  include/${PROJECT_NAME}/residual-distance-collision.hpp
+  include/${PROJECT_NAME}/residual-distance-collision.hxx
+  DESTINATION
+  ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+)
