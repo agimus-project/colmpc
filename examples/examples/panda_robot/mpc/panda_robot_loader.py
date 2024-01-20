@@ -15,7 +15,7 @@ from mim_robots.pybullet.wrapper import PinBulletWrapper
 RED = np.array([249, 136, 126, 125]) / 255
 import pybullet
 
-def load_pinocchio_robot_panda(capsule = False):
+def load_pinocchio_robot_panda(capsule = False, scene = 1):
     """Load the robot from the models folder.
 
     Returns:
@@ -73,22 +73,32 @@ def load_pinocchio_robot_panda(capsule = False):
                     cmodel.removeGeometryObject(geometry_object.name)
                     list_names_capsules.append(geometry_object.name[:-4] + "capsule")
 
-        
-    ### CREATING THE SPHERE ON THE UNIVERSE
-    OBSTACLE_RADIUS = 1.0e-1
-    # OBSTACLE_POSE = pin.SE3.Identity()
-    # OBSTACLE_POSE.translation = np.array([0.25, -0.425, 1.5])
-    OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.5]))
-    OBSTACLE = hppfcl.Sphere(OBSTACLE_RADIUS)
-    OBSTACLE_GEOM_OBJECT = pin.GeometryObject(
-        "obstacle",
-        rmodel.getFrameId("universe"),
-        rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
-        OBSTACLE,
-        OBSTACLE_POSE,
-    )
-    ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)
-
+    if scene == 1:
+        ### CREATING THE SPHERE ON THE UNIVERSE
+        OBSTACLE_RADIUS = 1.0e-1
+        OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.5]))
+        OBSTACLE = hppfcl.Sphere(OBSTACLE_RADIUS)
+        OBSTACLE_GEOM_OBJECT = pin.GeometryObject(
+            "obstacle",
+            rmodel.getFrameId("universe"),
+            rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
+            OBSTACLE,
+            OBSTACLE_POSE,
+        )
+        ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)
+    elif scene ==2:
+        ### CREATING THE SPHERE ON THE UNIVERSE
+        OBSTACLE_RADIUS = 1.5e-1
+        OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.2]))
+        OBSTACLE = hppfcl.Sphere(OBSTACLE_RADIUS)
+        OBSTACLE_GEOM_OBJECT = pin.GeometryObject(
+            "obstacle",
+            rmodel.getFrameId("universe"),
+            rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
+            OBSTACLE,
+            OBSTACLE_POSE,
+        )
+        ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)
     # ### CREATING THE SPHERE ON THE END EFFECTOR
     # SPHERE2_RADIUS = 1.5e-1
     # SPHERE2_POSE = pin.SE3.Identity()
@@ -126,7 +136,7 @@ class PandaRobot(PinBulletWrapper):
     '''
     Pinocchio-PyBullet wrapper class for the KUKA LWR iiwa 
     '''
-    def __init__(self, qref=np.zeros(7), pos=None, orn=None): 
+    def __init__(self, qref=np.zeros(7), pos=None, orn=None, scene = 1): 
 
         # Load the robot
         if pos is None:
@@ -152,7 +162,7 @@ class PandaRobot(PinBulletWrapper):
         pybullet.getBasePositionAndOrientation(self.robotId)
         
         # Create the robot wrapper in pinocchio.
-        robot_full = load_pinocchio_robot_panda(capsule=False)
+        robot_full = load_pinocchio_robot_panda(capsule=False, scene=scene)
 
         
         # Query all the joints.

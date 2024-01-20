@@ -169,7 +169,7 @@ if __name__=="__main__":
     
     curr_path = dirname(str(abspath(__file__)))
 
-    test = Result(curr_path + "/scene1/comparingnodes/nnodes8fdt50maxit10maxqpiters25.json")
+    test = Result(curr_path + "/scene1/comparingnodes/nnodes10fdt50maxit10maxqpiters25.json")
     test._results["weights"]
     print(test._results["weights"])
     

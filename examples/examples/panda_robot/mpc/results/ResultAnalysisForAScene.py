@@ -171,8 +171,9 @@ class ResultAnalysisForAScene():
     
 if __name__=="__main__":
 
-    COMPARING_NODES = True     
+    COMPARING_NODES = False 
     SCENE1 = True
+    COMPARING_CSQP_FDDP = True
     rmodel, cmodel = load_model()
     curr_path = dirname(str(abspath(__file__)))
 
@@ -181,6 +182,8 @@ if __name__=="__main__":
         path = curr_path + "/scene1"
         if COMPARING_NODES:
             path += "/comparingnodes"
+        elif COMPARING_CSQP_FDDP:
+            path += "/comparingcsqpfddp"
     for filename in listdir(path):
         f = join(path, filename)
         # checking if it is a file
