@@ -23,6 +23,7 @@ class OCPPandaReaching:
         WEIGHT_GRIPPER_POSE=10,
         WEIGHT_GRIPPER_POSE_TERM = 10,
         WEIGHT_LIMIT = 1e-1,
+        callbacks = False,
     ) -> None:
         """Creating the class for optimal control problem of a panda robot reaching for a target while taking auto collision into consideration
 
@@ -43,6 +44,8 @@ class OCPPandaReaching:
         self._T = T
         self._dt = dt
         self._x0 = x0
+        
+        self._callbacks = callbacks
 
         # Weights
         self._WEIGHT_xREG = WEIGHT_xREG
@@ -83,7 +86,7 @@ class OCPPandaReaching:
 
         framePlacementResidual = crocoddyl.ResidualModelFrameTranslation(
             self._state,
-            self._rmodel.getFrameId("panda2_leftfinger"),
+            self._rmodel.getFrameId("panda2_rightfinger"),
             self._TARGET_POSE.translation,
         )
         goalTrackingCost = crocoddyl.CostModelResidual(
@@ -147,15 +150,11 @@ class OCPPandaReaching:
             self._x0, [self._runningModel] * self._T, self._terminalModel
         )
         # Create solver + callbacks
-        # ddp = crocoddyl.SolverSQP(problem)
-
-        # ddp.setCallbacks([crocoddyl.CallbackLogger(), crocoddyl.CallbackVerbose()])
-
         # Define solver
         ddp = mim_solvers.SolverSQP(problem)
         ddp.use_filter_line_search = False
         ddp.termination_tolerance = 1e-3
         ddp.max_qp_iters = 1000
-        ddp.with_callbacks = True 
+        ddp.with_callbacks = self._callbacks 
 
         return ddp

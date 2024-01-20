@@ -825,7 +825,13 @@
     <parent link="camera_depth_frame"/>
     <child link="camera_depth_optical_frame"/>
   </joint>
-  <link name="camera_depth_optical_frame"/>
+  <link name="camera_depth_optical_frame">
+      <inertial>
+      <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
+      <mass value="0.0"/>
+       <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>    
   <!-- camera left IR joints and links -->
   <joint name="camera_infra1_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0.0 0"/>

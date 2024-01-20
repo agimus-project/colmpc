@@ -18,8 +18,6 @@ class OCPPandaReachingColWithMultipleCol:
         rmodel: pin.Model,
         cmodel: pin.GeometryModel,
         TARGET_POSE: pin.SE3,
-        OBSTACLE_POSE: pin.SE3,
-        OBSTACLE_RADIUS: float,
         T: int,
         dt: float,
         x0: np.ndarray,
@@ -30,7 +28,7 @@ class OCPPandaReachingColWithMultipleCol:
         WEIGHT_GRIPPER_POSE_TERM = 10,
         WEIGHT_LIMIT = 1e-1,
         SAFETY_THRESHOLD=5e-3,
-        max_qp_iter = 100,
+        max_qp_iters = 100,
         callbacks = False,
     ) -> None:
         """Creating the class for optimal control problem of a panda robot reaching for a target while taking a collision between a given previously given shape of the robot and an obstacle into consideration.
@@ -39,8 +37,6 @@ class OCPPandaReachingColWithMultipleCol:
             rmodel (pin.Model): pinocchio Model of the robot
             cmodel (pin.GeometryModel): Collision model of the robot
             TARGET_POSE (pin.SE3): Pose of the target in WOLRD ref
-            OBSTACLE_POSE (pin.SE3): Pose of the obstacle in the universe ref
-            OBSTACLE_RADIUS (float): Radius of the obstacle
             T (int): Number of nodes in the trajectory
             dt (float): Time step between each node
             x0 (np.ndarray): Initial state of the problem
@@ -55,15 +51,13 @@ class OCPPandaReachingColWithMultipleCol:
 
         # Poses & dimensions of the target & obstacle
         self._TARGET_POSE = TARGET_POSE
-        self._OBSTACLE_RADIUS = OBSTACLE_RADIUS
-        self._OBSTACLE_POSE = OBSTACLE_POSE
         self._SAFETY_THRESHOLD = SAFETY_THRESHOLD
 
         # Params of the problem
         self._T = T
         self._dt = dt
         self._x0 = x0
-        self._max_qp_iter = max_qp_iter
+        self._max_qp_iters = max_qp_iters
         self._callbacks = callbacks
 
         # Weights
@@ -81,7 +75,7 @@ class OCPPandaReachingColWithMultipleCol:
         self._cdata = cmodel.createData()
 
         # Frames
-        self._endeff_frame = self._rmodel.getFrameId("panda2_leftfinger")
+        self._endeff_frame = self._rmodel.getFrameId("panda2_rightfinger")
 
         # Making sure that the frame exists
         assert self._endeff_frame <= len(self._rmodel.frames)
@@ -252,10 +246,6 @@ class OCPPandaReachingColWithMultipleCol:
             self._x0, [self._runningModel] * self._T, self._terminalModel
         )
         # Create solver + callbacks
-        # ddp = crocoddyl.SolverSQP(problem)
-
-        # ddp.setCallbacks([crocoddyl.CallbackLogger(), crocoddyl.CallbackVerbose()])
-
         # Define mim solver with inequalities constraints
         ddp = mim_solvers.SolverCSQP(problem)
         
@@ -264,7 +254,7 @@ class OCPPandaReachingColWithMultipleCol:
         
         # Parameters of the solver
         ddp.termination_tolerance = 1e-3
-        ddp.max_qp_iters =self._max_qp_iter
+        ddp.max_qp_iters =self._max_qp_iters
         ddp.eps_abs = 1e-6
         ddp.eps_rel = 0
         
