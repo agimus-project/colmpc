@@ -8,7 +8,7 @@ It has several dependencies:
 ## For OCP & MPC scripts: 
 
 - HPPFCL : https://github.com/humanoid-path-planner/hpp-fcl/tree/hppfcl3x **(HPPFCL3X BRANCH REQUIERED)** for collision computations.
-- Pinocchio: https://github.com/stack-of-tasks/pinocchio fast rigid body dynamics. **(if you have pinocchio2, switch to the pinocchio2 branch)**
+- Pinocchio: https://github.com/stack-of-tasks/pinocchio fast rigid body dynamics.
 - Crocoddyl: https://github.com/loco-3d/crocoddyl framework for the solver.
 
 ## For visualization: 
