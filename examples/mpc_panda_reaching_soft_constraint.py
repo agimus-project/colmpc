@@ -16,9 +16,7 @@ import pin_utils, mpc_utils
 from mim_robots.pybullet.env import BulletEnvWithGround
 from panda_robot_loader import PandaRobot
 from ocp_panda_reaching import OCPPandaReaching
-from ocp_panda_reaching_obs import OCPPandaReachingColWithMultipleCol
-
-from utils import BLUE, YELLOW_FULL, RED_FULL, GREEN_FULL, BLUE_FULL, BLACK
+from ocp_panda_reaching_obs_soft import OCPPandaReachingColWithMultipleColSoft
 
 import pybullet as p
 
@@ -115,7 +113,7 @@ OBSTACLE_RADIUS = 1.0e-1
 dt = 2e-2
 T = 10
 
-max_iter = 4  # Maximum iterations of the solver
+max_iter = 50  # Maximum iterations of the solver
 max_qp_iters = 25  # Maximum iterations for solving each qp solved in one iteration of the solver
 
 WEIGHT_GRIPPER_POSE=1e2
@@ -123,7 +121,7 @@ WEIGHT_GRIPPER_POSE_TERM=1e2
 WEIGHT_xREG=1e-2
 WEIGHT_xREG_TERM=1e-2
 WEIGHT_uREG=1e-4
-max_qp_iters= 25
+max_qp_iters= 100
 callbacks=False
 safety_threshhold = 1e-2
 
@@ -164,7 +162,7 @@ if WITH_TRAJECTORY_WARMSTART:
 ### CREATING THE PROBLEM WITH OBSTACLE
 
 print("Solving the problem with collision")
-problem = OCPPandaReachingColWithMultipleCol(
+problem = OCPPandaReachingColWithMultipleColSoft(
     robot_simulator.pin_robot.model,
     robot_simulator.pin_robot.collision_model,
     TARGET_POSE1,
@@ -181,7 +179,7 @@ problem = OCPPandaReachingColWithMultipleCol(
     callbacks=callbacks,
 )
 ddp = problem()
-ddp.solve(xs_init, us_init, maxiter=100)
+ddp.solve(xs_init, us_init, maxiter=50)
 xs_init = ddp.xs
 us_init = ddp.us
 
@@ -265,7 +263,7 @@ for i in range(sim_data["N_sim"]):
 
             print("solving the ocp with obstacle")
 
-        problem = OCPPandaReachingColWithMultipleCol(
+        problem = OCPPandaReachingColWithMultipleColSoft(
             robot_simulator.pin_robot.model,
             robot_simulator.pin_robot.collision_model,
             TARGET_POSE,
@@ -362,22 +360,6 @@ for i in range(sim_data["N_sim"]):
         x_mea_SIM_RATE = np.concatenate([q_mea_SIM_RATE, v_mea_SIM_RATE]).T
         sim_data["state_mea_SIM_RATE"][i + 1, :] = x_mea_SIM_RATE
         u_list.append(u_curr.tolist())
-        
-if WITH_SAVING_RESULTS:
-    results = {
-        "Nnodes" : T,
-        "dt": dt,
-        "weights": [WEIGHT_GRIPPER_POSE,WEIGHT_GRIPPER_POSE_TERM,WEIGHT_xREG,WEIGHT_xREG_TERM,WEIGHT_uREG],
-        "max_iter": max_iter,
-        "max_qp_iters": max_qp_iters,
-        "time_calc": time_calc,
-        "X": sim_data["state_mea_SIM_RATE"].flatten().tolist(),
-        "U": u_list,
-        "collision_pairs": list_col_pairs,
-    }
-    with open("results/scene1/comparisoncsqpfddp" + "nnodes" + str(T) + "fdt" + str(int(1/dt)) + "maxit" + str(max_iter) + "maxqpiters" + str(max_qp_iters) + ".json", "w") as outfile:
-        json.dump(results, outfile)
-
 
 if WITH_PLOTS:
     plot_data = mpc_utils.extract_plot_data_from_sim_data(sim_data)

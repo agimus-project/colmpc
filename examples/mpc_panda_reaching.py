@@ -3,7 +3,6 @@ Example script : MPC simulation with KUKA arm
 static target reaching task
 
 """
-import json
 import time
 
 import numpy as np
@@ -18,8 +17,6 @@ from panda_robot_loader import PandaRobot
 from ocp_panda_reaching import OCPPandaReaching
 from ocp_panda_reaching_obs import OCPPandaReachingColWithMultipleCol
 
-from utils import BLUE, YELLOW_FULL, RED_FULL, GREEN_FULL, BLUE_FULL, BLACK
-
 import pybullet as p
 
 # # # # # # # #
@@ -30,7 +27,7 @@ import pybullet as p
 WITH_TRAJECTORY_WARMSTART = False
 WITH_WARMSTART_WHEN_CHANGING_TARGET = False
 WITH_PLOTS = False
-WITH_SAVING_RESULTS = False
+WITH_SAVING_RESULTS = True
 
 # # # # # # # # # # # # # # # # # # #
 ### LOAD ROBOT MODEL and SIMU ENV ###
@@ -39,7 +36,7 @@ WITH_SAVING_RESULTS = False
 # Simulation environment
 env = BulletEnvWithGround(p.GUI, dt=1e-3)
 # Robot simulator
-robot_simulator = PandaRobot(scene = 2)
+robot_simulator = PandaRobot()
 env.add_robot(robot_simulator)
 
 # Extract robot model
@@ -48,8 +45,6 @@ nv = robot_simulator.pin_robot.model.nv
 nu = nq
 nx = nq + nv
 q0 = np.array([0.1, 0.7, 0.0, 0.7, -0.5, 1.5, 0.0])
-# q0 = np.array([ 0.439,   0.9274 , 0.3113 , 0.3734 ,-0.2116,  1.1214 , 0.024])
-
 v0 = np.zeros(nv)
 x0 = np.concatenate([q0, v0])
 # Add robot to simulation and initialize
@@ -105,21 +100,19 @@ for col_pair in robot_simulator.pin_robot.collision_model.collisionPairs:
 ###  OCP CONSTANTS  ###
 # # # # # # # # # # # #
 
-TARGET_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0.00833, -0.4, 1.5]))
-TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.0, 0.95]))
+TARGET_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.4, 1.5]))
+TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.0, 1.5]))
 
 # OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.5]))
 OBSTACLE_POSE = robot_simulator.pin_robot.collision_model.geometryObjects[
     robot_simulator.pin_robot.collision_model.getGeometryId("obstacle")
 ].placement
-OBSTACLE_RADIUS = robot_simulator.pin_robot.collision_model.geometryObjects[
-    robot_simulator.pin_robot.collision_model.getGeometryId("obstacle")
-].geometry.radius
-print(OBSTACLE_RADIUS)
-dt = 2e-2
-T = 8
+OBSTACLE_RADIUS = 1.0e-1
 
-max_iter = 10  # Maximum iterations of the solver
+dt = 2e-2
+T = 10
+
+max_iter = 4  # Maximum iterations of the solver
 max_qp_iters = 25  # Maximum iterations for solving each qp solved in one iteration of the solver
 
 WEIGHT_GRIPPER_POSE=1e2
@@ -367,21 +360,6 @@ for i in range(sim_data["N_sim"]):
         sim_data["state_mea_SIM_RATE"][i + 1, :] = x_mea_SIM_RATE
         u_list.append(u_curr.tolist())
         
-if WITH_SAVING_RESULTS:
-    results = {
-        "Nnodes" : T,
-        "dt": dt,
-        "weights": [WEIGHT_GRIPPER_POSE,WEIGHT_GRIPPER_POSE_TERM,WEIGHT_xREG,WEIGHT_xREG_TERM,WEIGHT_uREG],
-        "max_iter": max_iter,
-        "max_qp_iters": max_qp_iters,
-        "time_calc": time_calc,
-        "X": sim_data["state_mea_SIM_RATE"].flatten().tolist(),
-        "U": u_list,
-        "collision_pairs": list_col_pairs,
-    }
-    with open("results/scene1/" + "nnodes" + str(T) + "fdt" + str(int(1/dt)) + "maxit" + str(max_iter) + "maxqpiters" + str(max_qp_iters) + ".json", "w") as outfile:
-        json.dump(results, outfile)
-
 
 if WITH_PLOTS:
     plot_data = mpc_utils.extract_plot_data_from_sim_data(sim_data)
