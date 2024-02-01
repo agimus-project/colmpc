@@ -19,12 +19,11 @@ template <typename Scalar>
 ResidualDistanceCollisionTpl<Scalar>::ResidualDistanceCollisionTpl(
     boost::shared_ptr<StateMultibody> state, const std::size_t nu,
     boost::shared_ptr<GeometryModel> geom_model,
-    const pinocchio::PairIndex pair_id, const pinocchio::JointIndex joint_id)
+    const pinocchio::PairIndex pair_id)
     : Base(state, 1, nu, true, false, false),
       pin_model_(*state->get_pinocchio()),
       geom_model_(geom_model),
-      pair_id_(pair_id),
-      joint_id_(joint_id)
+      pair_id_(pair_id)
      {
 
   if (static_cast<pinocchio::FrameIndex>(geom_model_->collisionPairs.size()) <=
@@ -33,13 +32,6 @@ ResidualDistanceCollisionTpl<Scalar>::ResidualDistanceCollisionTpl(
         "Invalid argument: "
         << "the pair index is wrong (it does not exist in the geometry model)");
   }
-  if (static_cast<pinocchio::FrameIndex>(state->get_pinocchio()->njoints) <=
-      joint_id) {
-    throw_pretty(
-        "Invalid argument: "
-        << "the joint index is wrong (it does not exist in the robot)");
-  }
-
 }
 
 template <typename Scalar>
@@ -51,20 +43,72 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
     const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
   Data *d = static_cast<Data *>(data.get());
 
-  const Eigen::VectorBlock<const Eigen::Ref<const VectorXs>, Eigen::Dynamic> q =
-      x.head(state_->get_nq());
+  // const Eigen::VectorBlock<const Eigen::Ref<const VectorXs>, Eigen::Dynamic> q =
+  //     x.head(state_->get_nq());
   // computes the distance for the collision pair pair_id_
 
-//   pinocchio::forwardKinematics(pin_model_, *(d->pinocchio),q);
-  pinocchio::updateGeometryPlacements(pin_model_, *(d->pinocchio),
-                                      *geom_model_.get(), d->geometry);
+  const pinocchio::Model::JointIndex joint_id_1 = geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first].parentJoint;
+  const pinocchio::Model::JointIndex joint_id_2 = geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second].parentJoint;
+
+  if (joint_id_1 > 0) 
+  {
+  d->oMg_id_1 = d->pinocchio->oMi[joint_id_1] * geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first].placement;
+  }
+  else 
+  {
+  d->oMg_id_1 =  geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first].placement;
+  }
+
+  if (joint_id_2 > 0) 
+  {
+  d->oMg_id_2 = d->pinocchio->oMi[joint_id_2] * geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second].placement;
+  }
+  else 
+  {
+  d->oMg_id_2 =  geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second].placement;
+  }
+
+
+  // pinocchio::updateGeometryPlacements(pin_model_, *(d->pinocchio),
+  //                                     *geom_model_.get(), d->geometry);
+
+  // Check each corresponding element
+  // for (int i = 0; i < d->oMg_id_1.rows(); ++i) {
+  //     for (int j = 0; j < d->oMg_id_1.cols(); ++j) {
+  //         if (d->oMg_id_1(i, j) != d->geometry.oMg[geom_model_->collisionPairs[pair_id_].first](i, j)) {
+  //           throw_pretty(
+  //               "Invalid matrix: "
+  //               << "the value of the matrix d->oMg_id_1 is not the same as the one updated from geometryPlacements");
+  //         }
+  //       }
+  // }
+  
+  // bool sameRotation1 = d->oMg_id_1.rotation().isApprox(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].first].rotation());
+  // std::cout << "same rotation for oMg_id1? " << sameRotation1 << std::endl;
+
+  // bool sameRotation2 = d->oMg_id_2.rotation().isApprox(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].second].rotation());
+  // std::cout << "same rotation for oMg_id2? " << sameRotation2 << std::endl;
+
+  // bool sameTranslation1 = d->oMg_id_1.translation().isApprox(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].first].translation());
+  // std::cout << "same translation for oMg_id1? " << sameTranslation1 << std::endl;
+  
+  // bool sameTranslation2 = d->oMg_id_2.translation().isApprox(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].second].translation());
+  // std::cout << "same translation for oMg_id2? " << sameTranslation2 << std::endl;
 
 // const auto M1 = toFclTransform3f(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].first]);
+  // d->r[0] = hpp::fcl::distance(
+  //     geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first].geometry.get(),
+  //     toFclTransform3f(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].first]),
+  //     geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second].geometry.get(),
+  //     toFclTransform3f(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].second]), 
+  //     d->req, 
+  //     d->res
+  // );
   d->r[0] = hpp::fcl::distance(
       geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first].geometry.get(),
-      toFclTransform3f(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].first]),
+      toFclTransform3f(d->oMg_id_1),
       geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second].geometry.get(),
-      toFclTransform3f(d->geometry.oMg[geom_model_->collisionPairs[pair_id_].second]), 
+      toFclTransform3f(d->oMg_id_2),
       d->req, 
       d->res
   );
@@ -77,8 +121,8 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
     const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
   Data *d = static_cast<Data *>(data.get());
 
-  const Eigen::VectorBlock<const Eigen::Ref<const VectorXs>, Eigen::Dynamic> q =
-      x.head(state_->get_nq());
+  // const Eigen::VectorBlock<const Eigen::Ref<const VectorXs>, Eigen::Dynamic> q =
+  //     x.head(state_->get_nq());
 
   const std::size_t nv = state_->get_nv();
 

@@ -55,15 +55,12 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
    * @param[in] geom_model  Pinocchio geometry model containing the collision
    * pair
    * @param[in] pair_id     Index of the collision pair in the geometry model
-   * @param[in] joint_id    Index of the nearest joint on which the collision
-   * link is attached
    */
 
   ResidualDistanceCollisionTpl(boost::shared_ptr<StateMultibody> state,
                                const std::size_t nu,
                                boost::shared_ptr<GeometryModel> geom_model,
-                               const pinocchio::PairIndex pair_id,
-                               const pinocchio::JointIndex joint_id);
+                               const pinocchio::PairIndex pair_id);
   virtual ~ResidualDistanceCollisionTpl();
 
   /**
@@ -193,6 +190,8 @@ struct ResidualDataDistanceCollisionTpl
   Vector3s f2p2;
   pinocchio::SE3 f2Mp2;
 
+  pinocchio::SE3 oMg_id_1;
+  pinocchio::SE3 oMg_id_2;
 
 };
 

@@ -162,7 +162,7 @@ class OCPPandaReachingColWithMultipleColSoft:
             # obstacleDistanceResidual = ResidualCollision(
             #     self._state, self._cmodel, self._cdata, col_idx
             # )
-            obstacleDistanceResidual = ResidualDistanceCollision(self._state, 7, self._cmodel, col_idx,6)
+            obstacleDistanceResidual = ResidualDistanceCollision(self._state, 7, self._cmodel, col_idx)
 
             xlb = np.array([0.02])
             xlb = 0.01

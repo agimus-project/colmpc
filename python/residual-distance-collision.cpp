@@ -14,15 +14,13 @@ void exposeResidualDistanceCollision() {
       "ResidualDistanceCollision",
       bp::init<boost::shared_ptr<StateMultibody>, const std::size_t,
                boost::shared_ptr<pinocchio::GeometryModel>,
-               const pinocchio::PairIndex, const pinocchio::JointIndex>(
-          bp::args("self", "state", "nu", "geom_model", "pair_id", "joint_id"),
+               const pinocchio::PairIndex>(
+          bp::args("self", "state", "nu", "geom_model", "pair_id"),
           "Initialize the residual model.\n\n"
           ":param state: state of the multibody system\n"
           ":param geom_model: Pinocchio geometry model containing the "
           "collision pair\n"
-          ":param pair_id: Index of the collision pair in the geometry model\n"
-          ":param joint_id: Index of the nearest joint on which the collision "
-          "link is attached"))
+          ":param pair_id: Index of the collision pair in the geometry model\n"))
       .def("calc", &ResidualDistanceCollision::calc,
            bp::args("self", "data", "x", "u"),
            "Compute the residual.\n\n"

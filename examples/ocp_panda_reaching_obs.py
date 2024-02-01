@@ -162,7 +162,7 @@ class OCPPandaReachingColWithMultipleCol:
             # obstacleDistanceResidual = ResidualCollision(
             #     self._state, self._cmodel, self._cdata, col_idx
             # )
-            obstacleDistanceResidual = ResidualDistanceCollision(self._state, 7, self._cmodel, col_idx,6)
+            obstacleDistanceResidual = ResidualDistanceCollision(self._state, 7, self._cmodel, col_idx)
         # obstacleDistanceResidual2 = ResidualDistanceCollision(self._state, 7, self._cmodel, 0,6)
 
 
