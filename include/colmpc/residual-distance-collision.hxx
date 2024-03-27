@@ -47,8 +47,8 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
   //     x.head(state_->get_nq());
   // computes the distance for the collision pair pair_id_
 
-  const pinocchio::Model::JointIndex joint_id_1 = geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first].parentJoint;
-  const pinocchio::Model::JointIndex joint_id_2 = geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second].parentJoint;
+  const pinocchio::Model::JointIndex joint_id_1 = geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first].parent;
+  const pinocchio::Model::JointIndex joint_id_2 = geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second].parent;
 
   if (joint_id_1 > 0) 
   {

@@ -47,7 +47,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
         CAPSULE1_GEOM_OBJECT = pin.GeometryObject(
             "CAPSULE1",
             rmodel.getFrameId("universe"),
-            rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
+            rmodel.frames[rmodel.getFrameId("universe")].parent,
             CAPSULE1,
             CAPSULE1_POSE,
         )
@@ -60,7 +60,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
         CAPSULE2_GEOM_OBJECT = pin.GeometryObject(
             "CAPSULE2",
             rmodel.getFrameId("panda2_leftfinger"),
-            rmodel.frames[rmodel.getFrameId("panda2_leftfinger")].parentJoint,
+            rmodel.frames[rmodel.getFrameId("panda2_leftfinger")].parent,
             CAPSULE2,
             CAPSULE2_POSE,
         )
@@ -73,7 +73,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
         CAPSULE3_GEOM_OBJECT = pin.GeometryObject(
             "CAPSULE3",
             rmodel.getFrameId("panda2_link3_sc_joint"),
-            rmodel.frames[rmodel.getFrameId("panda2_link3_sc_joint")].parentJoint,
+            rmodel.frames[rmodel.getFrameId("panda2_link3_sc_joint")].parent,
             CAPSULE3,
             CAPSULE3_POSE,
         )
@@ -94,7 +94,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
         self.CAPSULE1_GEOM_OBJECT = pin.GeometryObject(
             "CAPSULE1",
             rmodel.getFrameId("universe"),
-            rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
+            rmodel.frames[rmodel.getFrameId("universe")].parent,
             CAPSULE1,
             CAPSULE1_POSE,
         )
@@ -107,7 +107,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
         self.CAPSULE2_GEOM_OBJECT = pin.GeometryObject(
             "CAPSULE2",
             rmodel.getFrameId("tool0"),
-            rmodel.frames[rmodel.getFrameId("tool0")].parentJoint,
+            rmodel.frames[rmodel.getFrameId("tool0")].parent,
             CAPSULE2,
             CAPSULE2_POSE,
         )
@@ -120,7 +120,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
         self.CAPSULE3_GEOM_OBJECT = pin.GeometryObject(
             "CAPSULE3",
             rmodel.getFrameId("wrist_2_joint"),
-            rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parentJoint,
+            rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parent,
             CAPSULE3,
             CAPSULE3_POSE,
         )

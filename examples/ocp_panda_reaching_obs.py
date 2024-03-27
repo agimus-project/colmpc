@@ -99,7 +99,7 @@ class OCPPandaReachingColWithMultipleCol:
         self._shape1 = self._cmodel.geometryObjects[self._id_shape1]
 
         # Shape 1 parent joint
-        self._shape1_parentJoint = self._shape1.parentJoint
+        self._shape1_parentJoint = self._shape1.parent
 
         # Geometry ID of the shape 2 of collision pair
         self._id_shape2 = self._collisionPair.second
@@ -111,7 +111,7 @@ class OCPPandaReachingColWithMultipleCol:
         self._shape2 = self._cmodel.geometryObjects[self._id_shape2]
 
         # Shape 2 parent joint
-        self._shape2_parentJoint = self._shape2.parentJoint
+        self._shape2_parentJoint = self._shape2.parent
 
         # Checking that shape 1 is belonging to the robot & shape 2 is the obstacle
         assert not "obstacle" in self._shape1.name

@@ -56,7 +56,7 @@ class ResidualCollision(crocoddyl.ResidualModelAbstract):
         self._shape1 = self._geom_model.geometryObjects[self._shape1_id]
 
         # Shape 1 parent joint
-        self._shape1_parentJoint = self._shape1.parentJoint
+        self._shape1_parentJoint = self._shape1.parent
 
         # Geometry ID of the shape 2 of collision pair
         self._shape2_id = self._collisionPair.second
@@ -68,7 +68,7 @@ class ResidualCollision(crocoddyl.ResidualModelAbstract):
         self._shape2 = self._geom_model.geometryObjects[self._shape2_id]
 
         # Shape 2 parent joint
-        self._shape2_parentJoint = self._shape2.parentJoint
+        self._shape2_parentJoint = self._shape2.parent
 
         # Checking that shape 1 is belonging to the robot & shape 2 is the obstacle
         # assert not "obstacle" in self._shape1.name

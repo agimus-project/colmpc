@@ -51,7 +51,7 @@ def load_pinocchio_robot_panda(capsule = False):
                 if (geometry_object.name[:-4] + "capsule") in list_names_capsules:
                     capsule = pin.GeometryObject(
                     geometry_object.name[:-4] + "capsule" + "1",
-                    geometry_object.parentJoint,
+                    geometry_object.parent,
                     geometry_object.parentFrame,
                     geometry_object.placement,
                     hppfcl.Capsule(geometry_object.geometry.radius, geometry_object.geometry.halfLength),
@@ -63,7 +63,7 @@ def load_pinocchio_robot_panda(capsule = False):
                 else:
                     capsule = pin.GeometryObject(
                     geometry_object.name[:-4] + "capsule",
-                    geometry_object.parentJoint,
+                    geometry_object.parent,
                     geometry_object.parentFrame,
                     geometry_object.placement,
                     hppfcl.Capsule(geometry_object.geometry.radius, geometry_object.geometry.halfLength),
@@ -81,7 +81,7 @@ def load_pinocchio_robot_panda(capsule = False):
     OBSTACLE_GEOM_OBJECT = pin.GeometryObject(
         "obstacle",
         rmodel.getFrameId("universe"),
-        rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
+        rmodel.frames[rmodel.getFrameId("universe")].parent,
         OBSTACLE,
         OBSTACLE_POSE,
     )
