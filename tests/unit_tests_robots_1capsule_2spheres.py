@@ -22,9 +22,7 @@ class TestRobotsDistanceDerivativesCapsuleSpheres(unittest.TestCase):
         """
 
         ### LOADING THE ROBOT
-        pinocchio_model_dir = join(
-            dirname(dirname(dirname(str(abspath(__file__))))), "models"
-        )
+        pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
         model_path = join(pinocchio_model_dir, "franka_description/robots")
         mesh_dir = pinocchio_model_dir
         urdf_filename = "franka2.urdf"
@@ -44,10 +42,14 @@ class TestRobotsDistanceDerivativesCapsuleSpheres(unittest.TestCase):
         CAPSULE_POSE = pin.SE3.Identity()
         CAPSULE_POSE.translation = np.array([0.0, 0.25, 1.5])
         CAPSULE = hppfcl.Capsule(self.radius, self.halfLength)
+        try:
+            parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
+        except:
+            parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
         CAPSULE_GEOM_OBJECT = pin.GeometryObject(
             "CAPSULE",
             rmodel.getFrameId("universe"),
-            rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
+            parentJoint,
             CAPSULE,
             CAPSULE_POSE,
         )
@@ -57,10 +59,18 @@ class TestRobotsDistanceDerivativesCapsuleSpheres(unittest.TestCase):
         SPHERE2_POSE = pin.SE3.Identity()
         SPHERE2_POSE.translation = np.array([0.2, 0.0, 0.0])
         SPHERE2 = hppfcl.Sphere(self.radius)
+
+        try:
+            parentJoint = rmodel.frames[
+                rmodel.getFrameId("panda2_leftfinger")
+            ].parentJoint
+        except:
+            parentJoint = rmodel.frames[rmodel.getFrameId("panda2_leftfinger")].parent
+
         SPHERE2_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE2",
             rmodel.getFrameId("panda2_leftfinger"),
-            rmodel.frames[rmodel.getFrameId("panda2_leftfinger")].parentJoint,
+            parentJoint,
             SPHERE2,
             SPHERE2_POSE,
         )
@@ -70,10 +80,19 @@ class TestRobotsDistanceDerivativesCapsuleSpheres(unittest.TestCase):
         SPHERE3_POSE = pin.SE3.Identity()
         SPHERE3_POSE.translation = np.array([0.0, 0.1, 0.2])
         SPHERE3 = hppfcl.Sphere(self.radius)
+        try:
+            parentJoint = rmodel.frames[
+                rmodel.getFrameId("panda2_link3_sc_joint")
+            ].parentJoint
+        except:
+            parentJoint = rmodel.frames[
+                rmodel.getFrameId("panda2_link3_sc_joint")
+            ].parent
+
         SPHERE3_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE3",
             rmodel.getFrameId("panda2_link3_sc_joint"),
-            rmodel.frames[rmodel.getFrameId("panda2_link3_sc_joint")].parentJoint,
+            parentJoint,
             SPHERE3,
             SPHERE3_POSE,
         )
@@ -91,10 +110,15 @@ class TestRobotsDistanceDerivativesCapsuleSpheres(unittest.TestCase):
         CAPSULE_POSE = pin.SE3.Identity()
         CAPSULE_POSE.translation = np.array([0.0, 0.25, 1.5])
         CAPSULE = hppfcl.Capsule(self.radius, self.halfLength)
+        try:
+            parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
+        except:
+            parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
+
         self.CAPSULE_GEOM_OBJECT = pin.GeometryObject(
             "CAPSULE",
             rmodel.getFrameId("universe"),
-            rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
+            parentJoint,
             CAPSULE,
             CAPSULE_POSE,
         )
@@ -104,10 +128,15 @@ class TestRobotsDistanceDerivativesCapsuleSpheres(unittest.TestCase):
         SPHERE2_POSE = pin.SE3.Identity()
         SPHERE2_POSE.translation = np.array([0.2, 0.0, 0.0])
         SPHERE2 = hppfcl.Sphere(self.radius)
+        try:
+            parentJoint = rmodel.frames[rmodel.getFrameId("tool0")].parentJoint
+        except:
+            parentJoint = rmodel.frames[rmodel.getFrameId("tool0")].parent
+
         self.SPHERE2_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE2",
             rmodel.getFrameId("tool0"),
-            rmodel.frames[rmodel.getFrameId("tool0")].parentJoint,
+            parentJoint,
             SPHERE2,
             SPHERE2_POSE,
         )
@@ -117,170 +146,22 @@ class TestRobotsDistanceDerivativesCapsuleSpheres(unittest.TestCase):
         SPHERE3_POSE = pin.SE3.Identity()
         SPHERE3_POSE.translation = np.array([0.0, 0.3, 0.0])
         SPHERE3 = hppfcl.Sphere(self.radius)
+
+        try:
+            parentJoint = rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parentJoint
+        except:
+            parentJoint = rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parent
+
         self.SPHERE3_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE3",
             rmodel.getFrameId("wrist_2_joint"),
-            rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parentJoint,
+            parentJoint,
             SPHERE3,
             SPHERE3_POSE,
         )
         self.ID_SPHERE3_UR = cmodel.addGeometryObject(self.SPHERE3_GEOM_OBJECT)
 
         return rmodel, vmodel, cmodel
-
-    # def test_distance(self):
-    #     # Loading the UR robot
-    #     rmodel_ur, vmodel_ur, cmodel_ur = self.load_ur()
-
-    #     rdata_ur = rmodel_ur.createData()
-    #     cdata_ur = cmodel_ur.createData()
-
-    #     q_ur = pin.neutral(rmodel_ur)
-
-    #     # Loading the panda robot
-    #     rmodel_pa, vmodel_pa, cmodel_pa = self.load_panda()
-
-    #     rdata_pa = rmodel_pa.createData()
-    #     cdata_pa = cmodel_pa.createData()
-
-    #     # Number of joints
-    #     nq_ur = rmodel_ur.nq
-    #     nq_pa = rmodel_pa.nq
-
-    #     # Distance & Derivative results from hppfcl
-    #     req = hppfcl.DistanceRequest()
-    #     res = hppfcl.DistanceResult()
-
-    #     q_ur = pin.randomConfiguration(rmodel_ur)
-    #     q_pa = pin.randomConfiguration(rmodel_pa)
-
-    #     # Updating the models
-    #     pin.forwardKinematics(rmodel_ur, rdata_ur, q_ur)
-    #     pin.framesForwardKinematics(rmodel_ur, rdata_ur, q_ur)
-    #     pin.updateGeometryPlacements(rmodel_ur, rdata_ur, cmodel_ur, cdata_ur, q_ur)
-
-    #     pin.forwardKinematics(rmodel_pa, rdata_pa, q_pa)
-    #     pin.framesForwardKinematics(rmodel_pa, rdata_pa, q_pa)
-    #     pin.updateGeometryPlacements(rmodel_pa, rdata_pa, cmodel_pa, cdata_pa, q_pa)
-
-    #     CAPSULE_placement_ur = cdata_ur.oMg[cmodel_ur.getGeometryId("CAPSULE")]
-    #     sphere2_placement_ur = cdata_ur.oMg[cmodel_ur.getGeometryId("SPHERE2")]
-    #     sphere3_placement_ur = cdata_ur.oMg[cmodel_ur.getGeometryId("SPHERE3")]
-
-    #     CAPSULE_placement_pa = cdata_pa.oMg[cmodel_pa.getGeometryId("CAPSULE")]
-    #     sphere2_placement_pa = cdata_pa.oMg[cmodel_pa.getGeometryId("SPHERE2")]
-    #     sphere3_placement_pa = cdata_pa.oMg[cmodel_pa.getGeometryId("SPHERE3")]
-
-    #     ### Distance between capsule (on universe) & sphere 2 (on tool0 / gripper)
-
-    #     distance_ur = self.dist(
-    #         rmodel_ur,
-    #         rdata_ur,
-    #         cmodel_ur,
-    #         cdata_ur,
-    #         self.ID_CAPSULE_UR,
-    #         self.ID_SPHERE2_UR,
-    #         res,
-    #         req,
-    #         q_ur,
-    #     )
-    #     distance_pa = self.dist(
-    #         rmodel_pa,
-    #         rdata_pa,
-    #         cmodel_pa,
-    #         cdata_pa,
-    #         self.ID_CAPSULE_PA,
-    #         self.ID_SPHERE2_PA,
-    #         res,
-    #         req,
-    #         q_pa,
-    #     )
-
-    #     self.assertAlmostEqual(
-    #         distance_ur,
-    #         self.distance_sphere_capsule(sphere2_placement_ur, CAPSULE_placement_ur)
-    #     )
-    #     self.assertAlmostEqual(
-    #         distance_pa,
-    #         self.distance_sphere_capsule(sphere2_placement_pa, CAPSULE_placement_pa)
-
-    #     )
-
-    #     ### Distance between sphere 2 (on tool0 / gripper) & sphere 3 (on the robot)
-
-    #     distance_ur = self.dist(
-    #         rmodel_ur,
-    #         rdata_ur,
-    #         cmodel_ur,
-    #         cdata_ur,
-    #         self.ID_SPHERE3_UR,
-    #         self.ID_SPHERE2_UR,
-    #         res,
-    #         req,
-    #         q_ur,
-    #     )
-    #     distance_pa = self.dist(
-    #         rmodel_pa,
-    #         rdata_pa,
-    #         cmodel_pa,
-    #         cdata_pa,
-    #         self.ID_SPHERE3_PA,
-    #         self.ID_SPHERE2_PA,
-    #         res,
-    #         req,
-    #         q_pa,
-    #     )
-
-    #     self.assertAlmostEqual(
-    #         distance_ur,
-    #         np.linalg.norm(
-    #             (sphere3_placement_ur.inverse() * sphere2_placement_ur).translation
-    #         )
-    #         - 2 * self.radius,
-    #     )
-    #     self.assertAlmostEqual(
-    #         distance_pa,
-    #         np.linalg.norm(
-    #             (sphere3_placement_pa.inverse() * sphere2_placement_pa).translation
-    #         )
-    #         - 2 * self.radius,
-    #     )
-
-    #     ### Distance between capsule 1 (on universe) & sphere 3 (on the robot)
-
-    #     distance_ur = self.dist(
-    #         rmodel_ur,
-    #         rdata_ur,
-    #         cmodel_ur,
-    #         cdata_ur,
-    #         self.ID_SPHERE3_UR,
-    #         self.ID_CAPSULE_UR,
-    #         res,
-    #         req,
-    #         q_ur,
-    #     )
-    #     distance_pa = self.dist(
-    #         rmodel_pa,
-    #         rdata_pa,
-    #         cmodel_pa,
-    #         cdata_pa,
-    #         self.ID_SPHERE3_PA,
-    #         self.ID_CAPSULE_PA,
-    #         res,
-    #         req,
-    #         q_pa,
-    #     )
-
-    #     self.assertAlmostEqual(
-    #         distance_ur,
-    #         self.distance_sphere_capsule(sphere3_placement_ur, CAPSULE_placement_ur)
-
-    #     )
-    #     self.assertAlmostEqual(
-    #         distance_pa,
-    #         self.distance_sphere_capsule(sphere3_placement_pa, CAPSULE_placement_pa)
-
-    #     )
 
     def test_distance_derivatives(self):
         # Loading the UR robot
@@ -892,44 +773,44 @@ class TestRobotsDistanceDerivativesCapsuleSpheres(unittest.TestCase):
         return distance
 
     def distance_sphere_capsule(self, sphere_placement, capsule_placement):
-            """Computes the signed distance between a sphere & a capsule.
+        """Computes the signed distance between a sphere & a capsule.
 
-            Args:
-                sphere (pin.GeometryObject): Geometry object of pinocchio, stored in the geometry model.
-                capsule (pin.GeometryObject): Geometry object of pinocchio, stored in the geometry model.
+        Args:
+            sphere (pin.GeometryObject): Geometry object of pinocchio, stored in the geometry model.
+            capsule (pin.GeometryObject): Geometry object of pinocchio, stored in the geometry model.
 
-            Returns:
-                disntance (float): Signed distance between the closest points of a capsule-sphere pair.
-            """
-            A, B = self.get_A_B_from_center_capsule(capsule_placement)
+        Returns:
+            disntance (float): Signed distance between the closest points of a capsule-sphere pair.
+        """
+        A, B = self.get_A_B_from_center_capsule(capsule_placement)
 
-            # Position of the center of the sphere
-            C = sphere_placement.translation
+        # Position of the center of the sphere
+        C = sphere_placement.translation
 
-            AB = B - A
-            AC = C - A
+        AB = B - A
+        AC = C - A
 
-            # Project AC onto AB, but deferring divide by Dot(AB, AB)
-            t = np.dot(AC, AB)
-            if t <= 0.0:
-                # C projects outside the [A, B] interval, on the A side; clamp to A
-                t = 0.0
-                closest_point = A
+        # Project AC onto AB, but deferring divide by Dot(AB, AB)
+        t = np.dot(AC, AB)
+        if t <= 0.0:
+            # C projects outside the [A, B] interval, on the A side; clamp to A
+            t = 0.0
+            closest_point = A
+        else:
+            denom = np.dot(AB, AB)  # Always nonnegative since denom = ||AB||^2
+            if t >= denom:
+                # C projects outside the [A, B] interval, on the B side; clamp to B
+                t = 1.0
+                closest_point = B
             else:
-                denom = np.dot(AB, AB)  # Always nonnegative since denom = ||AB||^2
-                if t >= denom:
-                    # C projects outside the [A, B] interval, on the B side; clamp to B
-                    t = 1.0
-                    closest_point = B
-                else:
-                    # C projects inside the [A, B] interval; must do deferred divide now
-                    t = t / denom
-                    closest_point = A + t * AB
+                # C projects inside the [A, B] interval; must do deferred divide now
+                t = t / denom
+                closest_point = A + t * AB
 
-            # Calculate distance between C and the closest point on the segment
-            distance = np.linalg.norm(C - closest_point) - 2 * self.radius
+        # Calculate distance between C and the closest point on the segment
+        distance = np.linalg.norm(C - closest_point) - 2 * self.radius
 
-            return distance
+        return distance
 
     def get_A_B_from_center_capsule(self, capsule_placement):
         """Computes the points A & B of a capsule. The point A & B are the limits of the segment defining the capsule.

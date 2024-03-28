@@ -22,7 +22,7 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
 
         ### LOADING THE ROBOT
         pinocchio_model_dir = join(
-            dirname(dirname(dirname(str(abspath(__file__))))), "models"
+            dirname(dirname(str(abspath(__file__)))), "models"
         )
         model_path = join(pinocchio_model_dir, "franka_description/robots")
         mesh_dir = pinocchio_model_dir
@@ -43,10 +43,16 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         SPHERE1_POSE = pin.SE3.Identity()
         SPHERE1_POSE.translation = np.array([0.0, 0.25, 1.5])
         SPHERE1 = hppfcl.Sphere(self.radius)
+        
+        try:
+            parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
+        except:
+            parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
+        
         SPHERE1_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE1",
             rmodel.getFrameId("universe"),
-            rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
+            parentJoint,
             SPHERE1,
             SPHERE1_POSE,
         )
@@ -57,10 +63,19 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         SPHERE2_POSE = pin.SE3.Identity()
         SPHERE2_POSE.translation = np.array([0.2, 0.0, 0.0])
         SPHERE2 = hppfcl.Sphere(self.radius)
+        
+        try:
+            parentJoint = rmodel.frames[
+                rmodel.getFrameId("panda2_leftfinger")
+            ].parentJoint
+        except:
+            parentJoint = rmodel.frames[rmodel.getFrameId("panda2_leftfinger")].parent
+
+        
         SPHERE2_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE2",
             rmodel.getFrameId("panda2_leftfinger"),
-            rmodel.frames[rmodel.getFrameId("panda2_leftfinger")].parentJoint,
+            parentJoint,
             SPHERE2,
             SPHERE2_POSE,
         )
@@ -71,10 +86,21 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         SPHERE3_POSE = pin.SE3.Identity()
         SPHERE3_POSE.translation = np.array([0.0, 0.1, 0.2])
         SPHERE3 = hppfcl.Sphere(self.radius)
+        
+        try:
+            parentJoint = rmodel.frames[
+                rmodel.getFrameId("panda2_link3_sc_joint")
+            ].parentJoint
+        except:
+            parentJoint = rmodel.frames[
+                rmodel.getFrameId("panda2_link3_sc_joint")
+            ].parent
+
+        
         SPHERE3_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE3",
             rmodel.getFrameId("panda2_link3_sc_joint"),
-            rmodel.frames[rmodel.getFrameId("panda2_link3_sc_joint")].parentJoint,
+            parentJoint,
             SPHERE3,
             SPHERE3_POSE,
         )
@@ -93,10 +119,15 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         SPHERE1_POSE = pin.SE3.Identity()
         SPHERE1_POSE.translation = np.array([0.0, 0.25, 1.5])
         SPHERE1 = hppfcl.Sphere(self.radius)
+        try:
+            parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
+        except:
+            parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
+
         self.SPHERE1_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE1",
             rmodel.getFrameId("universe"),
-            rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
+            parentJoint,
             SPHERE1,
             SPHERE1_POSE,
         )
@@ -107,10 +138,17 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         SPHERE2_POSE = pin.SE3.Identity()
         SPHERE2_POSE.translation = np.array([0.2, 0.0, 0.0])
         SPHERE2 = hppfcl.Sphere(self.radius)
+        
+        try:
+            parentJoint = rmodel.frames[rmodel.getFrameId("tool0")].parentJoint
+        except:
+            parentJoint = rmodel.frames[rmodel.getFrameId("tool0")].parent
+
+        
         self.SPHERE2_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE2",
             rmodel.getFrameId("tool0"),
-            rmodel.frames[rmodel.getFrameId("tool0")].parentJoint,
+            parentJoint,
             SPHERE2,
             SPHERE2_POSE,
         )
@@ -121,10 +159,15 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         SPHERE3_POSE = pin.SE3.Identity()
         SPHERE3_POSE.translation = np.array([0.0, 0.3, 0.0])
         SPHERE3 = hppfcl.Sphere(self.radius)
+        try:
+            parentJoint = rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parentJoint
+        except:
+            parentJoint = rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parent
+
         self.SPHERE3_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE3",
             rmodel.getFrameId("wrist_2_joint"),
-            rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parentJoint,
+            parentJoint,
             SPHERE3,
             SPHERE3_POSE,
         )
