@@ -78,10 +78,15 @@ def load_pinocchio_robot_panda(capsule = False):
     OBSTACLE_RADIUS = 1.0e-1
     OBSTACLE_POSE = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.2, 1.5]))
     OBSTACLE = hppfcl.Sphere(OBSTACLE_RADIUS)
+    try:
+        parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
+    except:
+        parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
+
     OBSTACLE_GEOM_OBJECT = pin.GeometryObject(
         "obstacle",
         rmodel.getFrameId("universe"),
-        rmodel.frames[rmodel.getFrameId("universe")].parentJoint,
+        parentJoint,
         OBSTACLE,
         OBSTACLE_POSE,
     )
