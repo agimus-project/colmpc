@@ -25,7 +25,7 @@ class TestCollisions(unittest.TestCase):
             placement = pin.SE3(np.eye(3), np.array([i, 0, 0]))
             try:
                 geom_obj = pin.GeometryObject(f"obj{i}", 0, 0, placement, geom)
-            except:
+            except:  # noqa 422 TODO
                 geom_obj = pin.GeometryObject(f"obj{i}", 0, 0, geom, placement)
             cmodel.addGeometryObject(geom_obj)
 
@@ -95,7 +95,7 @@ class TestCollisions(unittest.TestCase):
             placement = pin.SE3(np.eye(3), np.array([i, 0, 0]))
             try:
                 geom_obj = pin.GeometryObject(f"obj{i}", 0, 0, placement, geom)
-            except:
+            except:  # noqa 422 TODO
                 geom_obj = pin.GeometryObject(f"obj{i}", 0, 0, geom, placement)
 
             cmodel.addGeometryObject(geom_obj)
@@ -167,7 +167,7 @@ class TestCollisions(unittest.TestCase):
         placement0 = pin.SE3(pin.utils.rotate("y", np.pi), np.array([0, 0, 2]))
         try:
             geom_obj0 = pin.GeometryObject("obj0", 0, 0, placement0, geometries[0])
-        except:
+        except:  # noqa 422 TODO
             geom_obj0 = pin.GeometryObject("obj0", 0, 0, geometries[0], placement0)
 
         cmodel.addGeometryObject(geom_obj0)
@@ -175,7 +175,7 @@ class TestCollisions(unittest.TestCase):
         placement1 = pin.SE3(pin.utils.rotate("y", np.pi), np.array([0, 0, 0]))
         try:
             geom_obj1 = pin.GeometryObject("obj1", 0, 0, placement1, geometries[1])
-        except:
+        except:  # noqa 422 TODO
             geom_obj1 = pin.GeometryObject("obj1", 0, 0, geometries[1], placement1)
 
         cmodel.addGeometryObject(geom_obj1)
@@ -247,7 +247,7 @@ class TestCollisions(unittest.TestCase):
         placement0 = pin.SE3(pin.utils.rotate("y", np.pi), np.array([1, 0, 0]))
         try:
             geom_obj0 = pin.GeometryObject("obj0", 0, 0, placement0, geometries[0])
-        except:
+        except:  # noqa 422 TODO
             geom_obj0 = pin.GeometryObject("obj0", 0, 0, geometries[0], placement0)
 
         cmodel.addGeometryObject(geom_obj0)
@@ -255,7 +255,7 @@ class TestCollisions(unittest.TestCase):
         placement1 = pin.SE3(pin.utils.rotate("y", np.pi), np.array([0, 0, 0]))
         try:
             geom_obj1 = pin.GeometryObject("obj1", 0, 0, placement1, geometries[1])
-        except:
+        except:  # noqa 422 TODO
             geom_obj1 = pin.GeometryObject("obj1", 0, 0, geometries[1], placement1)
 
         cmodel.addGeometryObject(geom_obj1)
