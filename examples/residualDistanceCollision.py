@@ -2,7 +2,6 @@ import crocoddyl
 import hppfcl
 import numpy as np
 import pinocchio as pin
-from crocoddyl.utils import *
 
 
 class ResidualCollision(crocoddyl.ResidualModelAbstract):

@@ -143,7 +143,7 @@ def get_rpy_(q, model, id_endeff):
         id_endeff : id of EE frame
     """
     R = get_R_(q, model, id_endeff)
-    if type(R) == list:
+    if isinstance(R, list):
         N = np.shape(q)[0]
         rpy = np.empty((N, 3))
         for i in range(N):

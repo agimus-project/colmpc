@@ -43,7 +43,7 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
 
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
 
         SPHERE1_GEOM_OBJECT = pin.GeometryObject(
@@ -64,7 +64,7 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
             parentJoint = rmodel.frames[
                 rmodel.getFrameId("panda2_leftfinger")
             ].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("panda2_leftfinger")].parent
 
         SPHERE2_GEOM_OBJECT = pin.GeometryObject(
@@ -85,7 +85,7 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
             parentJoint = rmodel.frames[
                 rmodel.getFrameId("panda2_link3_sc_joint")
             ].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[
                 rmodel.getFrameId("panda2_link3_sc_joint")
             ].parent
@@ -113,7 +113,7 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         SPHERE1 = hppfcl.Sphere(self.radius)
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
 
         self.SPHERE1_GEOM_OBJECT = pin.GeometryObject(
@@ -132,7 +132,7 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
 
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("tool0")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("tool0")].parent
 
         self.SPHERE2_GEOM_OBJECT = pin.GeometryObject(
@@ -150,7 +150,7 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         SPHERE3 = hppfcl.Sphere(self.radius)
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parent
 
         self.SPHERE3_GEOM_OBJECT = pin.GeometryObject(

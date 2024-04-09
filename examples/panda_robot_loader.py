@@ -8,13 +8,11 @@ from os.path import abspath, dirname, join
 import hppfcl
 import numpy as np
 import pinocchio as pin
-
-np.set_printoptions(precision=4, linewidth=180)
-
+import pybullet
 from mim_robots.pybullet.wrapper import PinBulletWrapper
 
+np.set_printoptions(precision=4, linewidth=180)
 RED = np.array([249, 136, 126, 125]) / 255
-import pybullet
 
 
 def load_pinocchio_robot_panda(capsule=False):
@@ -87,7 +85,7 @@ def load_pinocchio_robot_panda(capsule=False):
     OBSTACLE = hppfcl.Sphere(OBSTACLE_RADIUS)
     try:
         parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
-    except:
+    except AttributeError:
         parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
 
     OBSTACLE_GEOM_OBJECT = pin.GeometryObject(

@@ -6,11 +6,8 @@ Inspired example from Sebastien Kleff: https://github.com/machines-in-motion/min
 
 import time
 
-import numpy as np
-
-np.set_printoptions(precision=4, linewidth=180)
-
 import mpc_utils
+import numpy as np
 import pin_utils
 import pinocchio as pin
 from env import BulletEnv
@@ -18,6 +15,7 @@ from ocp_panda_reaching import OCPPandaReaching
 from ocp_panda_reaching_obs_soft import OCPPandaReachingColWithMultipleColSoft
 from panda_robot_loader import PandaRobot
 
+np.set_printoptions(precision=4, linewidth=180)
 # # # # # # # #
 ### HELPERS  ##
 # # # # # # # #
