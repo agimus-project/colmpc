@@ -7,7 +7,7 @@
   <author>Arthur Haffemayer</author>
   <license>BSD</license>
 
-  <url type="website">https://github.com/ArthurH91/colmpc</url>
+  <url type="website">https://github.com/agimus-project/colmpc</url>
 
   <build_depend>git</build_depend>
   <build_depend>doxygen</build_depend>

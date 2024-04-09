@@ -1,9 +1,9 @@
 """
-Example script : MPC simulation with KUKA arm 
+Example script : MPC simulation with PANDA arm 
 static target reaching task
-
+Inspired example from Sebastien Kleff: https://github.com/machines-in-motion/minimal_examples_crocoddyl 
 """
-import json
+
 import time
 
 import numpy as np
@@ -13,12 +13,10 @@ np.set_printoptions(precision=4, linewidth=180)
 import pinocchio as pin
 import pin_utils, mpc_utils
 
-from mim_robots.pybullet.env import BulletEnvWithGround
+from env import BulletEnv
 from panda_robot_loader import PandaRobot
 from ocp_panda_reaching import OCPPandaReaching
 from ocp_panda_reaching_obs_soft import OCPPandaReachingColWithMultipleColSoft
-
-import pybullet as p
 
 # # # # # # # #
 ### HELPERS  ##
@@ -35,7 +33,7 @@ WITH_SAVING_RESULTS = True
 # # # # # # # # # # # # # # # # # # #
 
 # Simulation environment
-env = BulletEnvWithGround(p.GUI, dt=1e-3)
+env = BulletEnv()
 # Robot simulator
 robot_simulator = PandaRobot()
 env.add_robot(robot_simulator)
@@ -86,9 +84,7 @@ robot_simulator.pin_robot.collision_model.addCollisionPair(
 robot_simulator.pin_robot.collision_model.addCollisionPair(
     pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_3"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
 )
-# robot_simulator.pin_robot.collision_model.addCollisionPair(
-#     pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_4"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
-# )
+
 list_col_pairs = []
 for col_pair in robot_simulator.pin_robot.collision_model.collisionPairs:
     list_col_pairs.append([col_pair.first, col_pair.second])
