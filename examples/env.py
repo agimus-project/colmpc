@@ -8,11 +8,6 @@ Copyright note valid unless otherwise stated in individual files.
 All rights reserved.
 """
 
-try:
-    # use standard Python importlib if available (Python>3.7)
-    import importlib.resources as importlib_resources
-except ImportError:
-    pass
 import time
 
 import pybullet
