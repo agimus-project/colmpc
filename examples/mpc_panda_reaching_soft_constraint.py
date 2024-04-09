@@ -28,9 +28,9 @@ WITH_WARMSTART_WHEN_CHANGING_TARGET = False
 WITH_PLOTS = False
 WITH_SAVING_RESULTS = True
 
-# # # # # # # # # # # # # # # # # # #
-### LOAD ROBOT MODEL and SIMU ENV ###
-# # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # #
+### LOAD ROBOT MODEL and SIMU ENV ###
+# # # # # # # # # # # # # # # # # # #
 
 # Simulation environment
 env = BulletEnv()
@@ -93,9 +93,9 @@ for col_pair in robot_simulator.pin_robot.collision_model.collisionPairs:
     list_col_pairs.append([col_pair.first, col_pair.second])
 
 
-# # # # # # # # # # # #
+# # # # # # # # # # # #
 ###  OCP CONSTANTS  ###
-# # # # # # # # # # # #
+# # # # # # # # # # # #
 
 TARGET_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.4, 1.5]))
 TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.0, 1.5]))
@@ -126,9 +126,9 @@ safety_threshhold = 1e-2
 # vis.display(robot_simulator.pin_robot.)
 
 
-# # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # #
 ###  SETUP CROCODDYL OCP  ###
-# # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # #
 # State and actuation model
 
 ### CREATING THE PROBLEM WITHOUT OBSTACLE
@@ -181,9 +181,9 @@ ddp.solve(xs_init, us_init, maxiter=50)
 xs_init = ddp.xs
 us_init = ddp.us
 
-# # # # # # # # # # # #
+# # # # # # # # # # # #
 ###  MPC SIMULATION ###
-# # # # # # # # # # # #
+# # # # # # # # # # # #
 # OCP parameters
 ocp_params = {}
 ocp_params["N_h"] = T
