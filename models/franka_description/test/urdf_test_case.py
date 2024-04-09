@@ -18,14 +18,13 @@ class UrdfTestCase(TestCase):
         try:
             return URDF.from_xml_string(
                 subprocess.check_output(
-                    "xacro $(rospack find %s)/robots/%s %s" % (PKG, file, args),
+                    f"xacro $(rospack find {PKG})/robots/{file} {args}",
                     shell=True,
                 )
             )
         except subprocess.CalledProcessError as e:
             self.fail(
-                'Could not generate URDF from "%s", probably syntax error: %s'
-                % (file, e.output)
+                f'Could not generate URDF from "{file}", probably syntax error: {e.output}'
             )
 
     def assertContainsLink(self, urdf, link):
@@ -101,8 +100,7 @@ class UrdfTestCase(TestCase):
             candidates = list(filter(lambda j: j.joint_type == type, candidates))
             self.assertTrue(
                 candidates,
-                "Could not find any joint in URDF from %s -> %s which is %s"
-                % (parent, child, type),
+                f"Could not find any joint in URDF from {parent} -> {child} which is {type}",
             )
 
     def assertJointHasTransmission(self, urdf, joint, type):
@@ -121,6 +119,5 @@ class UrdfTestCase(TestCase):
         else:
             # Transmission Loop not broken -> no suitable transmission for joint found
             self.fail(
-                'No suitable "%s" transmission tag for "%s" found in URDF'
-                % (type, joint)
+                f'No suitable "{type}" transmission tag for "{joint}" found in URDF'
             )

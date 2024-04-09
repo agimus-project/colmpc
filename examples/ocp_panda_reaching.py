@@ -114,7 +114,7 @@ class OCPPandaReaching:
             self._state, self._x0, self._actuation.nu
         )
         xLimitActivation = crocoddyl.ActivationModelQuadraticBarrier(bounds)
-        limitCost = crocoddyl.CostModelResidual(
+        crocoddyl.CostModelResidual(
             self._state, xLimitActivation, xLimitResidual
         )
 

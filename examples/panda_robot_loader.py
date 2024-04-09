@@ -97,7 +97,7 @@ def load_pinocchio_robot_panda(capsule=False):
         OBSTACLE,
         OBSTACLE_POSE,
     )
-    ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)
+    cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)
     robot_reduced = pin.robot_wrapper.RobotWrapper(rmodel, cmodel, vmodel)
 
     return robot_reduced
@@ -118,7 +118,6 @@ class PandaRobot(PinBulletWrapper):
         pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
         print(pinocchio_model_dir)
         model_path = join(pinocchio_model_dir, "franka_description/robots")
-        mesh_dir = pinocchio_model_dir
         urdf_filename = "franka2.urdf"
         urdf_model_path = join(join(model_path, "panda"), urdf_filename)
 
@@ -166,7 +165,7 @@ class PandaRobot(PinBulletWrapper):
         self.joint_names = controlled_joints_names
 
         # Creates the wrapper by calling the super.__init__.
-        super(PandaRobot, self).__init__(
+        super().__init__(
             self.robotId,
             self.pin_robot,
             controlled_joints_names,

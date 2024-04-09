@@ -19,14 +19,14 @@ class FrankaRobotUrdfTest(UrdfTestCase):
         arm_id = self.robot
         urdf = self.xacro(self.file)
         for i in range(0, 9):
-            self.assertContainsLink(urdf, "%s_link%s" % (arm_id, i))
+            self.assertContainsLink(urdf, f"{arm_id}_link{i}")
 
     def test_generate_urdf_without_xacro_args_contains_joint1_up_to_joint8(self):
         arm_id = self.robot
         urdf = self.xacro(self.file)
         for i in range(1, 9):
-            joint = "panda_joint%s" % i
-            self.assertContainsJoint(urdf, "%s_joint%s" % (arm_id, i))
+            "panda_joint%s" % i
+            self.assertContainsJoint(urdf, f"{arm_id}_joint{i}")
 
     def test_generate_urdf_without_xacro_args_dont_use_gripper(self):
         urdf = self.xacro(self.file)
@@ -43,7 +43,7 @@ class FrankaRobotUrdfTest(UrdfTestCase):
         arm_id = self.robot
         urdf = self.xacro(self.file)
         for i in range(0, 8):
-            link = "%s_link%s" % (arm_id, i)
+            link = f"{arm_id}_link{i}"
             collisions = self.collision_geometries(urdf, link)
             self.assertGreaterEqual(
                 len(collisions),
@@ -53,8 +53,7 @@ class FrankaRobotUrdfTest(UrdfTestCase):
             self.assertIsInstance(
                 collisions[0],
                 Mesh,
-                "Link '%s' is expected to have mesh geometries in <collision> not '%s'"
-                % (link, collisions[0].__class__.__name__),
+                f"Link '{link}' is expected to have mesh geometries in <collision> not '{collisions[0].__class__.__name__}'",
             )
 
     def test_generate_urdf_without_xacro_args_uses_coarse_collision_models_for_sc_links(
@@ -69,8 +68,7 @@ class FrankaRobotUrdfTest(UrdfTestCase):
                 self.assertIsInstance(
                     geometry,
                     (Cylinder, Sphere),
-                    "Link '%s' is expected to define only a capsule <collision> geometry (made from Cylinders and Spheres, not '%s')"
-                    % (name, geometry.__class__.__name__),
+                    f"Link '{name}' is expected to define only a capsule <collision> geometry (made from Cylinders and Spheres, not '{geometry.__class__.__name__}')",
                 )
 
     def test_generate_urdf_without_xacro_args_doesnt_insert_inertial_tags_for_any_link(
@@ -80,8 +78,7 @@ class FrankaRobotUrdfTest(UrdfTestCase):
         for name, link in urdf.link_map.items():
             self.assertIsNone(
                 link.inertial,
-                "Link '%s' is expected to have no <inertial> defined but actually has one:\n%s"
-                % (name, link.inertial),
+                f"Link '{name}' is expected to have no <inertial> defined but actually has one:\n{link.inertial}",
             )
 
     def test_generate_urdf_with_hand_but_not_gazebo_doesnt_insert_inertial_tags_for_any_link(
@@ -91,8 +88,7 @@ class FrankaRobotUrdfTest(UrdfTestCase):
         for name, link in urdf.link_map.items():
             self.assertIsNone(
                 link.inertial,
-                "Link '%s' is expected to have no <inertial> defined but actually has one:\n%s"
-                % (name, link.inertial),
+                f"Link '{name}' is expected to have no <inertial> defined but actually has one:\n{link.inertial}",
             )
 
     def test_custom_arm_id_renames_links(self):
@@ -111,22 +107,22 @@ class FrankaRobotUrdfTest(UrdfTestCase):
         arm_id = self.robot
         urdf = self.xacro(self.file, args="hand:=true")
         for name in ["hand", "hand_tcp", "leftfinger", "rightfinger"]:
-            link = "%s_%s" % (arm_id, name)
+            link = f"{arm_id}_{name}"
             self.assertContainsLink(urdf, link)
 
         for name in ["hand_joint", "hand_tcp_joint", "finger_joint1", "finger_joint2"]:
-            joint = "%s_%s" % (arm_id, name)
+            joint = f"{arm_id}_{name}"
             self.assertContainsJoint(urdf, joint)
 
     def test_custom_arm_id_with_hand_renames_hand_joints_and_links(self):
         arm_id = "foo"
         urdf = self.xacro(self.file, args="arm_id:=%s hand:=true" % arm_id)
         for name in ["hand", "hand_tcp", "leftfinger", "rightfinger"]:
-            link = "%s_%s" % (arm_id, name)
+            link = f"{arm_id}_{name}"
             self.assertContainsLink(urdf, link)
 
         for name in ["hand_joint", "hand_tcp_joint", "finger_joint1", "finger_joint2"]:
-            joint = "%s_%s" % (arm_id, name)
+            joint = f"{arm_id}_{name}"
             self.assertContainsJoint(urdf, joint)
 
     def test_gazebo_arg_will_add_top_level_world_link(self):
@@ -146,7 +142,6 @@ class FrankaRobotUrdfTest(UrdfTestCase):
         self.assertJointBetween(urdf, parent, arm_id + "_link0", type="fixed")
 
     def test_parent_arg_will_not_top_level_link(self):
-        arm_id = self.robot
         parent = "foo"
         urdf = self.xacro(self.file, args="gazebo:=true parent:=%s" % parent)
         with self.assertRaises(AssertionError):
@@ -194,7 +189,7 @@ class FrankaRobotUrdfTest(UrdfTestCase):
     def test_gazebo_arg_will_insert_position_interfaces(self):
         arm_id = self.robot
         urdf = self.xacro(self.file, args="gazebo:=true")
-        for joint in ["%s_joint%s" % (arm_id, i) for i in range(1, 8)]:
+        for joint in [f"{arm_id}_joint{i}" for i in range(1, 8)]:
             self.assertJointHasTransmission(
                 urdf, joint, "hardware_interface/PositionJointInterface"
             )
@@ -202,7 +197,7 @@ class FrankaRobotUrdfTest(UrdfTestCase):
     def test_gazebo_arg_will_insert_velocity_interfaces(self):
         arm_id = self.robot
         urdf = self.xacro(self.file, args="gazebo:=true")
-        for joint in ["%s_joint%s" % (arm_id, i) for i in range(1, 8)]:
+        for joint in [f"{arm_id}_joint{i}" for i in range(1, 8)]:
             self.assertJointHasTransmission(
                 urdf, joint, "hardware_interface/VelocityJointInterface"
             )
@@ -210,7 +205,7 @@ class FrankaRobotUrdfTest(UrdfTestCase):
     def test_gazebo_arg_will_insert_effort_interfaces(self):
         arm_id = self.robot
         urdf = self.xacro(self.file, args="gazebo:=true")
-        for joint in ["%s_joint%s" % (arm_id, i) for i in range(1, 8)]:
+        for joint in [f"{arm_id}_joint{i}" for i in range(1, 8)]:
             self.assertJointHasTransmission(
                 urdf, joint, "hardware_interface/EffortJointInterface"
             )
@@ -221,7 +216,7 @@ class FrankaRobotUrdfTest(UrdfTestCase):
         for transmission in urdf.transmissions:
             if transmission.type == "franka_hw/FrankaStateInterface":
                 self.assertListEqual(
-                    ["%s_joint%s" % (arm_id, i) for i in range(1, 8)],
+                    [f"{arm_id}_joint{i}" for i in range(1, 8)],
                     [joint.name for joint in transmission.joints],
                 )
                 break
@@ -267,8 +262,7 @@ class FrankaRobotUrdfTest(UrdfTestCase):
             self.assertEqual(
                 len(link.collisions),
                 0,
-                "Link '%s' is expected to have no <collision> tags defined but has %s"
-                % (name, len(link.collisions)),
+                f"Link '{name}' is expected to have no <collision> tags defined but has {len(link.collisions)}",
             )
 
     def test_setting_gazebo_arg_with_hand_forces_to_have_no_geometries_inside_sc_links(
@@ -281,8 +275,7 @@ class FrankaRobotUrdfTest(UrdfTestCase):
             self.assertEqual(
                 len(link.collisions),
                 0,
-                "Link '%s' is expected to have no <collision> tags defined but has %s"
-                % (name, len(link.collisions)),
+                f"Link '{name}' is expected to have no <collision> tags defined but has {len(link.collisions)}",
             )
 
     def test_generate_urdf_without_tcp_args_uses_default_10_34_cm_hand_tcp_offset(self):

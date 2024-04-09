@@ -167,7 +167,7 @@ class OCPPandaReachingColWithMultipleColSoft:
 
             xlb = np.array([0.02])
             xlb = 0.01
-            xub = np.array([np.inf])
+            np.array([np.inf])
             # bounds = crocoddyl.ActivationBounds(xlb, xub, 1.0)
             xLimitActivation = crocoddyl.ActivationModel2NormBarrier(1, xlb)
             obstacleDistanceCost = crocoddyl.CostModelResidual(

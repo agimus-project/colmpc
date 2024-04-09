@@ -182,8 +182,6 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
         q_pa = pin.neutral(rmodel_pa)
 
         # Number of joints
-        nq_ur = rmodel_ur.nq
-        nq_pa = rmodel_pa.nq
 
         # Updating the models
         pin.forwardKinematics(rmodel_ur, rdata_ur, q_ur)

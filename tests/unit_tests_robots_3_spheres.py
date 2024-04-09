@@ -56,7 +56,6 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         self.ID_SPHERE1_PA = cmodel.addGeometryObject(SPHERE1_GEOM_OBJECT)
 
         ### CREATING THE SPHERE ON THE END EFFECTOR
-        SPHERE2_RADIUS = 1.5e-1
         SPHERE2_POSE = pin.SE3.Identity()
         SPHERE2_POSE.translation = np.array([0.2, 0.0, 0.0])
         SPHERE2 = hppfcl.Sphere(self.radius)
@@ -78,7 +77,6 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         self.ID_SPHERE2_PA = cmodel.addGeometryObject(SPHERE2_GEOM_OBJECT)
 
         ### CREATING THE SPHERE ON THE ROBOT
-        SPHERE3_RADIUS = 1.5e-1
         SPHERE3_POSE = pin.SE3.Identity()
         SPHERE3_POSE.translation = np.array([0.0, 0.1, 0.2])
         SPHERE3 = hppfcl.Sphere(self.radius)
@@ -110,7 +108,6 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         vmodel = robot.visual_model
 
         ### CREATING THE SPHERE ON THE UNIVERSE
-        SPHERE1_RADIUS = 1.5e-1
         SPHERE1_POSE = pin.SE3.Identity()
         SPHERE1_POSE.translation = np.array([0.0, 0.25, 1.5])
         SPHERE1 = hppfcl.Sphere(self.radius)
@@ -129,7 +126,6 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         self.ID_SPHERE1_UR = cmodel.addGeometryObject(self.SPHERE1_GEOM_OBJECT)
 
         ### CREATING THE SPHERE ON THE END EFFECTOR
-        SPHERE2_RADIUS = 1.5e-1
         SPHERE2_POSE = pin.SE3.Identity()
         SPHERE2_POSE.translation = np.array([0.2, 0.0, 0.0])
         SPHERE2 = hppfcl.Sphere(self.radius)
@@ -149,7 +145,6 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         self.ID_SPHERE2_UR = cmodel.addGeometryObject(self.SPHERE2_GEOM_OBJECT)
 
         ### CREATING THE SPHERE ON THE ROBOT
-        SPHERE3_RADIUS = 1.5e-1
         SPHERE3_POSE = pin.SE3.Identity()
         SPHERE3_POSE.translation = np.array([0.0, 0.3, 0.0])
         SPHERE3 = hppfcl.Sphere(self.radius)
@@ -187,8 +182,6 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         q_pa = pin.neutral(rmodel_pa)
 
         # Number of joints
-        nq_ur = rmodel_ur.nq
-        nq_pa = rmodel_pa.nq
 
         # Updating the models
         pin.forwardKinematics(rmodel_ur, rdata_ur, q_ur)
@@ -445,8 +438,6 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         q_pa = pin.neutral(rmodel_pa)
 
         # Number of joints
-        nq_ur = rmodel_ur.nq
-        nq_pa = rmodel_pa.nq
 
         # Updating the models
         pin.forwardKinematics(rmodel_ur, rdata_ur, q_ur)

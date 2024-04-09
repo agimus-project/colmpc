@@ -287,9 +287,9 @@ for i in range(sim_data["N_sim"]):
         # Set x0 to measured state
         ddp.problem.x0 = sim_data["state_mea_SIM_RATE"][i, :]
         # Warm start using previous solution
-        xs_init = list(ddp.xs[1:]) + [ddp.xs[-1]]
+        xs_init = [*list(ddp.xs[1:]), ddp.xs[-1]]
         xs_init[0] = sim_data["state_mea_SIM_RATE"][i, :]
-        us_init = list(ddp.us[1:]) + [ddp.us[-1]]
+        us_init = [*list(ddp.us[1:]), ddp.us[-1]]
 
         # Solve OCP & record MPC predictions
         start = time.process_time()

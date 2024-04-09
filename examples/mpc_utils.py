@@ -288,7 +288,6 @@ def extract_plot_data_from_sim_data(sim_data):
     plot_data["nv"] = nv
     nx = nq + nv
     plot_data["nx"] = nx
-    nu = nq
     # MPC params
     plot_data["T_sim"] = sim_data["T_sim"]
     plot_data["N_sim"] = sim_data["N_sim"]
@@ -556,7 +555,7 @@ def plot_mpc_state(
     N_mpc = plot_data["N_mpc"]
     dt_mpc = plot_data["dt_mpc"]
     nq = plot_data["nq"]
-    nx = plot_data["nx"]
+    plot_data["nx"]
     T_h = plot_data["T_h"]
     N_h = plot_data["N_h"]
     # Create time spans for X and U + Create figs and subplots
@@ -574,7 +573,7 @@ def plot_mpc_state(
                 # Receding horizon = [j,j+N_h]
                 t0_horizon = j * dt_mpc
                 tspan_x_pred = np.linspace(t0_horizon, t0_horizon + T_h, N_h + 1)
-                tspan_u_pred = np.linspace(t0_horizon, t0_horizon + T_h - dt_mpc, N_h)
+                np.linspace(t0_horizon, t0_horizon + T_h - dt_mpc, N_h)
                 # Set up lists of (x,y) points for predicted positions and velocities
                 points_q = (
                     np.array([tspan_x_pred, q_pred_i[j, :]])
@@ -762,7 +761,7 @@ def plot_mpc_control(
     T_h = plot_data["T_h"]
     N_h = plot_data["N_h"]
     # Create time spans for X and U + Create figs and subplots
-    t_span_simu = np.linspace(0, T_sim - dt_sim, N_sim)
+    np.linspace(0, T_sim - dt_sim, N_sim)
     t_span_plan = np.linspace(0, T_sim - dt_mpc, N_mpc)
     fig_u, ax_u = plt.subplots(nq, 1, figsize=(19.2, 10.8), sharex="col")
     # For each joint
@@ -795,7 +794,7 @@ def plot_mpc_control(
                 ax_u[i].add_collection(lc_u)
                 # Scatter to highlight points
                 colors = np.r_[np.linspace(0.1, 1, N_h), 1]
-                my_colors = cm(colors)
+                cm(colors)
                 ax_u[i].scatter(
                     tspan_u_pred,
                     u_pred_i[j, :],
