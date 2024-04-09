@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 # Project properties
 set(PROJECT_NAME colmpc)
 set(PROJECT_DESCRIPTION "Collision avoidance for MPC")
-set(PROJECT_URL https://github.com/ArthuH91/${PROJECT_NAME})
+set(PROJECT_URL https://github.com/agimus-project/${PROJECT_NAME})
 
 # Project options
 option(BUILD_PYTHON_INTERFACE "Build the python binding" ON)
@@ -16,13 +16,26 @@ set(PROJECT_USE_CMAKE_EXPORT TRUE)
 
 # Check if the submodule cmake have been initialized
 set(JRL_CMAKE_MODULES "${CMAKE_CURRENT_LIST_DIR}/cmake")
-if(NOT EXISTS "${CMAKE_SOURCE_DIR}/cmake/base.cmake")
-  if(${CMAKE_VERSION} VERSION_LESS "3.14.0")
+if(EXISTS "${JRL_CMAKE_MODULES}/base.cmake")
+  message(STATUS "JRL cmakemodules found in 'cmake/' git submodule")
+else()
+  find_package(jrl-cmakemodules QUIET CONFIG)
+  if(jrl-cmakemodules_FOUND)
+    get_property(
+      JRL_CMAKE_MODULES
+      TARGET jrl-cmakemodules::jrl-cmakemodules
+      PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+    message(STATUS "JRL cmakemodules found on system at ${JRL_CMAKE_MODULES}")
+  elseif(${CMAKE_VERSION} VERSION_LESS "3.14.0")
     message(
       FATAL_ERROR
-        "\nPlease run the following command first:\ngit submodule update --init\n"
+        "\nCan't find jrl-cmakemodules. Please either:\n"
+        "  - use git submodule: 'git submodule update --init'\n"
+        "  - or install https://github.com/jrl-umi3218/jrl-cmakemodules\n"
+        "  - or upgrade your CMake version to >= 3.14 to allow automatic fetching\n"
     )
   else()
+    message(STATUS "JRL cmakemodules not found. Let's fetch it.")
     include(FetchContent)
     FetchContent_Declare(
       "jrl-cmakemodules"
@@ -49,33 +62,31 @@ apply_default_apple_configuration()
 # Project dependencies
 if(BUILD_PYTHON_INTERFACE)
   add_project_dependency(eigenpy 3.0.0 REQUIRED)
-  string(REGEX REPLACE "-" "_" PY_NAME ${PROJECT_NAME})
+  set(PY_NAME "${PROJECT_NAME}_pywrap")
   set(${PY_NAME}_INSTALL_DIR ${PYTHON_SITELIB})
 endif()
 
 add_project_dependency(crocoddyl REQUIRED)
 
 # Main Library
-set(${PROJECT_NAME}_cpp_HEADERS
+set(${PROJECT_NAME}_HEADERS
     include/${PROJECT_NAME}/fwd.hpp
     include/${PROJECT_NAME}/residual-distance-collision.hpp
     include/${PROJECT_NAME}/residual-distance-collision.hxx)
 
-add_library(${PROJECT_NAME}_cpp SHARED ${${PROJECT_NAME}_cpp_HEADERS})
-set_target_properties(${PROJECT_NAME}_cpp PROPERTIES LINKER_LANGUAGE CXX)
-target_include_directories(${PROJECT_NAME}_cpp
-                           PUBLIC $<INSTALL_INTERFACE:include>)
-target_link_libraries(${PROJECT_NAME}_cpp PUBLIC crocoddyl::crocoddyl)
+add_library(${PROJECT_NAME}SHARED ${${PROJECT_NAME}_HEADERS})
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+target_include_directories(
+  ${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_link_libraries(${PROJECT_NAME} PUBLIC crocoddyl::crocoddyl)
 if(UNIX)
-  get_relative_rpath(${CMAKE_INSTALL_LIBDIR} ${PROJECT_NAME}_cpp_INSTALL_RPATH)
+  get_relative_rpath(${CMAKE_INSTALL_LIBDIR} ${PROJECT_NAME}_INSTALL_RPATH)
   set_target_properties(
-    ${PROJECT_NAME}_cpp PROPERTIES INSTALL_RPATH
-                                   "${${PROJECT_NAME}_cpp_INSTALL_RPATH}")
+    ${PROJECT_NAME} PROPERTIES INSTALL_RPATH "${${PROJECT_NAME}_INSTALL_RPATH}")
 endif()
 
 if(SUFFIX_SO_VERSION)
-  set_target_properties(${PROJECT_NAME}_cpp PROPERTIES SOVERSION
-                                                       ${PROJECT_VERSION})
+  set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${PROJECT_VERSION})
 endif()
 
 # Python Bindings
@@ -88,16 +99,7 @@ endif()
 
 # Installation
 install(
-  TARGETS ${PROJECT_NAME}_cpp
+  TARGETS ${PROJECT_NAME}
   EXPORT ${TARGETS_EXPORT_NAME}
   DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(FILES package.xml DESTINATION share/${PROJECT_NAME})
-
-install(FILES
-  include/${PROJECT_NAME}/fwd.hpp
-  include/${PROJECT_NAME}/python.hpp
-  include/${PROJECT_NAME}/residual-distance-collision.hpp
-  include/${PROJECT_NAME}/residual-distance-collision.hxx
-  DESTINATION
-  ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
-)
