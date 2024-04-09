@@ -1,7 +1,7 @@
 """
-Example script : MPC simulation with PANDA arm 
+Example script : MPC simulation with PANDA arm
 static target reaching task
-Inspired example from Sebastien Kleff: https://github.com/machines-in-motion/minimal_examples_crocoddyl 
+Inspired example from Sebastien Kleff: https://github.com/machines-in-motion/minimal_examples_crocoddyl
 """
 
 import time
@@ -10,13 +10,13 @@ import numpy as np
 
 np.set_printoptions(precision=4, linewidth=180)
 
+import mpc_utils
+import pin_utils
 import pinocchio as pin
-import pin_utils, mpc_utils
-
 from env import BulletEnv
-from panda_robot_loader import PandaRobot
 from ocp_panda_reaching import OCPPandaReaching
 from ocp_panda_reaching_obs_soft import OCPPandaReachingColWithMultipleColSoft
+from panda_robot_loader import PandaRobot
 
 # # # # # # # #
 ### HELPERS  ##
@@ -82,15 +82,15 @@ robot_simulator.pin_robot.collision_model.addCollisionPair(
     )
 )
 robot_simulator.pin_robot.collision_model.addCollisionPair(
-    pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_3"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
+    pin.CollisionPair(
+        robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_3"),
+        robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"),
+    )
 )
 
 list_col_pairs = []
 for col_pair in robot_simulator.pin_robot.collision_model.collisionPairs:
     list_col_pairs.append([col_pair.first, col_pair.second])
-
-
-
 
 
 # # # # # # # # # # # #
@@ -110,15 +110,17 @@ dt = 2e-2
 T = 10
 
 max_iter = 50  # Maximum iterations of the solver
-max_qp_iters = 25  # Maximum iterations for solving each qp solved in one iteration of the solver
+max_qp_iters = (
+    25  # Maximum iterations for solving each qp solved in one iteration of the solver
+)
 
-WEIGHT_GRIPPER_POSE=1e2
-WEIGHT_GRIPPER_POSE_TERM=1e2
-WEIGHT_xREG=1e-2
-WEIGHT_xREG_TERM=1e-2
-WEIGHT_uREG=1e-4
-max_qp_iters= 100
-callbacks=False
+WEIGHT_GRIPPER_POSE = 1e2
+WEIGHT_GRIPPER_POSE_TERM = 1e2
+WEIGHT_xREG = 1e-2
+WEIGHT_xREG_TERM = 1e-2
+WEIGHT_uREG = 1e-4
+max_qp_iters = 100
+callbacks = False
 safety_threshhold = 1e-2
 
 # vis.display(robot_simulator.pin_robot.)

@@ -20,7 +20,8 @@ void exposeResidualDistanceCollision() {
           ":param state: state of the multibody system\n"
           ":param geom_model: Pinocchio geometry model containing the "
           "collision pair\n"
-          ":param pair_id: Index of the collision pair in the geometry model\n"))
+          ":param pair_id: Index of the collision pair in the geometry "
+          "model\n"))
       .def("calc", &ResidualDistanceCollision::calc,
            bp::args("self", "data", "x", "u"),
            "Compute the residual.\n\n"

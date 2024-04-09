@@ -1,21 +1,23 @@
-'''
-Example script : MPC simulation with KUKA arm 
+"""
+Example script : MPC simulation with KUKA arm
 static target reaching task
-'''
-from os.path import dirname, join, abspath
+"""
 
-import pinocchio as pin
+from os.path import abspath, dirname, join
+
 import hppfcl
 import numpy as np
+import pinocchio as pin
+
 np.set_printoptions(precision=4, linewidth=180)
 
-import pin_utils, mpc_utils
 from mim_robots.pybullet.wrapper import PinBulletWrapper
 
 RED = np.array([249, 136, 126, 125]) / 255
 import pybullet
 
-def load_pinocchio_robot_panda(capsule = False):
+
+def load_pinocchio_robot_panda(capsule=False):
     """Load the robot from the models folder.
 
     Returns:
@@ -23,9 +25,7 @@ def load_pinocchio_robot_panda(capsule = False):
     """
 
     ### LOADING THE ROBOT
-    pinocchio_model_dir = join(
-        dirname(dirname(str(abspath(__file__)))), "models"
-    )
+    pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
     model_path = join(pinocchio_model_dir, "franka_description/robots")
     mesh_dir = pinocchio_model_dir
     urdf_filename = "franka2.urdf"
@@ -50,29 +50,36 @@ def load_pinocchio_robot_panda(capsule = False):
             if isinstance(geometry_object.geometry, hppfcl.Cylinder):
                 if (geometry_object.name[:-4] + "capsule") in list_names_capsules:
                     capsule = pin.GeometryObject(
-                    geometry_object.name[:-4] + "capsule" + "1",
-                    geometry_object.parentJoint,
-                    geometry_object.parentFrame,
-                    geometry_object.placement,
-                    hppfcl.Capsule(geometry_object.geometry.radius, geometry_object.geometry.halfLength),
+                        geometry_object.name[:-4] + "capsule" + "1",
+                        geometry_object.parentJoint,
+                        geometry_object.parentFrame,
+                        geometry_object.placement,
+                        hppfcl.Capsule(
+                            geometry_object.geometry.radius,
+                            geometry_object.geometry.halfLength,
+                        ),
                     )
                     capsule.meshColor = RED
                     cmodel.addGeometryObject(capsule)
                     cmodel.removeGeometryObject(geometry_object.name)
-                    list_names_capsules.append(geometry_object.name[:-4] + "capsule" + "1" )
+                    list_names_capsules.append(
+                        geometry_object.name[:-4] + "capsule" + "1"
+                    )
                 else:
                     capsule = pin.GeometryObject(
-                    geometry_object.name[:-4] + "capsule",
-                    geometry_object.parentJoint,
-                    geometry_object.parentFrame,
-                    geometry_object.placement,
-                    hppfcl.Capsule(geometry_object.geometry.radius, geometry_object.geometry.halfLength),
+                        geometry_object.name[:-4] + "capsule",
+                        geometry_object.parentJoint,
+                        geometry_object.parentFrame,
+                        geometry_object.placement,
+                        hppfcl.Capsule(
+                            geometry_object.geometry.radius,
+                            geometry_object.geometry.halfLength,
+                        ),
                     )
                     capsule.meshColor = RED
                     cmodel.addGeometryObject(capsule)
                     cmodel.removeGeometryObject(geometry_object.name)
                     list_names_capsules.append(geometry_object.name[:-4] + "capsule")
-
 
     ### CREATING THE SPHERE ON THE UNIVERSE
     OBSTACLE_RADIUS = 1.0e-1
@@ -91,26 +98,24 @@ def load_pinocchio_robot_panda(capsule = False):
         OBSTACLE_POSE,
     )
     ID_OBSTACLE = cmodel.addGeometryObject(OBSTACLE_GEOM_OBJECT)
-    robot_reduced = pin.robot_wrapper.RobotWrapper(rmodel, cmodel, vmodel)  
+    robot_reduced = pin.robot_wrapper.RobotWrapper(rmodel, cmodel, vmodel)
 
     return robot_reduced
 
 
 class PandaRobot(PinBulletWrapper):
-    '''
-    Pinocchio-PyBullet wrapper class for the KUKA LWR iiwa 
-    '''
-    def __init__(self, qref=np.zeros(7), pos=None, orn=None): 
+    """
+    Pinocchio-PyBullet wrapper class for the KUKA LWR iiwa
+    """
 
+    def __init__(self, qref=np.zeros(7), pos=None, orn=None):
         # Load the robot
         if pos is None:
             pos = [0.0, 0, 0.0]
         if orn is None:
             orn = pybullet.getQuaternionFromEuler([0, 0, 0])
 
-        pinocchio_model_dir = join(
-            dirname(dirname(str(abspath(__file__)))), "models"
-        )
+        pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
         print(pinocchio_model_dir)
         model_path = join(pinocchio_model_dir, "franka_description/robots")
         mesh_dir = pinocchio_model_dir
@@ -120,46 +125,56 @@ class PandaRobot(PinBulletWrapper):
         self.urdf_path = urdf_model_path
         self.robotId = pybullet.loadURDF(
             self.urdf_path,
-            pos, orn,
+            pos,
+            orn,
             # flags=pybullet.URDF_USE_INERTIA_FROM_FILE,
-            useFixedBase=True)
+            useFixedBase=True,
+        )
         pybullet.getBasePositionAndOrientation(self.robotId)
-        
+
         # Create the robot wrapper in pinocchio.
         robot_full = load_pinocchio_robot_panda(capsule=False)
 
-        
         # Query all the joints.
         num_joints = pybullet.getNumJoints(self.robotId)
 
         for ji in range(num_joints):
-            pybullet.changeDynamics(self.robotId, 
-                                    ji, 
-                                    linearDamping=.04,
-                                    angularDamping=0.04, 
-                                    restitution=0.0, 
-                                    lateralFriction=0.5)
-          
+            pybullet.changeDynamics(
+                self.robotId,
+                ji,
+                linearDamping=0.04,
+                angularDamping=0.04,
+                restitution=0.0,
+                lateralFriction=0.5,
+            )
 
         self.pin_robot = robot_full
-        controlled_joints_names = ["panda2_joint1", "panda2_joint2", "panda2_joint3", "panda2_joint4", 
-                                   "panda2_joint5", "panda2_joint6", "panda2_joint7"]
-        
+        controlled_joints_names = [
+            "panda2_joint1",
+            "panda2_joint2",
+            "panda2_joint3",
+            "panda2_joint4",
+            "panda2_joint5",
+            "panda2_joint6",
+            "panda2_joint7",
+        ]
+
         self.base_link_name = "support_joint"
         self.end_eff_ids = []
-        self.end_eff_ids.append(self.pin_robot.model.getFrameId('panda2_rightfinger'))
+        self.end_eff_ids.append(self.pin_robot.model.getFrameId("panda2_rightfinger"))
         self.nb_ee = len(self.end_eff_ids)
         self.joint_names = controlled_joints_names
 
-        # Creates the wrapper by calling the super.__init__.          
+        # Creates the wrapper by calling the super.__init__.
         super(PandaRobot, self).__init__(
-            self.robotId, 
+            self.robotId,
             self.pin_robot,
             controlled_joints_names,
-            ['panda2_finger_joint1'],
-            useFixedBase=True)
+            ["panda2_finger_joint1"],
+            useFixedBase=True,
+        )
         self.nb_dof = self.nv
-        
+
     def forward_robot(self, q=None, dq=None):
         if q is None:
             q, dq = self.get_state()
@@ -177,5 +192,3 @@ class PandaRobot(PinBulletWrapper):
 
     def stop_recording(self):
         pybullet.stopStateLogging(pybullet.STATE_LOGGING_VIDEO_MP4, self.file_name)
-        
-        

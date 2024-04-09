@@ -1,12 +1,13 @@
 import subprocess
-
-from urdf_parser_py.urdf import URDF
 from unittest import TestCase
 
-PKG = 'franka_description'
+from urdf_parser_py.urdf import URDF
+
+PKG = "franka_description"
+
 
 class UrdfTestCase(TestCase):
-    def xacro(self, file, args=''):
+    def xacro(self, file, args=""):
         """
         Generates a URDF from a XACRO file. If the URDF is invalid the test is
         automatically failed.
@@ -15,12 +16,17 @@ class UrdfTestCase(TestCase):
         @return: The generated URDF, as urdf_parser_py.urdf.URDF type
         """
         try:
-            return URDF.from_xml_string(subprocess.check_output(
-                'xacro $(rospack find %s)/robots/%s %s' % (PKG, file, args),
-                shell=True)
+            return URDF.from_xml_string(
+                subprocess.check_output(
+                    "xacro $(rospack find %s)/robots/%s %s" % (PKG, file, args),
+                    shell=True,
+                )
             )
         except subprocess.CalledProcessError as e:
-            self.fail('Could not generate URDF from "%s", probably syntax error: %s' % (file, e.output))
+            self.fail(
+                'Could not generate URDF from "%s", probably syntax error: %s'
+                % (file, e.output)
+            )
 
     def assertContainsLink(self, urdf, link):
         """
@@ -69,7 +75,7 @@ class UrdfTestCase(TestCase):
         @return: A list of urdf_parser_py.urdf.Geometry
         """
         self.assertContainsLink(urdf, link)
-        return [ collision.geometry for collision in urdf.link_map[link].collisions ]
+        return [collision.geometry for collision in urdf.link_map[link].collisions]
 
     def assertJointBetween(self, urdf, parent, child, type=None):
         """
@@ -82,14 +88,22 @@ class UrdfTestCase(TestCase):
                        for a specific type only.
         """
         candidates = list(filter(lambda j: j.parent == parent, urdf.joints))
-        self.assertTrue(candidates, "Could not find any joint in URDF which parent is '%s'" % parent)
+        self.assertTrue(
+            candidates, "Could not find any joint in URDF which parent is '%s'" % parent
+        )
 
         candidates = list(filter(lambda j: j.child == child, candidates))
-        self.assertTrue(candidates, "Could not find any joint in URDF which child is '%s'" % child)
+        self.assertTrue(
+            candidates, "Could not find any joint in URDF which child is '%s'" % child
+        )
 
         if type is not None:
             candidates = list(filter(lambda j: j.joint_type == type, candidates))
-            self.assertTrue(candidates, "Could not find any joint in URDF from %s -> %s which is %s" % (parent, child, type))
+            self.assertTrue(
+                candidates,
+                "Could not find any joint in URDF from %s -> %s which is %s"
+                % (parent, child, type),
+            )
 
     def assertJointHasTransmission(self, urdf, joint, type):
         """
@@ -106,4 +120,7 @@ class UrdfTestCase(TestCase):
                 break
         else:
             # Transmission Loop not broken -> no suitable transmission for joint found
-            self.fail('No suitable "%s" transmission tag for "%s" found in URDF' % (type, joint))
+            self.fail(
+                'No suitable "%s" transmission tag for "%s" found in URDF'
+                % (type, joint)
+            )

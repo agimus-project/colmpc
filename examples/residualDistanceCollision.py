@@ -1,8 +1,8 @@
+import crocoddyl
+import hppfcl
 import numpy as np
 import pinocchio as pin
-import crocoddyl
 from crocoddyl.utils import *
-import hppfcl
 
 
 class ResidualCollision(crocoddyl.ResidualModelAbstract):
@@ -131,8 +131,8 @@ class ResidualCollision(crocoddyl.ResidualModelAbstract):
         self.calcDiff_ana(data, x)
         # J_f = self._J
 
-        # J_diff = J_f - J_n 
-        
+        # J_diff = J_f - J_n
+
         # for k in J_diff:
         #     if np.linalg.norm(k) > 1e-5:
         #         print(J_diff)

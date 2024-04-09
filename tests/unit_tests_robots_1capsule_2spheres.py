@@ -1,11 +1,10 @@
 import unittest
-
-from os.path import dirname, join, abspath
-import numpy as np
+from os.path import abspath, dirname, join
 
 import example_robot_data as robex
-import pinocchio as pin
 import hppfcl
+import numpy as np
+import pinocchio as pin
 
 
 class TestRobotsDistanceDerivativesCapsuleSpheres(unittest.TestCase):

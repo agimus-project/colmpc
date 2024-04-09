@@ -1,10 +1,9 @@
 ## Class heavily inspired by the work of Sebastien Kleff : https://github.com/machines-in-motion/minimal_examples_crocoddyl
-import sys
 from typing import Any
-import numpy as np
+
 import crocoddyl
+import numpy as np
 import pinocchio as pin
-import mim_solvers
 
 # from residualDistanceCollision import ResidualCollision
 from colmpc import ResidualDistanceCollision
@@ -22,14 +21,14 @@ class OCPPandaReachingColWithMultipleColSoft:
         dt: float,
         x0: np.ndarray,
         WEIGHT_xREG=1e-1,
-        WEIGHT_xREG_TERM = 1e-1,
+        WEIGHT_xREG_TERM=1e-1,
         WEIGHT_uREG=1e-4,
         WEIGHT_GRIPPER_POSE=10,
-        WEIGHT_GRIPPER_POSE_TERM = 10,
-        WEIGHT_LIMIT = 1e-1,
+        WEIGHT_GRIPPER_POSE_TERM=10,
+        WEIGHT_LIMIT=1e-1,
         SAFETY_THRESHOLD=5e-3,
-        max_qp_iters = 100,
-        callbacks = False,
+        max_qp_iters=100,
+        callbacks=False,
     ) -> None:
         """Creating the class for optimal control problem of a panda robot reaching for a target while taking a collision between a given previously given shape of the robot and an obstacle into consideration.
 
@@ -79,10 +78,10 @@ class OCPPandaReachingColWithMultipleColSoft:
 
         # Making sure that the frame exists
         assert self._endeff_frame <= len(self._rmodel.frames)
-        
+
         # Collision pair id
         k = 0
-        
+
         # Making sure that the pair of collision exists
         assert k <= len(self._cmodel.collisionPairs)
 
@@ -114,7 +113,7 @@ class OCPPandaReachingColWithMultipleColSoft:
         self._shape2_parentJoint = self._shape2.parentJoint
 
         # Checking that shape 1 is belonging to the robot & shape 2 is the obstacle
-        assert not "obstacle" in self._shape1.name
+        assert "obstacle" not in self._shape1.name
         assert "obstacle" in self._shape2.name
 
     def __call__(self) -> Any:
@@ -156,13 +155,15 @@ class OCPPandaReachingColWithMultipleColSoft:
         self._terminalConstraintModelManager = crocoddyl.ConstraintModelManager(
             self._state, self._actuation.nu
         )
-            # Creating the residual  
-            
+        # Creating the residual
+
         for col_idx in range(len(self._cmodel.collisionPairs)):
             # obstacleDistanceResidual = ResidualCollision(
             #     self._state, self._cmodel, self._cdata, col_idx
             # )
-            obstacleDistanceResidual = ResidualDistanceCollision(self._state, 7, self._cmodel, col_idx)
+            obstacleDistanceResidual = ResidualDistanceCollision(
+                self._state, 7, self._cmodel, col_idx
+            )
 
             xlb = np.array([0.02])
             xlb = 0.01
@@ -170,13 +171,16 @@ class OCPPandaReachingColWithMultipleColSoft:
             # bounds = crocoddyl.ActivationBounds(xlb, xub, 1.0)
             xLimitActivation = crocoddyl.ActivationModel2NormBarrier(1, xlb)
             obstacleDistanceCost = crocoddyl.CostModelResidual(
-                self._state,xLimitActivation ,obstacleDistanceResidual
+                self._state, xLimitActivation, obstacleDistanceResidual
             )
 
             # Adding the constraint to the constraint manager
-            self._runningCostModel.addCost("colcostrm" + str(col_idx), obstacleDistanceCost, 10000)
-            self._terminalCostModel.addCost("colcosttm"+ str(col_idx), obstacleDistanceCost, 10000)
-
+            self._runningCostModel.addCost(
+                "colcostrm" + str(col_idx), obstacleDistanceCost, 10000
+            )
+            self._terminalCostModel.addCost(
+                "colcosttm" + str(col_idx), obstacleDistanceCost, 10000
+            )
 
         # Adding costs to the models
         self._runningCostModel.addCost("stateReg", xRegCost, self._WEIGHT_xREG)
@@ -184,12 +188,12 @@ class OCPPandaReachingColWithMultipleColSoft:
         self._runningCostModel.addCost(
             "gripperPoseRM", goalTrackingCost, self._WEIGHT_GRIPPER_POSE
         )
-        # self._runningCostModel.addCost("limitCostRM", limitCost, self._WEIGHT_LIMIT)    
+        # self._runningCostModel.addCost("limitCostRM", limitCost, self._WEIGHT_LIMIT)
         self._terminalCostModel.addCost("stateReg", xRegCost, self._WEIGHT_xREG_TERM)
         self._terminalCostModel.addCost(
             "gripperPose", goalTrackingCost, self._WEIGHT_GRIPPER_POSE_TERM
         )
-        # self._terminalCostModel.addCost("limitCost", limitCost, self._WEIGHT_LIMIT)    
+        # self._terminalCostModel.addCost("limitCost", limitCost, self._WEIGHT_LIMIT)
 
         # Create Differential Action Model (DAM), i.e. continuous dynamics and cost functions
         self._running_DAM = crocoddyl.DifferentialActionModelFreeFwdDynamics(
@@ -226,16 +230,16 @@ class OCPPandaReachingColWithMultipleColSoft:
         # Create solver + callbacks
         # Define mim solver with inequalities constraints
         # ddp = mim_solvers.SolverCSQP(problem)
-        
+
         # # Merit function
         # ddp.use_filter_line_search = False
-        
+
         # # Parameters of the solver
         # ddp.termination_tolerance = 1e-3
         # ddp.max_qp_iters =self._max_qp_iters
         # ddp.eps_abs = 1e-6
         # ddp.eps_rel = 0
-        
+
         # ddp.with_callbacks = self._callbacks
         ddp = crocoddyl.SolverFDDP(problem)
 
