@@ -3,7 +3,7 @@ repositories:
     type: git
     url: https://github.com/loco-3d/crocoddyl
     version: 5b415a16138d
-    
+
   vcs_repos/hpp_fcl:
     type: git
     url: https://github.com/humanoid-path-planner/hpp-fcl

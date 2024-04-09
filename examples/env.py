@@ -7,16 +7,13 @@ Copyright (C) 2018-2021, New York University , Max Planck Gesellschaft
 Copyright note valid unless otherwise stated in individual files.
 All rights reserved.
 """
-try:
-    # use standard Python importlib if available (Python>3.7)
-    import importlib.resources as importlib_resources
-except ImportError:
-    import importlib_resources
-import pybullet
+
 import time
 
+import pybullet
 
-class BulletEnv(object):
+
+class BulletEnv:
     """This class manages a PyBullet simulation environment and provides utility functions to interact with :py:obj:`PinBulletWrapper` objects.
 
     Attributes:
@@ -97,4 +94,3 @@ class BulletEnv(object):
         print("physics_engine_params:")
         for key in params:
             print("    - ", key, ": ", params[key])
-

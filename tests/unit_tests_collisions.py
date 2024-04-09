@@ -1,9 +1,8 @@
 import unittest
 
-import numpy as np
-
-import pinocchio as pin
 import hppfcl
+import numpy as np
+import pinocchio as pin
 
 
 class TestCollisions(unittest.TestCase):
@@ -25,9 +24,9 @@ class TestCollisions(unittest.TestCase):
         for i, geom in enumerate(geometries):
             placement = pin.SE3(np.eye(3), np.array([i, 0, 0]))
             try:
-                geom_obj = pin.GeometryObject("obj{}".format(i), 0, 0, placement, geom)
-            except:
-                geom_obj = pin.GeometryObject("obj{}".format(i), 0, 0, geom, placement)
+                geom_obj = pin.GeometryObject(f"obj{i}", 0, 0, placement, geom)
+            except:  # noqa 422 TODO
+                geom_obj = pin.GeometryObject(f"obj{i}", 0, 0, geom, placement)
             cmodel.addGeometryObject(geom_obj)
 
         rdata = rmodel.createData()
@@ -95,9 +94,9 @@ class TestCollisions(unittest.TestCase):
         for i, geom in enumerate(geometries):
             placement = pin.SE3(np.eye(3), np.array([i, 0, 0]))
             try:
-                geom_obj = pin.GeometryObject("obj{}".format(i), 0, 0, placement, geom)
-            except:
-                geom_obj = pin.GeometryObject("obj{}".format(i), 0, 0, geom, placement)
+                geom_obj = pin.GeometryObject(f"obj{i}", 0, 0, placement, geom)
+            except:  # noqa 422 TODO
+                geom_obj = pin.GeometryObject(f"obj{i}", 0, 0, geom, placement)
 
             cmodel.addGeometryObject(geom_obj)
 
@@ -168,7 +167,7 @@ class TestCollisions(unittest.TestCase):
         placement0 = pin.SE3(pin.utils.rotate("y", np.pi), np.array([0, 0, 2]))
         try:
             geom_obj0 = pin.GeometryObject("obj0", 0, 0, placement0, geometries[0])
-        except:
+        except:  # noqa 422 TODO
             geom_obj0 = pin.GeometryObject("obj0", 0, 0, geometries[0], placement0)
 
         cmodel.addGeometryObject(geom_obj0)
@@ -176,7 +175,7 @@ class TestCollisions(unittest.TestCase):
         placement1 = pin.SE3(pin.utils.rotate("y", np.pi), np.array([0, 0, 0]))
         try:
             geom_obj1 = pin.GeometryObject("obj1", 0, 0, placement1, geometries[1])
-        except:
+        except:  # noqa 422 TODO
             geom_obj1 = pin.GeometryObject("obj1", 0, 0, geometries[1], placement1)
 
         cmodel.addGeometryObject(geom_obj1)
@@ -218,7 +217,9 @@ class TestCollisions(unittest.TestCase):
             res,
         )
 
-        distance_ana = self.distance_sphere_capsule(shape1, shape1_placement,shape2, shape2_placement)
+        distance_ana = self.distance_sphere_capsule(
+            shape1, shape1_placement, shape2, shape2_placement
+        )
         self.assertAlmostEqual(distance_ana, distance_hpp)
 
         # Testing the computation of closest points
@@ -246,7 +247,7 @@ class TestCollisions(unittest.TestCase):
         placement0 = pin.SE3(pin.utils.rotate("y", np.pi), np.array([1, 0, 0]))
         try:
             geom_obj0 = pin.GeometryObject("obj0", 0, 0, placement0, geometries[0])
-        except:
+        except:  # noqa 422 TODO
             geom_obj0 = pin.GeometryObject("obj0", 0, 0, geometries[0], placement0)
 
         cmodel.addGeometryObject(geom_obj0)
@@ -254,7 +255,7 @@ class TestCollisions(unittest.TestCase):
         placement1 = pin.SE3(pin.utils.rotate("y", np.pi), np.array([0, 0, 0]))
         try:
             geom_obj1 = pin.GeometryObject("obj1", 0, 0, placement1, geometries[1])
-        except:
+        except:  # noqa 422 TODO
             geom_obj1 = pin.GeometryObject("obj1", 0, 0, geometries[1], placement1)
 
         cmodel.addGeometryObject(geom_obj1)
@@ -296,7 +297,9 @@ class TestCollisions(unittest.TestCase):
             res,
         )
 
-        distance_ana = self.distance_sphere_capsule(shape1, shape1_placement,shape2, shape2_placement)
+        distance_ana = self.distance_sphere_capsule(
+            shape1, shape1_placement, shape2, shape2_placement
+        )
         self.assertAlmostEqual(distance_ana, distance_hpp)
 
         # Testing the computation of closest points
@@ -308,7 +311,9 @@ class TestCollisions(unittest.TestCase):
         # - distance because interpenetration
         self.assertAlmostEqual(distance_cp, distance_ana)
 
-    def distance_sphere_capsule(self, sphere, sphere_placement, capsule, capsule_placement):
+    def distance_sphere_capsule(
+        self, sphere, sphere_placement, capsule, capsule_placement
+    ):
         """Computes the signed distance between a sphere & a capsule.
 
         Args:
@@ -320,7 +325,7 @@ class TestCollisions(unittest.TestCase):
         """
         r1 = sphere.geometry.radius
         r2 = capsule.geometry.radius
-        A, B = self.get_A_B_from_center_capsule(capsule,capsule_placement)
+        A, B = self.get_A_B_from_center_capsule(capsule, capsule_placement)
 
         # Position of the center of the sphere
         C = sphere_placement.translation

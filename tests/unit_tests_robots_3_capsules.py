@@ -1,11 +1,10 @@
 import unittest
-
-from os.path import dirname, join, abspath
-import numpy as np
+from os.path import abspath, dirname, join
 
 import example_robot_data as robex
-import pinocchio as pin
 import hppfcl
+import numpy as np
+import pinocchio as pin
 
 
 class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
@@ -44,7 +43,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
         CAPSULE1 = hppfcl.Capsule(self.radius, self.halfLength)
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
         CAPSULE1_GEOM_OBJECT = pin.GeometryObject(
             "CAPSULE1",
@@ -64,7 +63,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
             parentJoint = rmodel.frames[
                 rmodel.getFrameId("panda2_leftfinger")
             ].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("panda2_leftfinger")].parent
 
         CAPSULE2_GEOM_OBJECT = pin.GeometryObject(
@@ -84,7 +83,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
             parentJoint = rmodel.frames[
                 rmodel.getFrameId("panda2_link3_sc_joint")
             ].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[
                 rmodel.getFrameId("panda2_link3_sc_joint")
             ].parent
@@ -113,7 +112,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
 
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
 
         self.CAPSULE1_GEOM_OBJECT = pin.GeometryObject(
@@ -132,7 +131,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
 
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("tool0")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("tool0")].parent
 
         self.CAPSULE2_GEOM_OBJECT = pin.GeometryObject(
@@ -151,7 +150,7 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
 
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parent
 
         self.CAPSULE3_GEOM_OBJECT = pin.GeometryObject(
@@ -183,8 +182,6 @@ class TestRobotsDistanceDerivativesCapsules(unittest.TestCase):
         q_pa = pin.neutral(rmodel_pa)
 
         # Number of joints
-        nq_ur = rmodel_ur.nq
-        nq_pa = rmodel_pa.nq
 
         # Updating the models
         pin.forwardKinematics(rmodel_ur, rdata_ur, q_ur)

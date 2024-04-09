@@ -157,7 +157,7 @@
        <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
     </inertial>
   </link>
- 
+
   <joint name="world_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <parent link="world"/>
@@ -225,7 +225,7 @@
       <origin rpy="0 0  0" xyz="-0.0 0.000 0.0"/>
       <mass value="0.0"/>
        <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
-    </inertial>    
+    </inertial>
   </link>
   <!-- fixed joint between both sub-links -->
   <joint name="panda2_link0_sc_joint" type="fixed">
@@ -619,7 +619,7 @@
        <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
     </inertial>
   </link>
-  
+
   <joint name="panda2_joint8" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0.107"/>
     <parent link="panda2_link7"/>
@@ -762,7 +762,7 @@
        <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
     </inertial>
   </link>
-   
+
   <joint name="panda2_ref_camera_joint" type="fixed">
     <parent link="panda2_hand"/>
     <child link="panda2_ref_camera_link"/>
@@ -787,7 +787,7 @@
        <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
     </inertial>
   </link>
-   
+
   <joint name="camera_link_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0.010600000000000002 0.0175 0.0125"/>
     <parent link="camera_bottom_screw_frame"/>
@@ -819,7 +819,7 @@
       <mass value="0.0"/>
        <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
     </inertial>
-  </link>    
+  </link>
   <joint name="camera_depth_optical_joint" type="fixed">
     <origin rpy="-1.5707963267948966 0 -1.5707963267948966" xyz="0 0 0"/>
     <parent link="camera_depth_frame"/>
@@ -831,7 +831,7 @@
       <mass value="0.0"/>
        <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
     </inertial>
-  </link>    
+  </link>
   <!-- camera left IR joints and links -->
   <joint name="camera_infra1_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0.0 0"/>
@@ -925,4 +925,3 @@
   </joint>
   <!-- wall behind the table -->
 </robot>
-

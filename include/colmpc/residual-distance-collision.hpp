@@ -146,8 +146,7 @@ struct ResidualDataDistanceCollisionTpl
         req(),
         res(),
         J1(6, model->get_state()->get_nv()),
-        J2(6, model->get_state()->get_nv())
- {
+        J2(6, model->get_state()->get_nv()) {
     // Check that proper shared data has been passed
     DataCollectorMultibodyTpl<Scalar> *d =
         dynamic_cast<DataCollectorMultibodyTpl<Scalar> *>(shared);
@@ -165,8 +164,6 @@ struct ResidualDataDistanceCollisionTpl
     cp2.fill(0);
     f1p1.fill(0);
     f2p2.fill(0);
-
-
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
@@ -175,7 +172,8 @@ struct ResidualDataDistanceCollisionTpl
   using Base::Rx;
   using Base::shared;
 
-  hpp::fcl::DistanceRequest req;  //!< Distance Request from hppfcl,
+  hpp::fcl::DistanceRequest
+      req;  //!< Distance Request from hppfcl,
             //!< used to compute the distance between shapes
   hpp::fcl::DistanceResult res;  //!< Distance Result from hppfcl
 
@@ -192,7 +190,6 @@ struct ResidualDataDistanceCollisionTpl
 
   pinocchio::SE3 oMg_id_1;
   pinocchio::SE3 oMg_id_2;
-
 };
 
 }  // namespace colmpc

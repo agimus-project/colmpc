@@ -1,10 +1,12 @@
 ## Class heavily inspired by the work of Sebastien Kleff : https://github.com/machines-in-motion/minimal_examples_crocoddyl
 import sys
 from typing import Any
-import numpy as np
+
 import crocoddyl
-import pinocchio as pin
 import mim_solvers
+import numpy as np
+import pinocchio as pin
+
 
 class OCPPandaReaching:
     """This class is creating a optimal control problem of a panda robot reaching for a target while taking auto collisions into consideration"""
@@ -18,12 +20,12 @@ class OCPPandaReaching:
         dt: float,
         x0: np.ndarray,
         WEIGHT_xREG=1e-1,
-        WEIGHT_xREG_TERM = 1e-1,
-        WEIGHT_uREG = 1e-4,
+        WEIGHT_xREG_TERM=1e-1,
+        WEIGHT_uREG=1e-4,
         WEIGHT_GRIPPER_POSE=10,
-        WEIGHT_GRIPPER_POSE_TERM = 10,
-        WEIGHT_LIMIT = 1e-1,
-        callbacks = False,
+        WEIGHT_GRIPPER_POSE_TERM=10,
+        WEIGHT_LIMIT=1e-1,
+        callbacks=False,
     ) -> None:
         """Creating the class for optimal control problem of a panda robot reaching for a target while taking auto collision into consideration
 
@@ -44,7 +46,7 @@ class OCPPandaReaching:
         self._T = T
         self._dt = dt
         self._x0 = x0
-        
+
         self._callbacks = callbacks
 
         # Weights
@@ -77,10 +79,9 @@ class OCPPandaReaching:
         xResidual = crocoddyl.ResidualModelState(self._state, self._x0)
         xRegCost = crocoddyl.CostModelResidual(self._state, xResidual)
 
-        # Control Regularization cost 
+        # Control Regularization cost
         uResidual = crocoddyl.ResidualModelControl(self._state)
         uRegCost = crocoddyl.CostModelResidual(self._state, uResidual)
-        
 
         # End effector frame cost
 
@@ -93,8 +94,8 @@ class OCPPandaReaching:
             self._state, framePlacementResidual
         )
         # Bounds costs
-        
-                # Cost for self-collision
+
+        # Cost for self-collision
         maxfloat = sys.float_info.max
         xlb = np.concatenate(
             [
@@ -109,22 +110,24 @@ class OCPPandaReaching:
             ]
         )
         bounds = crocoddyl.ActivationBounds(xlb, xub, 1.0)
-        xLimitResidual = crocoddyl.ResidualModelState(self._state, self._x0, self._actuation.nu)
+        xLimitResidual = crocoddyl.ResidualModelState(
+            self._state, self._x0, self._actuation.nu
+        )
         xLimitActivation = crocoddyl.ActivationModelQuadraticBarrier(bounds)
-        limitCost = crocoddyl.CostModelResidual(self._state, xLimitActivation, xLimitResidual)
-
+        crocoddyl.CostModelResidual(self._state, xLimitActivation, xLimitResidual)
 
         # Adding costs to the models
         self._runningCostModel.addCost("stateReg", xRegCost, self._WEIGHT_xREG)
         self._runningCostModel.addCost("ctrlRegGrav", uRegCost, self._WEIGHT_uREG)
-        self._runningCostModel.addCost("gripperPoseRM", goalTrackingCost, self._WEIGHT_GRIPPER_POSE)    
-        # self._runningCostModel.addCost("limitCostRM", limitCost, self._WEIGHT_LIMIT)    
+        self._runningCostModel.addCost(
+            "gripperPoseRM", goalTrackingCost, self._WEIGHT_GRIPPER_POSE
+        )
+        # self._runningCostModel.addCost("limitCostRM", limitCost, self._WEIGHT_LIMIT)
         self._terminalCostModel.addCost("stateReg", xRegCost, self._WEIGHT_xREG)
         self._terminalCostModel.addCost(
             "gripperPose", goalTrackingCost, self._WEIGHT_GRIPPER_POSE
         )
-        # self._terminalCostModel.addCost("limitCost", limitCost, self._WEIGHT_LIMIT)    
-
+        # self._terminalCostModel.addCost("limitCost", limitCost, self._WEIGHT_LIMIT)
 
         # Create Differential Action Model (DAM), i.e. continuous dynamics and cost functions
         self._running_DAM = crocoddyl.DifferentialActionModelFreeFwdDynamics(
@@ -142,9 +145,12 @@ class OCPPandaReaching:
             self._terminal_DAM, 0.0
         )
 
-        self._runningModel.differential.armature = 1 *  np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.])
-        self._terminalModel.differential.armature =  1 * np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.])
-
+        self._runningModel.differential.armature = 1 * np.array(
+            [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0]
+        )
+        self._terminalModel.differential.armature = 1 * np.array(
+            [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0]
+        )
 
         problem = crocoddyl.ShootingProblem(
             self._x0, [self._runningModel] * self._T, self._terminalModel
@@ -155,6 +161,6 @@ class OCPPandaReaching:
         ddp.use_filter_line_search = False
         ddp.termination_tolerance = 1e-3
         ddp.max_qp_iters = 1000
-        ddp.with_callbacks = self._callbacks 
+        ddp.with_callbacks = self._callbacks
 
         return ddp

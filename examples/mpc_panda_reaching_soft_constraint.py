@@ -1,23 +1,21 @@
 """
-Example script : MPC simulation with PANDA arm 
+Example script : MPC simulation with PANDA arm
 static target reaching task
-Inspired example from Sebastien Kleff: https://github.com/machines-in-motion/minimal_examples_crocoddyl 
+Inspired example from Sebastien Kleff: https://github.com/machines-in-motion/minimal_examples_crocoddyl
 """
 
 import time
 
+import mpc_utils
 import numpy as np
-
-np.set_printoptions(precision=4, linewidth=180)
-
+import pin_utils
 import pinocchio as pin
-import pin_utils, mpc_utils
-
 from env import BulletEnv
-from panda_robot_loader import PandaRobot
 from ocp_panda_reaching import OCPPandaReaching
 from ocp_panda_reaching_obs_soft import OCPPandaReachingColWithMultipleColSoft
+from panda_robot_loader import PandaRobot
 
+np.set_printoptions(precision=4, linewidth=180)
 # # # # # # # #
 ### HELPERS  ##
 # # # # # # # #
@@ -28,9 +26,9 @@ WITH_WARMSTART_WHEN_CHANGING_TARGET = False
 WITH_PLOTS = False
 WITH_SAVING_RESULTS = True
 
-# # # # # # # # # # # # # # # # # # #
-### LOAD ROBOT MODEL and SIMU ENV ###
-# # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # #
+### LOAD ROBOT MODEL and SIMU ENV ###
+# # # # # # # # # # # # # # # # # # #
 
 # Simulation environment
 env = BulletEnv()
@@ -82,7 +80,10 @@ robot_simulator.pin_robot.collision_model.addCollisionPair(
     )
 )
 robot_simulator.pin_robot.collision_model.addCollisionPair(
-    pin.CollisionPair(robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_3"), robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"))
+    pin.CollisionPair(
+        robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_3"),
+        robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"),
+    )
 )
 
 list_col_pairs = []
@@ -90,12 +91,9 @@ for col_pair in robot_simulator.pin_robot.collision_model.collisionPairs:
     list_col_pairs.append([col_pair.first, col_pair.second])
 
 
-
-
-
-# # # # # # # # # # # #
+# # # # # # # # # # # #
 ###  OCP CONSTANTS  ###
-# # # # # # # # # # # #
+# # # # # # # # # # # #
 
 TARGET_POSE1 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.4, 1.5]))
 TARGET_POSE2 = pin.SE3(pin.utils.rotate("x", np.pi), np.array([0, -0.0, 1.5]))
@@ -110,23 +108,25 @@ dt = 2e-2
 T = 10
 
 max_iter = 50  # Maximum iterations of the solver
-max_qp_iters = 25  # Maximum iterations for solving each qp solved in one iteration of the solver
+max_qp_iters = (
+    25  # Maximum iterations for solving each qp solved in one iteration of the solver
+)
 
-WEIGHT_GRIPPER_POSE=1e2
-WEIGHT_GRIPPER_POSE_TERM=1e2
-WEIGHT_xREG=1e-2
-WEIGHT_xREG_TERM=1e-2
-WEIGHT_uREG=1e-4
-max_qp_iters= 100
-callbacks=False
+WEIGHT_GRIPPER_POSE = 1e2
+WEIGHT_GRIPPER_POSE_TERM = 1e2
+WEIGHT_xREG = 1e-2
+WEIGHT_xREG_TERM = 1e-2
+WEIGHT_uREG = 1e-4
+max_qp_iters = 100
+callbacks = False
 safety_threshhold = 1e-2
 
 # vis.display(robot_simulator.pin_robot.)
 
 
-# # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # #
 ###  SETUP CROCODDYL OCP  ###
-# # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # #
 # State and actuation model
 
 ### CREATING THE PROBLEM WITHOUT OBSTACLE
@@ -179,9 +179,9 @@ ddp.solve(xs_init, us_init, maxiter=50)
 xs_init = ddp.xs
 us_init = ddp.us
 
-# # # # # # # # # # # #
+# # # # # # # # # # # #
 ###  MPC SIMULATION ###
-# # # # # # # # # # # #
+# # # # # # # # # # # #
 # OCP parameters
 ocp_params = {}
 ocp_params["N_h"] = T
@@ -285,9 +285,9 @@ for i in range(sim_data["N_sim"]):
         # Set x0 to measured state
         ddp.problem.x0 = sim_data["state_mea_SIM_RATE"][i, :]
         # Warm start using previous solution
-        xs_init = list(ddp.xs[1:]) + [ddp.xs[-1]]
+        xs_init = [*list(ddp.xs[1:]), ddp.xs[-1]]
         xs_init[0] = sim_data["state_mea_SIM_RATE"][i, :]
-        us_init = list(ddp.us[1:]) + [ddp.us[-1]]
+        us_init = [*list(ddp.us[1:]), ddp.us[-1]]
 
         # Solve OCP & record MPC predictions
         start = time.process_time()

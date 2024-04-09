@@ -1,11 +1,10 @@
 import unittest
-
-from os.path import dirname, join, abspath
-import numpy as np
+from os.path import abspath, dirname, join
 
 import example_robot_data as robex
-import pinocchio as pin
 import hppfcl
+import numpy as np
+import pinocchio as pin
 
 
 class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
@@ -21,9 +20,7 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         """
 
         ### LOADING THE ROBOT
-        pinocchio_model_dir = join(
-            dirname(dirname(str(abspath(__file__)))), "models"
-        )
+        pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
         model_path = join(pinocchio_model_dir, "franka_description/robots")
         mesh_dir = pinocchio_model_dir
         urdf_filename = "franka2.urdf"
@@ -43,12 +40,12 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         SPHERE1_POSE = pin.SE3.Identity()
         SPHERE1_POSE.translation = np.array([0.0, 0.25, 1.5])
         SPHERE1 = hppfcl.Sphere(self.radius)
-        
+
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
-        
+
         SPHERE1_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE1",
             rmodel.getFrameId("universe"),
@@ -59,19 +56,17 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         self.ID_SPHERE1_PA = cmodel.addGeometryObject(SPHERE1_GEOM_OBJECT)
 
         ### CREATING THE SPHERE ON THE END EFFECTOR
-        SPHERE2_RADIUS = 1.5e-1
         SPHERE2_POSE = pin.SE3.Identity()
         SPHERE2_POSE.translation = np.array([0.2, 0.0, 0.0])
         SPHERE2 = hppfcl.Sphere(self.radius)
-        
+
         try:
             parentJoint = rmodel.frames[
                 rmodel.getFrameId("panda2_leftfinger")
             ].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("panda2_leftfinger")].parent
 
-        
         SPHERE2_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE2",
             rmodel.getFrameId("panda2_leftfinger"),
@@ -82,21 +77,19 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         self.ID_SPHERE2_PA = cmodel.addGeometryObject(SPHERE2_GEOM_OBJECT)
 
         ### CREATING THE SPHERE ON THE ROBOT
-        SPHERE3_RADIUS = 1.5e-1
         SPHERE3_POSE = pin.SE3.Identity()
         SPHERE3_POSE.translation = np.array([0.0, 0.1, 0.2])
         SPHERE3 = hppfcl.Sphere(self.radius)
-        
+
         try:
             parentJoint = rmodel.frames[
                 rmodel.getFrameId("panda2_link3_sc_joint")
             ].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[
                 rmodel.getFrameId("panda2_link3_sc_joint")
             ].parent
 
-        
         SPHERE3_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE3",
             rmodel.getFrameId("panda2_link3_sc_joint"),
@@ -115,13 +108,12 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         vmodel = robot.visual_model
 
         ### CREATING THE SPHERE ON THE UNIVERSE
-        SPHERE1_RADIUS = 1.5e-1
         SPHERE1_POSE = pin.SE3.Identity()
         SPHERE1_POSE.translation = np.array([0.0, 0.25, 1.5])
         SPHERE1 = hppfcl.Sphere(self.radius)
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("universe")].parent
 
         self.SPHERE1_GEOM_OBJECT = pin.GeometryObject(
@@ -134,17 +126,15 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         self.ID_SPHERE1_UR = cmodel.addGeometryObject(self.SPHERE1_GEOM_OBJECT)
 
         ### CREATING THE SPHERE ON THE END EFFECTOR
-        SPHERE2_RADIUS = 1.5e-1
         SPHERE2_POSE = pin.SE3.Identity()
         SPHERE2_POSE.translation = np.array([0.2, 0.0, 0.0])
         SPHERE2 = hppfcl.Sphere(self.radius)
-        
+
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("tool0")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("tool0")].parent
 
-        
         self.SPHERE2_GEOM_OBJECT = pin.GeometryObject(
             "SPHERE2",
             rmodel.getFrameId("tool0"),
@@ -155,13 +145,12 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         self.ID_SPHERE2_UR = cmodel.addGeometryObject(self.SPHERE2_GEOM_OBJECT)
 
         ### CREATING THE SPHERE ON THE ROBOT
-        SPHERE3_RADIUS = 1.5e-1
         SPHERE3_POSE = pin.SE3.Identity()
         SPHERE3_POSE.translation = np.array([0.0, 0.3, 0.0])
         SPHERE3 = hppfcl.Sphere(self.radius)
         try:
             parentJoint = rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parentJoint
-        except:
+        except AttributeError:
             parentJoint = rmodel.frames[rmodel.getFrameId("wrist_2_joint")].parent
 
         self.SPHERE3_GEOM_OBJECT = pin.GeometryObject(
@@ -193,8 +182,6 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         q_pa = pin.neutral(rmodel_pa)
 
         # Number of joints
-        nq_ur = rmodel_ur.nq
-        nq_pa = rmodel_pa.nq
 
         # Updating the models
         pin.forwardKinematics(rmodel_ur, rdata_ur, q_ur)
@@ -451,8 +438,6 @@ class TestRobotsDistanceDerivativesSpheres(unittest.TestCase):
         q_pa = pin.neutral(rmodel_pa)
 
         # Number of joints
-        nq_ur = rmodel_ur.nq
-        nq_pa = rmodel_pa.nq
 
         # Updating the models
         pin.forwardKinematics(rmodel_ur, rdata_ur, q_ur)
