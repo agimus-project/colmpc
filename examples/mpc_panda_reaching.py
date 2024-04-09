@@ -1,7 +1,7 @@
 """
-Example script : MPC simulation with KUKA arm 
+Example script : MPC simulation with PANDA arm 
 static target reaching task
-
+Inspired example from Sebastien Kleff: https://github.com/machines-in-motion/minimal_examples_crocoddyl 
 """
 import time
 
