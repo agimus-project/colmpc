@@ -6,7 +6,7 @@ MAKE_JOBS=${2:-2}
 export CMAKE_PREFIX_PATH
 
 declare -a SOURCES=(
-    'jrl-umi3218/jrl-cmakemodules/streq'
+    'jrl-umi3218/jrl-cmakemodules/master'
     'stack-of-tasks/eigenpy/v3.4.0'
     'humanoid-path-planner/hpp-fcl/devel'
     'stack-of-tasks/pinocchio/v2.7.0'
