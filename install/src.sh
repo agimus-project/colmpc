@@ -12,7 +12,7 @@ declare -a SOURCES=(
     'stack-of-tasks/pinocchio/v2.7.0'
     'gepetto/example-robot-data/v4.1.0'
     'loco-3d/crocoddyl/v2.0.2'
-    'cmake-wheels/mim_solvers/v0.0.4.c0'
+    'cmake-wheel/mim_solvers/v0.0.4.c0'
     'agimus-project/colmpc/main'
 )
 
