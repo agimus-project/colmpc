@@ -74,7 +74,12 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
             ->geometryObjects[geom_model_->collisionPairs[pair_id_].second]
             .placement;
   }
-
+  std::cout << " ------------" << std::endl;
+  std::cout << "Collision pair between: " << geom_model_
+            ->geometryObjects[geom_model_->collisionPairs[pair_id_].first]
+            .name << " and " << geom_model_
+            ->geometryObjects[geom_model_->collisionPairs[pair_id_].second]
+            .name << std::endl;
   d->r[0] = hpp::fcl::distance(
       geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first]
           .geometry.get(),
@@ -82,6 +87,8 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
       geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second]
           .geometry.get(),
       toFclTransform3f(d->oMg_id_2), d->req, d->res);
+    std::cout << "distance: " << d->r[0] << std::endl;
+
 }
 
 template <typename Scalar>
@@ -141,6 +148,14 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
   data->Rx.leftCols(nv) =
       -d->res.normal.transpose() *
       (d->J1.template topRows<3>() - d->J2.template topRows<3>());
+  std::cout << " ------------" << std::endl;
+  std::cout << "Collision pair between: " << geom_model_
+            ->geometryObjects[geom_model_->collisionPairs[pair_id_].first]
+            .name << " and " << geom_model_
+            ->geometryObjects[geom_model_->collisionPairs[pair_id_].second]
+            .name << std::endl;
+  std::cout << "Rx: " << data->Rx.leftCols(nv) << std::endl;  
+
 }
 template <typename Scalar>
 boost::shared_ptr<ResidualDataAbstractTpl<Scalar> >
