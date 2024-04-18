@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+title: 'ColMpc: Collision Avoidance for MPC'
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Arthur
+    family-names: Haffemayer
+    email: ahaffemaye@laas.fr
+identifiers:
+  - type: url
+    value: >-
+      https://hal-lara.archives-ouvertes.fr/LAAS-ROBOTIQUE/hal-04425002v1
+repository-code: 'https://github.com/agimus-project/colmpc'
+url: 'https://gepettoweb.laas.fr/articles/haffemayer2024.html'
+abstract: >-
+  We design a method to control the motion of a manipulator
+  robot while strictly enforcing collision avoidance in a
+  dynamic obstacle field. We rely on model predictive
+  control while formulating collision avoidance as a hard
+  constraint. We express the constraint as the requirement
+  for a signed distance function to be positive between
+  pairs of strictly convex objects. Among various
+  formulations, we provide a suitable definition for this
+  signed distance and for the analytical derivatives needed
+  by the numerical solver to enforce the constraint. The
+  method is completely implemented on a manipulator "Panda"
+  robot, and the efficient open-source implementation is
+  provided along with the paper. We experimentally
+  demonstrate the efficiency of our approach by performing
+  dynamic tasks in an obstacle field while reacting to
+  non-modeled perturbations. 
+license: BSD-2-Clause
