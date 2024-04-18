@@ -42,5 +42,5 @@ The examples are based on https://github.com/machines-in-motion/minimal_examples
 
 
 # Citation
-
+To see it in real time, have a look at: https://gepettoweb.laas.fr/articles/haffemayer2024.html.
 Please, if you use this library, please cite this paper: https://laas.hal.science/hal-04425002.
