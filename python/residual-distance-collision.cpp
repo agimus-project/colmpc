@@ -44,19 +44,16 @@ void exposeResidualDistanceCollision() {
            "returns the allocated data for a predefined residual.\n"
            ":param data: shared data\n"
            ":return residual data.")
-        .add_property(
+      .add_property(
           "geometry",
-          bp::make_function(
-              &ResidualDistanceCollision::get_geometry,
-              bp::return_value_policy<bp::return_by_value>()),
+          bp::make_function(&ResidualDistanceCollision::get_geometry,
+                            bp::return_value_policy<bp::return_by_value>()),
           "Pinocchio Geometry model")
-        .add_property(
+      .add_property(
           "collision_pair_id",
-          bp::make_function(
-              &ResidualDistanceCollision::get_pair_id,
-              bp::return_value_policy<bp::return_by_value>()),
-          bp::make_function(
-              &ResidualDistanceCollision::set_pair_id),
+          bp::make_function(&ResidualDistanceCollision::get_pair_id,
+                            bp::return_value_policy<bp::return_by_value>()),
+          bp::make_function(&ResidualDistanceCollision::set_pair_id),
           "reference collision pair id");
 
   bp::register_ptr_to_python<
@@ -80,43 +77,43 @@ void exposeResidualDistanceCollision() {
                                     bp::return_internal_reference<>()),
                     "pinocchio data")
       .add_property("J1",
-                   bp::make_getter(&ResidualDataDistanceCollision::J1,
+                    bp::make_getter(&ResidualDataDistanceCollision::J1,
                                     bp::return_internal_reference<>()),
                     "J1")
       .add_property("J2",
-                   bp::make_getter(&ResidualDataDistanceCollision::J2,
+                    bp::make_getter(&ResidualDataDistanceCollision::J2,
                                     bp::return_internal_reference<>()),
                     "J2")
       .add_property("cp1",
-                   bp::make_getter(&ResidualDataDistanceCollision::cp1,
+                    bp::make_getter(&ResidualDataDistanceCollision::cp1,
                                     bp::return_internal_reference<>()),
                     "cp1")
       .add_property("cp2",
-                   bp::make_getter(&ResidualDataDistanceCollision::cp2,
+                    bp::make_getter(&ResidualDataDistanceCollision::cp2,
                                     bp::return_internal_reference<>()),
                     "cp2")
       .add_property("f1p1",
-                   bp::make_getter(&ResidualDataDistanceCollision::f1p1,
+                    bp::make_getter(&ResidualDataDistanceCollision::f1p1,
                                     bp::return_internal_reference<>()),
                     "f1p1")
       .add_property("f2p2",
-                   bp::make_getter(&ResidualDataDistanceCollision::f2p2,
+                    bp::make_getter(&ResidualDataDistanceCollision::f2p2,
                                     bp::return_internal_reference<>()),
                     "f2p2")
       .add_property("f1Mp1",
-                   bp::make_getter(&ResidualDataDistanceCollision::f1Mp1,
+                    bp::make_getter(&ResidualDataDistanceCollision::f1Mp1,
                                     bp::return_internal_reference<>()),
                     "f1Mp1")
       .add_property("f2Mp2",
-                   bp::make_getter(&ResidualDataDistanceCollision::f2Mp2,
+                    bp::make_getter(&ResidualDataDistanceCollision::f2Mp2,
                                     bp::return_internal_reference<>()),
                     "f2Mp2")
       .add_property("oMg_id_1",
-                   bp::make_getter(&ResidualDataDistanceCollision::oMg_id_1,
+                    bp::make_getter(&ResidualDataDistanceCollision::oMg_id_1,
                                     bp::return_internal_reference<>()),
                     "oMg_id_1")
       .add_property("oMg_id_2",
-                   bp::make_getter(&ResidualDataDistanceCollision::oMg_id_2,
+                    bp::make_getter(&ResidualDataDistanceCollision::oMg_id_2,
                                     bp::return_internal_reference<>()),
                     "oMg_id_2");
 }
