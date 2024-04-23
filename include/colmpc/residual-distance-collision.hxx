@@ -156,6 +156,17 @@ ResidualDistanceCollisionTpl<Scalar>::get_geometry() const {
   return *geom_model_.get();
 }
 
+template <typename Scalar>
+pinocchio::PairIndex ResidualDistanceCollisionTpl<Scalar>::get_pair_id() const {
+  return pair_id_;
+}
+
+template <typename Scalar>
+void ResidualDistanceCollisionTpl<Scalar>::set_pair_id(
+    const pinocchio::PairIndex pair_id) {
+  pair_id_ = pair_id;
+}
+
 }  // namespace colmpc
 
 #endif  // PINOCCHIO_WITH_HPP_FCL
