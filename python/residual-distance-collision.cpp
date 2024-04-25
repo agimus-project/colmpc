@@ -115,7 +115,16 @@ void exposeResidualDistanceCollision() {
       .add_property("oMg_id_2",
                     bp::make_getter(&ResidualDataDistanceCollision::oMg_id_2,
                                     bp::return_internal_reference<>()),
-                    "oMg_id_2");
+                    "oMg_id_2")
+      .add_property("req",
+                   bp::make_getter(&ResidualDataDistanceCollision::req,
+                                    bp::return_internal_reference<>()),
+                    "req")
+      .add_property("res",
+                   bp::make_getter(&ResidualDataDistanceCollision::res,
+                                    bp::return_internal_reference<>()),
+                    "res");
+                    
 }
 
 }  // namespace python
