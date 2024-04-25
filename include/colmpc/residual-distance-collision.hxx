@@ -41,6 +41,9 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
     const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
   Data *d = static_cast<Data *>(data.get());
 
+  // clear the hppfcl results
+  d->res.clear();
+
   // computes the distance for the collision pair pair_id_
   const pinocchio::Model::JointIndex joint_id_1 =
       geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first]
@@ -107,7 +110,8 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
   // getting the nearest points belonging to the collision shapes
   const Vector3s &cp1 = d->res.nearest_points[0];
   const Vector3s &cp2 = d->res.nearest_points[1];
-
+  d->cp1 = cp1;
+  d->cp2 = cp2;
   // Transport the jacobian of frame 1 into the jacobian associated to cp1
   // Vector from frame 1 center to p1
   d->f1p1 =
