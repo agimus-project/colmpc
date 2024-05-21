@@ -1,16 +1,15 @@
 import json
 from collections import defaultdict
-import time
+
 import numpy as np
 import pinocchio as pin
-
-from wrapper_panda import PandaWrapper, compute_distance_between_shapes
 from ocp import OCPPandaReachingColWithMultipleCol
 from scenes import Scene
+from wrapper_panda import PandaWrapper, compute_distance_between_shapes
 
 ### PARAMETERS
-T = 20 # Number of nodes of the trajectory
-dt = 0.01 # Time step between each node
+T = 20  # Number of nodes of the trajectory
+dt = 0.01  # Time step between each node
 
 
 # Creating the robot
@@ -51,8 +50,12 @@ for xs in ddp.xs:
     for collision_pair in cmodel.collisionPairs:
         id1 = collision_pair.first
         id2 = collision_pair.second
-        name_collision = cmodel.geometryObjects[id1].name + "-" + cmodel.geometryObjects[id2].name
-        dist = compute_distance_between_shapes(rmodel, cmodel, id1, id2, np.array(xs.tolist()[:7]))
+        name_collision = (
+            cmodel.geometryObjects[id1].name + "-" + cmodel.geometryObjects[id2].name
+        )
+        dist = compute_distance_between_shapes(
+            rmodel, cmodel, id1, id2, np.array(xs.tolist()[:7])
+        )
         result[name_collision].append(dist)
 
 result["T"] = T
@@ -60,11 +63,10 @@ result["dt"] = dt
 result["ocp_params"] = {
     "T": T,
     "dt": dt,
-    "WEIGHT_GRIPPER_POSE" :100,
-    "WEIGHT_xREG" :1e-2,
-    "WEIGHT_uREG" :1e-4,
-    "SAFETY_THRESHOLD" :2.5e-3,
+    "WEIGHT_GRIPPER_POSE": 100,
+    "WEIGHT_xREG": 1e-2,
+    "WEIGHT_uREG": 1e-4,
+    "SAFETY_THRESHOLD": 2.5e-3,
 }
 with open("tests_benchmark/" + name_scene + ".json", "w") as outfile:
-        json.dump(result, outfile)
-       
+    json.dump(result, outfile)
