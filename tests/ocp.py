@@ -1,5 +1,4 @@
 ## Class heavily inspired by the work of Sebastien Kleff : https://github.com/machines-in-motion/minimal_examples_crocoddyl
-import sys
 from typing import Any
 
 import crocoddyl
