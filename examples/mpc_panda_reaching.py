@@ -8,31 +8,30 @@ import time
 
 import mpc_utils
 import numpy as np
+import pybullet
 import pin_utils
 import pinocchio as pin
+
+import matplotlib.pyplot as plt
 from env import BulletEnv
-from ocp_panda_reaching import OCPPandaReaching
 from ocp_panda_reaching_obs import OCPPandaReachingColWithMultipleCol
 from panda_robot_loader import PandaRobot
-
+from meshcat_wrapper import MeshcatWrapper
 np.set_printoptions(precision=4, linewidth=180)
 
 # # # # # # # #
 ### HELPERS  ##
 # # # # # # # #
 
-
-WITH_TRAJECTORY_WARMSTART = False
-WITH_WARMSTART_WHEN_CHANGING_TARGET = False
-WITH_PLOTS = False
-WITH_SAVING_RESULTS = True
+WITH_PLOTS = True
+WITH_SAVING_RESULTS = False
 
 # # # # # # # # # # # # # # # # # # #
 ### LOAD ROBOT MODEL and SIMU ENV ###
 # # # # # # # # # # # # # # # # # # #
 
 # Simulation environment
-env = BulletEnv()
+env = BulletEnv(server=pybullet.DIRECT)
 # Robot simulator
 robot_simulator = PandaRobot()
 env.add_robot(robot_simulator)
@@ -50,47 +49,25 @@ robot_simulator.reset_state(q0, v0)
 robot_simulator.forward_robot(q0, v0)
 print("[PyBullet] Created robot (id = " + str(robot_simulator.robotId) + ")")
 
-robot_simulator.pin_robot.collision_model.addCollisionPair(
-    pin.CollisionPair(
-        robot_simulator.pin_robot.collision_model.getGeometryId("panda2_rightfinger_0"),
-        robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"),
-    )
-)
-robot_simulator.pin_robot.collision_model.addCollisionPair(
-    pin.CollisionPair(
-        robot_simulator.pin_robot.collision_model.getGeometryId("panda2_leftfinger_0"),
-        robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"),
-    )
-)
-robot_simulator.pin_robot.collision_model.addCollisionPair(
-    pin.CollisionPair(
-        robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link7_sc_1"),
-        robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"),
-    )
-)
-robot_simulator.pin_robot.collision_model.addCollisionPair(
-    pin.CollisionPair(
-        robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link7_sc_4"),
-        robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"),
-    )
-)
-robot_simulator.pin_robot.collision_model.addCollisionPair(
-    pin.CollisionPair(
-        robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link6_sc_2"),
-        robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"),
-    )
-)
-robot_simulator.pin_robot.collision_model.addCollisionPair(
-    pin.CollisionPair(
-        robot_simulator.pin_robot.collision_model.getGeometryId("panda2_link5_sc_3"),
-        robot_simulator.pin_robot.collision_model.getGeometryId("obstacle"),
-    )
-)
+shapes_in_collision_with_obstacle = [
+    "panda2_rightfinger_0",
+    "panda2_link7_sc_1",
+    "panda2_link7_sc_4",
+    "panda2_link6_sc_2",
+    "panda2_link5_sc_3",
+]
 
-list_col_pairs = []
-for col_pair in robot_simulator.pin_robot.collision_model.collisionPairs:
-    list_col_pairs.append([col_pair.first, col_pair.second])
-
+id_list = []
+for shape in shapes_in_collision_with_obstacle:
+    id_shape = robot_simulator.pin_robot.collision_model.getGeometryId(shape)
+    id_obstacle = robot_simulator.pin_robot.collision_model.getGeometryId("obstacle")
+    robot_simulator.pin_robot.collision_model.addCollisionPair(
+        pin.CollisionPair(
+            id_shape,
+            id_obstacle,
+        )
+    )
+    id_list.append(id_shape)
 
 # # # # # # # # # # # #
 ###  OCP CONSTANTS  ###
@@ -120,7 +97,7 @@ WEIGHT_xREG_TERM = 1e-2
 WEIGHT_uREG = 1e-4
 max_qp_iters = 25
 callbacks = False
-safety_threshhold = 1e-2
+safety_threshhold = 7e-2
 
 # vis.display(robot_simulator.pin_robot.)
 
@@ -130,31 +107,6 @@ safety_threshhold = 1e-2
 # # # # # # # # # # # # # # #
 # State and actuation model
 
-### CREATING THE PROBLEM WITHOUT OBSTACLE
-
-problem = OCPPandaReaching(
-    robot_simulator.pin_robot.model,
-    robot_simulator.pin_robot.collision_model,
-    TARGET_POSE1,
-    T,
-    dt,
-    x0,
-    WEIGHT_GRIPPER_POSE=WEIGHT_GRIPPER_POSE,
-    WEIGHT_GRIPPER_POSE_TERM=WEIGHT_GRIPPER_POSE_TERM,
-    WEIGHT_xREG=WEIGHT_xREG,
-    WEIGHT_xREG_TERM=WEIGHT_xREG_TERM,
-    WEIGHT_uREG=WEIGHT_uREG,
-    callbacks=True,
-)
-ddp = problem()
-
-xs_init = [x0 for i in range(T + 1)]
-us_init = ddp.problem.quasiStatic(xs_init[:-1])
-if WITH_TRAJECTORY_WARMSTART:
-    print("Solving the problem without collision first")
-    ddp.solve(xs_init, us_init, maxiter=100)
-    xs_init, us_init = ddp.xs, ddp.us
-# Solve
 
 ### CREATING THE PROBLEM WITH OBSTACLE
 
@@ -176,6 +128,10 @@ problem = OCPPandaReachingColWithMultipleCol(
     callbacks=callbacks,
 )
 ddp = problem()
+
+xs_init = [x0 for i in range(T + 1)]
+us_init = ddp.problem.quasiStatic(xs_init[:-1])
+
 ddp.solve(xs_init, us_init, maxiter=100)
 xs_init = ddp.xs
 us_init = ddp.us
@@ -232,33 +188,6 @@ for i in range(sim_data["N_sim"]):
             TARGET_POSE = TARGET_POSE2
         else:
             TARGET_POSE = TARGET_POSE1
-
-        if WITH_WARMSTART_WHEN_CHANGING_TARGET:
-            problem = OCPPandaReaching(
-                robot_simulator.pin_robot.model,
-                robot_simulator.pin_robot.collision_model,
-                TARGET_POSE,
-                T,
-                dt,
-                sim_data["state_mea_SIM_RATE"][i, :],
-                WEIGHT_GRIPPER_POSE=WEIGHT_GRIPPER_POSE,
-                WEIGHT_GRIPPER_POSE_TERM=WEIGHT_GRIPPER_POSE_TERM,
-                WEIGHT_xREG=WEIGHT_xREG,
-                WEIGHT_xREG_TERM=WEIGHT_xREG_TERM,
-                WEIGHT_uREG=WEIGHT_uREG,
-                callbacks=True,
-            )
-            ddp = problem()
-
-            xs_init = [x0 for i in range(T + 1)]
-            us_init = ddp.problem.quasiStatic(xs_init[:-1])
-            # Solve
-            ddp.solve(xs_init, us_init, maxiter=100)
-
-            xs_init = ddp.xs.tolist()
-            us_init = ddp.us.tolist()
-
-            print("solving the ocp with obstacle")
 
         problem = OCPPandaReachingColWithMultipleCol(
             robot_simulator.pin_robot.model,
@@ -358,8 +287,20 @@ for i in range(sim_data["N_sim"]):
         sim_data["state_mea_SIM_RATE"][i + 1, :] = x_mea_SIM_RATE
         u_list.append(u_curr.tolist())
 
-
 if WITH_PLOTS:
+    distances = {}
+    for shape in shapes_in_collision_with_obstacle:
+        distances[shape] = []
+    for q in sim_data["state_mea_SIM_RATE"]:
+        for shape, id_shape in zip(shapes_in_collision_with_obstacle, id_list):
+            dist = pin_utils.compute_distance_between_shapes(robot_simulator.pin_robot.model,robot_simulator.pin_robot.collision_model,id_shape, id_obstacle, q[:7])
+            distances[shape].append(dist)
+    
+    for key, value in distances.items():
+        plt.plot(value, label = key)
+    plt.plot(np.zeros(len(value)), label = "collision line")
+    plt.legend()
+    plt.show()
     plot_data = mpc_utils.extract_plot_data_from_sim_data(sim_data)
 
     mpc_utils.plot_mpc_results(
@@ -368,3 +309,25 @@ if WITH_PLOTS:
         PLOT_PREDICTIONS=True,
         pred_plot_sampling=int(sim_params["mpc_freq"] / 10),
     )
+
+
+# Generating the meshcat visualizer
+MeshcatVis = MeshcatWrapper()
+vis, meshcatVis = MeshcatVis.visualize(
+    TARGET_POSE2,
+    robot_model=robot_simulator.pin_robot.model,
+    robot_collision_model=robot_simulator.pin_robot.collision_model,
+    robot_visual_model=robot_simulator.pin_robot.collision_model,
+)
+
+while True:
+    vis.display(q0)
+    input()
+    for q in sim_data["state_mea_SIM_RATE"]:
+        vis.display(np.array(q[:7].tolist()))
+        time.sleep(2e-2)
+    input()
+    print("replay")
+
+
+    

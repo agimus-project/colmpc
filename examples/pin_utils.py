@@ -1,7 +1,7 @@
 import numpy as np
 import pinocchio as pin
 
-
+import hppfcl 
 # Rotate placement
 def rotate(se3_placement, rpy=[0.0, 0.0, 0.0]):
     """
@@ -198,3 +198,35 @@ def get_u_grav(q, model, armature):
     data = model.createData()
     data.M += np.diag(armature)
     return pin.computeGeneralizedGravity(model, data, q)
+
+
+def compute_distance_between_shapes(rmodel: pin.Model, cmodel: pin.Model, shape1_id: int, shape2_id: int, q: np.ndarray) -> float:
+    """Computes the distance between shapes given the configuration vector.
+
+    Args:
+        rmodel (pin.Model): model of the robot
+        cmodel (pin.Model): collision model of the robot
+        shape1_id (int): id of the shape 1 in the collision model
+        shape2_id (int): id of the shape 2 in the collision model
+        q (np.ndarray): configuration array of the robot
+
+    Returns:
+        float: distance between the two given shapes
+    """
+    rdata = rmodel.createData()
+    cdata = cmodel.createData()
+    pin.forwardKinematics(rmodel, rdata, q)
+    pin.updateGeometryPlacements(rmodel, rdata, cmodel, cdata, q)
+    req = hppfcl.DistanceRequest()
+    res = hppfcl.DistanceResult()
+    
+    distance = hppfcl.distance(
+        cmodel.geometryObjects[shape1_id].geometry,
+        cdata.oMg[shape1_id],
+        cmodel.geometryObjects[shape2_id].geometry,
+        cdata.oMg[shape2_id],
+        req,
+        res
+    )
+    
+    return distance
