@@ -133,31 +133,6 @@ class OCPPandaReachingColWithMultipleCol:
                     "col_term_" + str(col_idx), constraint
                 )
 
-        # Bounds costs
-
-        # Cost for self-collision
-        maxfloat = sys.float_info.max
-        xlb = np.concatenate(
-            [
-                self._rmodel.lowerPositionLimit,
-                -maxfloat * np.ones(self._state.nv),
-            ]
-        )
-        xub = np.concatenate(
-            [
-                self._rmodel.upperPositionLimit,
-                maxfloat * np.ones(self._state.nv),
-            ]
-        )
-        bounds = crocoddyl.ActivationBounds(xlb, xub, 1.0)
-        xLimitResidual = crocoddyl.ResidualModelState(
-            self._state, self._x0, self._actuation.nu
-        )
-        xLimitActivation = crocoddyl.ActivationModelQuadraticBarrier(bounds)
-        limitCost = crocoddyl.CostModelResidual(
-            self._state, xLimitActivation, xLimitResidual
-        )
-
         # Adding costs to the models
         self._runningCostModel.addCost("stateReg", xRegCost, self._WEIGHT_xREG)
         self._runningCostModel.addCost("ctrlRegGrav", uRegCost, self._WEIGHT_uREG)
