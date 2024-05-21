@@ -143,7 +143,6 @@ class PandaWrapper:
                             ),
                             geometry_object.placement,
                         )
-                        capsule.meshColor = RED
                         capsule.meshPath = "CAPSULE"
                         self._collision_model_reduced.addGeometryObject(capsule)
                         self._collision_model_reduced.removeGeometryObject(
@@ -164,7 +163,6 @@ class PandaWrapper:
                             geometry_object.placement,
                         )
                         capsule.meshPath = "CAPSULE"
-                        capsule.meshColor = RED
                         self._collision_model_reduced.addGeometryObject(capsule)
                         self._collision_model_reduced.removeGeometryObject(
                             geometry_object.name
@@ -176,15 +174,12 @@ class PandaWrapper:
             # Removing the geometry objects that aren't Capsule / Box and disabling the collisions for the finger and the camera
             for geometry_object in self._collision_model_reduced.geometryObjects:
                 # Disabling the collisions for the fingers
-                try:
-                    if (
-                        "finger" in geometry_object.name
-                        or "camera" in geometry_object.name
-                        or "support" in geometry_object.name
-                    ):
-                        geometry_object.disableCollision = True
-                except:
-                    pass
+                if (
+                    "finger" in geometry_object.name
+                    or "camera" in geometry_object.name
+                    or "support" in geometry_object.name
+                ):
+                    geometry_object.disableCollision = True
                 # Getting rid of the cylinders in cmodel
                 if isinstance(geometry_object.geometry, hppfcl.Cylinder):
                     self._collision_model_reduced.removeGeometryObject(
