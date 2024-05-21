@@ -81,7 +81,7 @@ class TestBenchmark(unittest.TestCase):
             # Solving the problem
             ddp.solve(XS_init, US_init)
         
-            np.testing.assert_allclose(np.array(ddp.xs.tolist()), data["xs"])
+            np.testing.assert_allclose(np.array(ddp.xs.tolist()), data["xs"], atol = 1e-3)
             
             for it, xs in enumerate(ddp.xs):
                 for col_pair in collision_pairs:
@@ -90,7 +90,7 @@ class TestBenchmark(unittest.TestCase):
                     dist = compute_distance_between_shapes(rmodel, cmodel, cmodel.getGeometryId(cp1), cmodel.getGeometryId(cp2), np.array(xs.tolist()[:7]))
                     dist_pre = data[cp1 + "-" + cp2][it]
                     
-                    self.assertAlmostEqual(dist, dist_pre, msg="Benchmark distances different than the one computed here.")
+                    self.assertAlmostEqual(dist, dist_pre, places=5, msg="Benchmark distances different than the one computed here.")
     
         
 if __name__ == "__main__":

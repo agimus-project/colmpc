@@ -1,3 +1,5 @@
+from argparse import ArgumentError
+
 import numpy as np
 import pinocchio as pin
 
@@ -106,13 +108,22 @@ class Scene:
             name = obstacle[0]
             shape = obstacle[1]
             pose = obstacle[2]
-            geom_obj = pin.GeometryObject(
-                name,
-                0,
-                0,
-                pose,
-                shape,
-            )
+            try:
+                geom_obj = pin.GeometryObject(
+                    name,
+                    0,
+                    0,
+                    pose,
+                    shape,
+                )
+            except ArgumentError:
+                geom_obj = pin.GeometryObject(
+                    name,
+                    0,
+                    0,
+                    shape,
+                    pose,
+                )
             self._cmodel.addGeometryObject(geom_obj)
         self._add_collision_pairs()
         return self._cmodel, self._target, self._q0
