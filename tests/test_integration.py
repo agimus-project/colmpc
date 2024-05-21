@@ -81,7 +81,7 @@ class TestBenchmark(unittest.TestCase):
             # Solving the problem
             ddp.solve(XS_init, US_init)
         
-            np.testing.assert_allclose(np.array(ddp.xs.tolist()), data["xs"], atol = 1e-3)
+            np.testing.assert_allclose(np.array(ddp.xs.tolist()), data["xs"], atol = 1e-3, err_msg="Differences between xs from benchmark and xs computed here.")
             
             for it, xs in enumerate(ddp.xs):
                 for col_pair in collision_pairs:
