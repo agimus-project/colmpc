@@ -188,9 +188,7 @@ class PandaWrapper:
                 for name, obstacle_info in self._obstacles.items():
                     shape = obstacle_info[0]
                     pose = obstacle_info[1]
-
                     obstacle = pin.GeometryObject(name, 0, 0, shape, pose)
-                    obstacle.meshColor = RED
                     self._collision_model_reduced.addGeometryObject(obstacle)
 
         if self._auto_col:
