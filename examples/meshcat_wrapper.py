@@ -1,10 +1,8 @@
-import numpy as np
 import hppfcl
-import pinocchio as pin
-
 import meshcat
 import meshcat.geometry as g
-
+import numpy as np
+import pinocchio as pin
 
 RED = np.array([249, 136, 126, 125]) / 255
 RED_FULL = np.array([249, 136, 126, 255]) / 255
@@ -99,9 +97,7 @@ class MeshcatWrapper:
 
         Viewer = pin.visualize.MeshcatVisualizer
 
-        self.viewer_pin = Viewer(
-            self._rmodel,self._cmodel,self._vmodel
-            )
+        self.viewer_pin = Viewer(self._rmodel, self._cmodel, self._vmodel)
         self.viewer_pin.initViewer(
             viewer=meshcat.Visualizer(zmq_url="tcp://127.0.0.1:6000")
         )

@@ -22,11 +22,11 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-from os.path import dirname, join, abspath
+from os.path import abspath, dirname, join
 
+import hppfcl
 import numpy as np
 import pinocchio as pin
-import hppfcl
 
 # This class is for unwrapping an URDF and converting it to a model. It is also possible to add objects in the model,
 # such as a ball at a specific position.
@@ -42,9 +42,7 @@ class PandaWrapper:
         """Initialize the wrapper with a scaling number of the target and the name of the robot wanted to get unwrapped."""
 
         # Importing the model
-        pinocchio_model_dir = join(
-            dirname((dirname(str(abspath(__file__))))), "models"
-        )
+        pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
         model_path = join(pinocchio_model_dir, "franka_description/robots")
         mesh_dir = pinocchio_model_dir
         urdf_filename = "franka2.urdf"
@@ -224,7 +222,9 @@ class PandaWrapper:
         )
 
 
-def compute_distance_between_shapes(rmodel: pin.Model, cmodel: pin.Model, shape1_id: int, shape2_id: int, q: np.ndarray) -> float:
+def compute_distance_between_shapes(
+    rmodel: pin.Model, cmodel: pin.Model, shape1_id: int, shape2_id: int, q: np.ndarray
+) -> float:
     """Computes the distance between shapes given the configuration vector.
 
     Args:
@@ -243,14 +243,14 @@ def compute_distance_between_shapes(rmodel: pin.Model, cmodel: pin.Model, shape1
     pin.updateGeometryPlacements(rmodel, rdata, cmodel, cdata, q)
     req = hppfcl.DistanceRequest()
     res = hppfcl.DistanceResult()
-    
+
     distance = hppfcl.distance(
         cmodel.geometryObjects[shape1_id].geometry,
         cdata.oMg[shape1_id],
         cmodel.geometryObjects[shape2_id].geometry,
         cdata.oMg[shape2_id],
         req,
-        res
+        res,
     )
-    
+
     return distance

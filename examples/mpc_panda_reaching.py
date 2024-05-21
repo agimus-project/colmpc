@@ -6,17 +6,17 @@ Inspired example from Sebastien Kleff: https://github.com/machines-in-motion/min
 
 import time
 
+import matplotlib.pyplot as plt
 import mpc_utils
 import numpy as np
-import pybullet
 import pin_utils
 import pinocchio as pin
-
-import matplotlib.pyplot as plt
+import pybullet
 from env import BulletEnv
+from meshcat_wrapper import MeshcatWrapper
 from ocp_panda_reaching_obs import OCPPandaReachingColWithMultipleCol
 from panda_robot_loader import PandaRobot
-from meshcat_wrapper import MeshcatWrapper
+
 np.set_printoptions(precision=4, linewidth=180)
 
 # # # # # # # #
@@ -293,12 +293,18 @@ if WITH_PLOTS:
         distances[shape] = []
     for q in sim_data["state_mea_SIM_RATE"]:
         for shape, id_shape in zip(shapes_in_collision_with_obstacle, id_list):
-            dist = pin_utils.compute_distance_between_shapes(robot_simulator.pin_robot.model,robot_simulator.pin_robot.collision_model,id_shape, id_obstacle, q[:7])
+            dist = pin_utils.compute_distance_between_shapes(
+                robot_simulator.pin_robot.model,
+                robot_simulator.pin_robot.collision_model,
+                id_shape,
+                id_obstacle,
+                q[:7],
+            )
             distances[shape].append(dist)
-    
+
     for key, value in distances.items():
-        plt.plot(value, label = key)
-    plt.plot(np.zeros(len(value)), label = "collision line")
+        plt.plot(value, label=key)
+    plt.plot(np.zeros(len(value)), label="collision line")
     plt.legend()
     plt.show()
     plot_data = mpc_utils.extract_plot_data_from_sim_data(sim_data)
@@ -328,6 +334,3 @@ while True:
         time.sleep(2e-2)
     input()
     print("replay")
-
-
-    

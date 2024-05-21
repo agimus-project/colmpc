@@ -1,9 +1,6 @@
-from argparse import ArgumentError
-
+import hppfcl
 import numpy as np
 import pinocchio as pin
-
-import hppfcl
 
 
 class Scene:
@@ -99,7 +96,7 @@ class Scene:
                     ),
                 ),
             ]
-            
+
         else:
             raise NotImplementedError(f"The input {name_scene} is not implemented.")
 
@@ -168,4 +165,3 @@ class Scene:
                         self._cmodel.getGeometryId(obstacle),
                     )
                 )
-
