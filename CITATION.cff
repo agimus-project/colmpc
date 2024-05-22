@@ -8,19 +8,19 @@ authors:
   - given-names: Arthur
     family-names: Haffemayer
     email: ahaffemaye@laas.fr
-  - given-names: Armand 
+  - given-names: Armand
     family-names: Jordana
-  - given-names:  Médéric  
+  - given-names:  Médéric
     family-names: Fourmy
-  - given-names:  Krzysztof  
+  - given-names:  Krzysztof
     family-names: Wojciechowski
-  - given-names:  Guilhem  
+  - given-names:  Guilhem
     family-names: Saurel
-  - given-names:  Vladimír  
+  - given-names:  Vladimír
     family-names: Petrík
-  - given-names:  Florent Lamiraux 
+  - given-names:  Florent Lamiraux
     family-names: Lamiraux
-  - given-names:  Nicolas Mansard 
+  - given-names:  Nicolas Mansard
     family-names: Mansard
 identifiers:
   - type: url
