@@ -1,22 +1,22 @@
 # COLMPC: Collision Avoidance for MPC
 
 This repo is mainly a addon residual for Crocoddyl for collision avoidance for trajectory optimisation and model predictive control (MPC).
-It has several dependencies:
 
-# Dependencies
+## Dependencies
 
-## For OCP & MPC scripts:
+### For OCP & MPC scripts:
 
-- HPPFCL : https://github.com/humanoid-path-planner/hpp-fcl  (commit: 65fb435b44a1bbd5059347d7a311cc7c7aa1349e) for collision computations.
-- Pinocchio: https://github.com/stack-of-tasks/pinocchio (v2.7.0) fast rigid body dynamics.
-- Crocoddyl: https://github.com/loco-3d/crocoddyl (commit: 5b415a16138d)framework for the solver.
+- [HPPFCL](https://github.com/humanoid-path-planner/hpp-fcl)  (commit: 65fb435b44a1bbd5059347d7a311cc7c7aa1349e) for collision computations.
+- [Pinocchio](https://github.com/stack-of-tasks/pinocchio) (v2.7.0) fast rigid body dynamics.
+- [Crocoddyl](https://github.com/loco-3d/crocoddyl) (commit: 5b415a16138d)framework for the solver.
 
-## For visualization:
-- Pybullet: https://pybullet.org/wordpress/
+### For visualization:
+- [Pybullet](https://pybullet.org/wordpress/).
+- [Meshcat](https://github.com/meshcat-dev/meshcat-python).
 
-## For the examples:
+### For the examples:
 
-- MiM Solvers: https://github.com/machines-in-motion/mim_solvers solver for the SQP and Constrained-SQP solver.
+- [MiM Solvers](https://github.com/machines-in-motion/mim_solvers) solver for the SQP and Constrained-SQP solver, and [Mim Robot](https://github.com/machines-in-motion/mim_robots/tree/main).
 
 # Installations
 
@@ -38,7 +38,7 @@ As the code is still in developpement, the code is constantly moving and sometim
 
 # Credits
 
-The examples are based on https://github.com/machines-in-motion/minimal_examples_crocoddyl/tree/master from Sebastien Kleff.
+The examples are based on [the examples](https://github.com/machines-in-motion/minimal_examples_crocoddyl/tree/master) of Sebastien Kleff.
 
 
 # Citation
