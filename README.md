@@ -2,7 +2,7 @@
 
 This repo is mainly an addon residual for Crocoddyl for collision avoidance for trajectory optimisation and model predictive control (MPC).
 
-Here's a video of the addon residual in a real time torque controlled 7-DoF manipulator: 
+Here's a video of the addon residual in a real time torque controlled 7-DoF manipulator:
 
 https://peertube.laas.fr/w/8NwVkejbLHkSWBEy6dMCsW?start=0s
 
