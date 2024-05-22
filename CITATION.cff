@@ -1,8 +1,6 @@
 cff-version: 1.2.0
 title: 'Model predictive control under hard collision avoidance constraints for a robotic arm'
-message: >-
-  If you use this software, please cite it using the
-  metadata from this file.
+message: 'If you use this software, please cite it using the metadata from this file.'
 type: conference-paper
 authors:
   - given-names: Arthur
@@ -10,25 +8,25 @@ authors:
     email: ahaffemaye@laas.fr
   - given-names: Armand 
     family-names: Jordana
-  - given-names:  Médéric  
+  - given-names: Médéric  
     family-names: Fourmy
-  - given-names:  Krzysztof  
+  - given-names: Krzysztof  
     family-names: Wojciechowski
-  - given-names:  Guilhem  
+  - given-names: Guilhem  
     family-names: Saurel
-  - given-names:  Vladimír  
+  - given-names: Vladimír  
     family-names: Petrík
-  - given-names:  Florent Lamiraux 
+  - given-names: Florent Lamiraux 
     family-names: Lamiraux
-  - given-names:  Nicolas Mansard 
+  - given-names: Nicolas 
     family-names: Mansard
 identifiers:
   - type: url
-    value: >-
-      https://dumas.ccsd.cnrs.fr/AGIMUS/hal-04425002v2
-repository-code: 'https://github.com/agimus-project/colmpc'
+    value: 'https://dumas.ccsd.cnrs.fr/AGIMUS/hal-04425002v2'
+  - type: repository-code
+    value: 'https://github.com/agimus-project/colmpc'
 url: 'https://gepettoweb.laas.fr/articles/haffemayer2024.html'
-abstract: >-
+abstract: >
   We design a method to control the motion of a manipulator
   robot while strictly enforcing collision avoidance in a
   dynamic obstacle field. We rely on model predictive
