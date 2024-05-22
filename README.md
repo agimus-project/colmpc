@@ -1,6 +1,11 @@
 # COLMPC: Collision Avoidance for MPC
 
-This repo is mainly a addon residual for Crocoddyl for collision avoidance for trajectory optimisation and model predictive control (MPC).
+This repo is mainly an addon residual for Crocoddyl for collision avoidance for trajectory optimisation and model predictive control (MPC).
+
+Here's a video of the addon residual in a real time torque controlled 7-DoF manipulator: 
+
+https://peertube.laas.fr/videos/embed/3f2f3d26-3afd-4099-9949-56d3c0116712
+
 
 ## Dependencies
 
