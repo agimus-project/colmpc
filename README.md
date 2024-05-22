@@ -4,8 +4,7 @@ This repo is mainly an addon residual for Crocoddyl for collision avoidance for 
 
 Here's a video of the addon residual in a real time torque controlled 7-DoF manipulator: 
 
-https://peertube.laas.fr/videos/embed/3f2f3d26-3afd-4099-9949-56d3c0116712
-
+https://peertube.laas.fr/w/8NwVkejbLHkSWBEy6dMCsW?start=0s
 
 ## Dependencies
 
