@@ -2,9 +2,10 @@
 
 This repo is mainly an addon residual for Crocoddyl for collision avoidance for trajectory optimisation and model predictive control (MPC).
 
-Here's a video of the addon residual in a real time torque controlled 7-DoF manipulator:
+Here's a video of the addon residual in a real time torque controlled 7-DoF manipulator robot:
 
-https://peertube.laas.fr/w/8NwVkejbLHkSWBEy6dMCsW?start=0s
+https://youtu.be/81bagcv4PUc
+
 
 ## Dependencies
 
@@ -22,9 +23,9 @@ https://peertube.laas.fr/w/8NwVkejbLHkSWBEy6dMCsW?start=0s
 
 - [MiM Solvers](https://github.com/machines-in-motion/mim_solvers) solver for the SQP and Constrained-SQP solver, and [Mim Robot](https://github.com/machines-in-motion/mim_robots/tree/main).
 
-## Installations
+## Installation
+HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : WITH_COLLISION_SUPPORT=ON.
 > [!NOTE]
-> HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : WITH_COLLISION_SUPPORT=ON.
 > Don't forget to switch to the right commits!
 
 ## Usage
