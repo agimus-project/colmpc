@@ -22,29 +22,36 @@ https://peertube.laas.fr/w/8NwVkejbLHkSWBEy6dMCsW?start=0s
 
 - [MiM Solvers](https://github.com/machines-in-motion/mim_solvers) solver for the SQP and Constrained-SQP solver, and [Mim Robot](https://github.com/machines-in-motion/mim_robots/tree/main).
 
-# Installations
+## Installations
+> [!NOTE]  
+> HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : WITH_COLLISION_SUPPORT=ON.
+> Don't forget to switch to the right commits!
 
-HPP-FCL & Pinocchio must be built from sources. Don't forget to checkout to the right commits. Build pinocchio with the flag : WITH_COLLISION_SUPPORT=ON.
+## Usage
+Before trying the examples, test your hppfcl installation. To do this and make sure the hppfcl librairy works well on your computer, run in the test folder :
+``` python -m unittest```.
 
-# Usage
-
-Before trying the scripts, test your hppfcl installation. To do this and make sure the hppfcl librairy works well in your computer, run :
-``` python tests/__init__.py```.
-
+### Possible issue
 If you have a problem with ``` FakeCollisionGeometry```, it is likely that the linking of Pinocchio with HPPFCL wasn't done properly. Verify that you have the right commits & the right compilation flags.
-If the unit tests don't pass, it is likely that you don't have the right HPPFCL version.
 
-## For the MPC part:
+### For the MPC part:
 
-Simply run ```python examples/mpc_panda_reaching.py```
+Create a meshcat-server by writting in a terminal ```meshcat-server```. Then, to see the example with hard constraints simply run in the main directory ```python examples/mpc_panda_reaching.py```. To compare it with the standard MPC without hard constraint but collision avoidance written as soft constraint, run  ```python examples/mpc_panda_reaching_soft_constraint.py```.
+
 
 As the code is still in developpement, the code is constantly moving and sometimes, examples do not work. Hence, do not hesitate to contact me at [ahaffemaye@laas.fr](mailto:ahaffemaye@laas.fr).
 
-# Credits
+# Citation
+To cite **COLMPC** in your academic research, please use the following bibtex entry:
+```bibtex
+@inproceedings{haffemayer_model_2024,
+	title = {Model predictive control under hard collision avoidance constraints for a robotic arm},
+	author = {Haffemayer, Arthur and Jordana, Armand and Fourmy, Médéric and Wojciechowski, Krzysztof and Saurel, Guilhem and Petrík, Vladimír and Lamiraux, Florent and Mansard, Nicolas},
+    booktitle={Ubiquitous Robots (UR)}
+	year = {2024},
+}
+```
 
+# Credits
 The examples are based on [the examples](https://github.com/machines-in-motion/minimal_examples_crocoddyl/tree/master) of Sebastien Kleff.
 
-
-# Citation
-To see it in real time, have a look at: https://gepettoweb.laas.fr/articles/haffemayer2024.html.
-Please, if you use this library, please cite this paper: https://laas.hal.science/hal-04425002.
