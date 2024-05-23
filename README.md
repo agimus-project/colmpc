@@ -23,7 +23,7 @@ https://peertube.laas.fr/w/8NwVkejbLHkSWBEy6dMCsW?start=0s
 - [MiM Solvers](https://github.com/machines-in-motion/mim_solvers) solver for the SQP and Constrained-SQP solver, and [Mim Robot](https://github.com/machines-in-motion/mim_robots/tree/main).
 
 ## Installations
-> [!NOTE]  
+> [!NOTE]
 > HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : WITH_COLLISION_SUPPORT=ON.
 > Don't forget to switch to the right commits!
 
@@ -54,4 +54,3 @@ To cite **COLMPC** in your academic research, please use the following bibtex en
 
 # Credits
 The examples are based on [the examples](https://github.com/machines-in-motion/minimal_examples_crocoddyl/tree/master) of Sebastien Kleff.
-
