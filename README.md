@@ -4,8 +4,10 @@ This repo is mainly an addon residual for Crocoddyl for collision avoidance for 
 
 Here's a video of the addon residual in a real time torque controlled 7-DoF manipulator robot:
 
-<div align="center">
-    <video src="https://www.youtube.com/watch?v=81bagcv4PUc" width=400/>
+<div style="text-align: center;">
+  <a href="https://www.youtube.com/watch?v=81bagcv4PUc ">
+    <img src="https://img.youtube.com/vi/81bagcv4PUc/0.jpg" alt="Watch the video">
+  </a>
 </div>
 
 ## Dependencies
