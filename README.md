@@ -1,46 +1,60 @@
 # COLMPC: Collision Avoidance for MPC
 
-This repo is mainly a addon residual for Crocoddyl for collision avoidance for trajectory optimisation and model predictive control (MPC).
-It has several dependencies:
+This repo is mainly an addon residual for Crocoddyl for collision avoidance for trajectory optimisation and model predictive control (MPC).
 
-# Dependencies
+Here's a video of the addon residual in a real time torque controlled 7-DoF manipulator robot:
 
-## For OCP & MPC scripts:
+<div style="text-align: center;">
+  <a href="https://www.youtube.com/watch?v=81bagcv4PUc ">
+    <img src="https://img.youtube.com/vi/81bagcv4PUc/0.jpg" alt="Watch the video">
+  </a>
+</div>
 
-- HPPFCL : https://github.com/humanoid-path-planner/hpp-fcl  (commit: 65fb435b44a1bbd5059347d7a311cc7c7aa1349e) for collision computations.
-- Pinocchio: https://github.com/stack-of-tasks/pinocchio (v2.7.0) fast rigid body dynamics.
-- Crocoddyl: https://github.com/loco-3d/crocoddyl (commit: 5b415a16138d)framework for the solver.
+## Dependencies
 
-## For visualization:
-- Pybullet: https://pybullet.org/wordpress/
+### For OCP & MPC scripts:
 
-## For the examples:
+- [HPPFCL](https://github.com/humanoid-path-planner/hpp-fcl)  (commit: 65fb435b44a1bbd5059347d7a311cc7c7aa1349e) for collision computations.
+- [Pinocchio](https://github.com/stack-of-tasks/pinocchio) (v2.7.0) fast rigid body dynamics.
+- [Crocoddyl](https://github.com/loco-3d/crocoddyl) (commit: 5b415a16138d)framework for the solver.
 
-- MiM Solvers: https://github.com/machines-in-motion/mim_solvers solver for the SQP and Constrained-SQP solver.
+### For visualization:
+- [Pybullet](https://pybullet.org/wordpress/).
+- [Meshcat](https://github.com/meshcat-dev/meshcat-python).
 
-# Installations
+### For the examples:
 
-HPP-FCL & Pinocchio must be built from sources. Don't forget to checkout to the right commits. Build pinocchio with the flag : WITH_COLLISION_SUPPORT=ON.
+- [MiM Solvers](https://github.com/machines-in-motion/mim_solvers) solver for the SQP and Constrained-SQP solver, and [Mim Robot](https://github.com/machines-in-motion/mim_robots/tree/main).
 
-# Usage
+## Installation
+HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : WITH_COLLISION_SUPPORT=ON.
+> [!NOTE]
+> Don't forget to switch to the right commits!
 
-Before trying the scripts, test your hppfcl installation. To do this and make sure the hppfcl librairy works well in your computer, run :
-``` python tests/__init__.py```.
+## Usage
+Before trying the examples, test your hppfcl installation. To do this and make sure the hppfcl librairy works well on your computer, run in the test folder :
+``` python -m unittest```.
 
+### Possible issue
 If you have a problem with ``` FakeCollisionGeometry```, it is likely that the linking of Pinocchio with HPPFCL wasn't done properly. Verify that you have the right commits & the right compilation flags.
-If the unit tests don't pass, it is likely that you don't have the right HPPFCL version.
 
-## For the MPC part:
+### For the MPC part:
 
-Simply run ```python examples/mpc_panda_reaching.py```
+Create a meshcat-server by writting in a terminal ```meshcat-server```. Then, to see the example with hard constraints simply run in the main directory ```python examples/mpc_panda_reaching.py```. To compare it with the standard MPC without hard constraint but collision avoidance written as soft constraint, run  ```python examples/mpc_panda_reaching_soft_constraint.py```.
+
 
 As the code is still in developpement, the code is constantly moving and sometimes, examples do not work. Hence, do not hesitate to contact me at [ahaffemaye@laas.fr](mailto:ahaffemaye@laas.fr).
 
-# Credits
-
-The examples are based on https://github.com/machines-in-motion/minimal_examples_crocoddyl/tree/master from Sebastien Kleff.
-
-
 # Citation
+To cite **COLMPC** in your academic research, please use the following bibtex entry:
+```bibtex
+@inproceedings{haffemayer_model_2024,
+	title = {Model predictive control under hard collision avoidance constraints for a robotic arm},
+	author = {Haffemayer, Arthur and Jordana, Armand and Fourmy, Médéric and Wojciechowski, Krzysztof and Saurel, Guilhem and Petrík, Vladimír and Lamiraux, Florent and Mansard, Nicolas},
+    booktitle={Ubiquitous Robots (UR)}
+	year = {2024},
+}
+```
 
-Please, if you use this library, please cite this paper: https://laas.hal.science/hal-04425002.
+# Credits
+The examples are based on [the examples](https://github.com/machines-in-motion/minimal_examples_crocoddyl/tree/master) of Sebastien Kleff.
