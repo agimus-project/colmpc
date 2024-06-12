@@ -52,7 +52,7 @@ if(BUILD_PYTHON_INTERFACE)
   string(REGEX REPLACE "-" "_" PY_NAME ${PROJECT_NAME})
   set(${PY_NAME}_INSTALL_DIR ${PYTHON_SITELIB})
 endif()
-
+add_project_dependency(OpenMP REQUIRED)
 add_project_dependency(crocoddyl REQUIRED)
 
 # Main Library
