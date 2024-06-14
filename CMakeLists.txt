@@ -66,6 +66,7 @@ if(BUILD_PYTHON_INTERFACE)
   set(${PY_NAME}_INSTALL_DIR ${PYTHON_SITELIB})
 endif()
 
+add_project_dependency(OpenMP REQUIRED)
 add_project_dependency(crocoddyl REQUIRED)
 
 # Main Library
