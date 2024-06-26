@@ -7,9 +7,9 @@ export CMAKE_PREFIX_PATH
 
 declare -a SOURCES=(
     'jrl-umi3218/jrl-cmakemodules/master'
-    'stack-of-tasks/eigenpy/v3.4.0'
+    'stack-of-tasks/eigenpy/v3.7.0'
     'humanoid-path-planner/hpp-fcl/devel'
-    'stack-of-tasks/pinocchio/v2.7.0'
+    'stack-of-tasks/pinocchio/v2.7.1'
     'gepetto/example-robot-data/v4.1.0'
     'loco-3d/crocoddyl/v2.0.2'
     'cmake-wheel/mim_solvers/v0.0.4.c0'
