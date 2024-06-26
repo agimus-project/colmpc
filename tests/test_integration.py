@@ -3,9 +3,10 @@ import unittest
 
 import numpy as np
 import pinocchio as pin
-from ocp import OCPPandaReachingColWithMultipleCol
-from scenes import Scene
-from wrapper_panda import PandaWrapper, compute_distance_between_shapes
+
+from .ocp import OCPPandaReachingColWithMultipleCol
+from .scenes import Scene
+from .wrapper_panda import PandaWrapper, compute_distance_between_shapes
 
 
 class TestBenchmark(unittest.TestCase):
