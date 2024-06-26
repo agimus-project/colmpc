@@ -1,0 +1,4 @@
+build
+Dockerfile
+*.nix
+flake.lock

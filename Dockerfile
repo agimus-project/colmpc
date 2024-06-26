@@ -23,4 +23,8 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
 WORKDIR /src
 ADD get-dependencies.sh .
 RUN ./get-dependencies.sh /usr/local
-ADD . .
+ADD . colmpc
+RUN cmake -B colmpc/build -S colmpc
+RUN cmake --build colmpc/build
+RUN cmake --build colmpc/build -t install
+RUN cd colmpc; python -m unittest

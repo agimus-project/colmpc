@@ -1,5 +1,6 @@
 import json
 from collections import defaultdict
+from pathlib import Path
 
 import numpy as np
 import pinocchio as pin
@@ -68,5 +69,6 @@ result["ocp_params"] = {
     "WEIGHT_uREG": 1e-4,
     "SAFETY_THRESHOLD": 2.5e-3,
 }
-with open("tests_benchmark/" + name_scene + ".json", "w") as outfile:
-    json.dump(result, outfile)
+outfile = Path(__file__).parent / "tests_benchmark" / f"{name_scene}.json"
+with outfile.open("w") as f:
+    json.dump(result, f)
