@@ -22,17 +22,45 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1717586104,
-        "narHash": "sha256-SQ85wUw48b5FVtiul4bCAs5x140Ziv0FLGQ4oxwfmUU=",
-        "owner": "NixOS",
+        "lastModified": 1719423307,
+        "narHash": "sha256-ojaUAwpFJOgcKNF024wvgpjPWVanR8K1XY8PxolF++4=",
+        "owner": "nim65s",
         "repo": "nixpkgs",
-        "rev": "76a87d524ab8c1d511ba4cd7cdee9b1e879f264d",
+        "rev": "3d0785b31606614d6a7ae692caeef4c427083ae6",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "owner": "nim65s",
+        "ref": "hpp-fcl-3-pre",
         "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nur": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems",
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1719499881,
+        "narHash": "sha256-KhFwldVs8sZgMjGv5ihqZsWrIkZSaWNhvjb82DRj4iQ=",
+        "owner": "nim65s",
+        "repo": "nur-packages",
+        "rev": "c1b23eb370b063604cf1c8dad291b8f651a4c138",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nim65s",
+        "ref": "hpp-fcl-3-pre",
+        "repo": "nur-packages",
         "type": "github"
       }
     },
@@ -40,7 +68,23 @@
       "inputs": {
         "flake-parts": "flake-parts",
         "nixpkgs": "nixpkgs",
+        "nur": "nur",
         "treefmt-nix": "treefmt-nix"
+      }
+    },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
       }
     },
     "treefmt-nix": {

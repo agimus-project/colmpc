@@ -5,7 +5,7 @@
   <description>Collision Residual for Crocoddyl</description>
   <maintainer email="guilhem.saurel@laas.fr">Guilhem Saurel</maintainer>
   <author>Arthur Haffemayer</author>
-  <license>BSD</license>
+  <license>BSD-2-Clause</license>
 
   <url type="website">https://github.com/agimus-project/colmpc</url>
 
