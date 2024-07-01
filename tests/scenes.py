@@ -105,13 +105,23 @@ class Scene:
             name = obstacle[0]
             shape = obstacle[1]
             pose = obstacle[2]
-            geom_obj = pin.GeometryObject(
-                name,
-                0,
-                0,
-                shape,
-                pose,
-            )
+            try:
+                geom_obj = pin.GeometryObject(
+                    name,
+                    0,
+                    0,
+                    shape,
+                    pose,
+                )
+            except:
+                geom_obj = pin.GeometryObject(
+                    name,
+                    0,
+                    0,
+                    pose,
+                    shape,
+                )                
+                
             self._cmodel.addGeometryObject(geom_obj)
         self._add_collision_pairs()
         return self._cmodel, self._target, self._q0
