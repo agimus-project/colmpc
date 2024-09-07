@@ -38,7 +38,7 @@ def get_p_(q, model, id_endeff):
     """
 
     data = model.createData()
-    if type(q) == np.ndarray and len(q.shape) == 1:
+    if isinstance(q, np.ndarray) and len(q.shape) == 1:
         pin.forwardKinematics(model, data, q)
         pin.updateFramePlacements(model, data)
         p = data.oMf[id_endeff].translation.T
@@ -75,7 +75,7 @@ def get_v_(q, dq, model, id_endeff, ref=pin.LOCAL):
     data = model.createData()
     if len(q) != len(dq):
         print("q and dq must have the same size !")
-    if type(q) == np.ndarray and len(q.shape) == 1:
+    if isinstance(q, np.ndarray) and len(q.shape) == 1:
         # J = pin.computeFrameJacobian(model, data, q, id_endeff)
         # v = J.dot(dq)[:3]
         pin.forwardKinematics(model, data, q, dq)
@@ -113,7 +113,7 @@ def get_R_(q, model, id_endeff):
     Output : single 3x3 array (or list of 3x3 arrays)
     """
     data = model.createData()
-    if type(q) == np.ndarray and len(q.shape) == 1:
+    if isinstance(q, np.ndarray) and len(q.shape) == 1:
         pin.framesForwardKinematics(model, data, q)
         R = data.oMf[id_endeff].rotation.copy()
     else:
@@ -177,7 +177,7 @@ def get_w_(q, dq, model, id_endeff, ref=pin.LOCAL):
     data = model.createData()
     if len(q) != len(dq):
         print("q and dq must have the same size !")
-    if type(q) == np.ndarray and len(q.shape) == 1:
+    if isinstance(q, np.ndarray) and len(q.shape) == 1:
         pin.forwardKinematics(model, data, q, dq)
         spatial_vel = pin.getFrameVelocity(model, data, id_endeff, ref)
         w = spatial_vel.angular

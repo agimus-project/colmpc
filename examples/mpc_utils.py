@@ -992,7 +992,7 @@ def plot_mpc_endeff_linear(
                 label="Reference",
                 alpha=0.9,
             )
-        ax[i, 0].set_ylabel("$P^{EE}_%s$  (m)" % xyz[i], fontsize=16)
+        ax[i, 0].set_ylabel(f"$P^{{EE}}_{xyz[i]}$  (m)", fontsize=16)
         ax[i, 0].yaxis.set_major_locator(plt.MaxNLocator(2))
         ax[i, 0].yaxis.set_major_formatter(plt.FormatStrFormatter("%.3e"))
         ax[i, 0].grid(True)
@@ -1027,7 +1027,7 @@ def plot_mpc_endeff_linear(
                 label="Reference",
                 alpha=0.9,
             )
-        ax[i, 1].set_ylabel("$V^{EE}_%s$  (m)" % xyz[i], fontsize=16)
+        ax[i, 1].set_ylabel(f"$V^{{EE}}_{xyz[i]}$  (m)", fontsize=16)
         ax[i, 1].yaxis.set_major_locator(plt.MaxNLocator(2))
         ax[i, 1].yaxis.set_major_formatter(plt.FormatStrFormatter("%.3e"))
         ax[i, 1].grid(True)
@@ -1189,7 +1189,7 @@ def plot_mpc_endeff_angular(
                 label="Reference",
                 alpha=0.9,
             )
-        ax[i, 0].set_ylabel("$RPY^{EE}_%s$  (m)" % xyz[i], fontsize=16)
+        ax[i, 0].set_ylabel(f"$RPY^{{EE}}_{xyz[i]}$  (m)", fontsize=16)
         ax[i, 0].yaxis.set_major_locator(plt.MaxNLocator(2))
         ax[i, 0].yaxis.set_major_formatter(plt.FormatStrFormatter("%.3e"))
         ax[i, 0].grid(True)
@@ -1223,7 +1223,7 @@ def plot_mpc_endeff_angular(
                 label="Reference",
                 alpha=0.9,
             )
-        ax[i, 1].set_ylabel("$W^{EE}_%s$  (m)" % xyz[i], fontsize=16)
+        ax[i, 1].set_ylabel(f"$W^{{EE}}_{xyz[i]}$  (m)", fontsize=16)
         ax[i, 1].yaxis.set_major_locator(plt.MaxNLocator(2))
         ax[i, 1].yaxis.set_major_formatter(plt.FormatStrFormatter("%.3e"))
         ax[i, 1].grid(True)
@@ -1367,7 +1367,7 @@ def plot_mpc_force(
                 label="Reference",
                 alpha=0.9,
             )
-        ax[i, 0].set_ylabel("$\\lambda^{EE}_%s$  (N)" % xyz[i], fontsize=16)
+        ax[i, 0].set_ylabel(f"$\\lambda^{{EE}}_{xyz[i]}$  (N)", fontsize=16)
         ax[i, 0].yaxis.set_major_locator(plt.MaxNLocator(2))
         ax[i, 0].yaxis.set_major_formatter(plt.FormatStrFormatter("%.3e"))
         ax[i, 0].grid(True)
@@ -1402,7 +1402,7 @@ def plot_mpc_force(
                 label="Reference",
                 alpha=0.9,
             )
-        ax[i, 1].set_ylabel("$\\tau^{EE}_%s$  (Nm)" % xyz[i], fontsize=16)
+        ax[i, 1].set_ylabel(f"$\\tau^{{EE}}_{xyz[i]}$  (Nm)", fontsize=16)
         ax[i, 1].yaxis.set_major_locator(plt.MaxNLocator(2))
         ax[i, 1].yaxis.set_major_formatter(plt.FormatStrFormatter("%.3e"))
         ax[i, 1].grid(True)
