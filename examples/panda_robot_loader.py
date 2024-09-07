@@ -24,9 +24,9 @@ def load_pinocchio_robot_panda(capsule=False):
 
     ### LOADING THE ROBOT
     pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
-    model_path = join(pinocchio_model_dir, "franka_description/robots")
+    model_path = join(pinocchio_model_dir, "panda")
     mesh_dir = pinocchio_model_dir
-    urdf_filename = "franka2.urdf"
+    urdf_filename = "franka.urdf"
     urdf_model_path = join(join(model_path, "panda"), urdf_filename)
 
     robot = pin.RobotWrapper.BuildFromURDF(
@@ -115,8 +115,8 @@ class PandaRobot(PinBulletWrapper):
 
         pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
         print(pinocchio_model_dir)
-        model_path = join(pinocchio_model_dir, "franka_description/robots")
-        urdf_filename = "franka2.urdf"
+        model_path = join(pinocchio_model_dir, "panda")
+        urdf_filename = "franka.urdf"
         urdf_model_path = join(join(model_path, "panda"), urdf_filename)
 
         self.urdf_path = urdf_model_path
