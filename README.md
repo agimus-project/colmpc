@@ -14,9 +14,9 @@ Here's a video of the addon residual in a real time torque controlled 7-DoF mani
 
 ### For OCP & MPC scripts:
 
-- [HPPFCL](https://github.com/humanoid-path-planner/hpp-fcl)  (commit: 65fb435b44a1bbd5059347d7a311cc7c7aa1349e) for collision computations.
-- [Pinocchio](https://github.com/stack-of-tasks/pinocchio) (v2.7.0) fast rigid body dynamics.
-- [Crocoddyl](https://github.com/loco-3d/crocoddyl) (commit: 5b415a16138d)framework for the solver.
+- [HPPFCL](https://github.com/humanoid-path-planner/hpp-fcl)  (commit: 7e3f33b7614bba363ca6f27c2730539dfa20c3ea) for collision computations.
+- [Pinocchio](https://github.com/stack-of-tasks/pinocchio) (tag: v3.2.0) fast rigid body dynamics.
+- [Crocoddyl](https://github.com/loco-3d/crocoddyl) (tag: v2.1.0) framework for the solver.
 
 ### For visualization:
 - [Pybullet](https://pybullet.org/wordpress/).
@@ -24,7 +24,7 @@ Here's a video of the addon residual in a real time torque controlled 7-DoF mani
 
 ### For the examples:
 
-- [MiM Solvers](https://github.com/machines-in-motion/mim_solvers) solver for the SQP and Constrained-SQP solver, and [Mim Robot](https://github.com/machines-in-motion/mim_robots/tree/main).
+- [MiM Solvers](https://github.com/machines-in-motion/mim_solvers) (tag: v0.0.5) solver for the SQP and Constrained-SQP solver, and [Mim Robot](https://github.com/machines-in-motion/mim_robots/tree/main).
 
 ## Installation
 HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : WITH_COLLISION_SUPPORT=ON.
@@ -36,7 +36,7 @@ Before trying the examples, test your hppfcl installation. To do this and make s
 ``` python -m unittest```.
 
 ### Possible issue
-If you have a problem with ``` FakeCollisionGeometry```, it is likely that the linking of Pinocchio with HPPFCL wasn't done properly. Verify that you have the right commits & the right compilation flags.
+If you have a problem with ```FakeCollisionGeometry```, it is likely that the linking of Pinocchio with HPPFCL wasn't done properly. Verify that you have the right commits & the right compilation flags.
 
 ### For the MPC part:
 
