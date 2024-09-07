@@ -7,12 +7,12 @@ export CMAKE_PREFIX_PATH
 
 declare -a SOURCES=(
     'jrl-umi3218/jrl-cmakemodules/master'
-    'stack-of-tasks/eigenpy/v3.4.0'
-    'humanoid-path-planner/hpp-fcl/devel'
-    'stack-of-tasks/pinocchio/v2.7.0'
+    'stack-of-tasks/eigenpy/v3.9.0'
+    'humanoid-path-planner/hpp-fcl/7e3f33b7614bba363ca6f27c2730539dfa20c3ea'
+    'stack-of-tasks/pinocchio/v3.2.0'
     'gepetto/example-robot-data/v4.1.0'
-    'loco-3d/crocoddyl/v2.0.2'
-    'cmake-wheel/mim_solvers/v0.0.4.c0'
+    'loco-3d/crocoddyl/v2.1.0'
+    'cmake-wheel/mim_solvers/v0.0.5'
     'agimus-project/colmpc/main'
 )
 

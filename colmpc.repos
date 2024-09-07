@@ -2,19 +2,19 @@ repositories:
   vcs_repos/crocoddyl:
     type: git
     url: https://github.com/loco-3d/crocoddyl
-    version: 5b415a16138d
+    version: v2.1.0
 
   vcs_repos/hpp_fcl:
     type: git
     url: https://github.com/humanoid-path-planner/hpp-fcl
-    version: 65fb435b44a1bbd5059347d7a311cc7c7aa1349e
+    version: 7e3f33b7614bba363ca6f27c2730539dfa20c3ea
 
   vcs_repos/pinocchio:
     type: git
     url: https://github.com/stack-of-tasks/pinocchio
-    version: v2.7.0
+    version: v3.2.0
 
   vcs_repos/mim_solvers:
     type: git
     url: https://github.com/machines-in-motion/mim_solvers
-    version: v0.0.3
+    version: v0.0.5
