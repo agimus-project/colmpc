@@ -39,7 +39,7 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef _Scalar Scalar;
   typedef MathBaseTpl<Scalar> MathBase;
   typedef ResidualModelAbstractTpl<Scalar> Base;
-  typedef ResidualDataDistanceCollisionTpl<Scalar> Data;
+  typedef ResidualDataVelocityAvoidanceTpl<Scalar> Data;
   typedef ResidualDataAbstractTpl<Scalar> ResidualDataAbstract;
   typedef StateMultibodyTpl<Scalar> StateMultibody;
   typedef DataCollectorAbstractTpl<Scalar> DataCollectorAbstract;
@@ -48,7 +48,6 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef typename MathBase::MatrixXs MatrixXs;
   typedef typename MathBase::Matrix6xs Matrix6xs;
   typedef typename MathBase::Vector3s Vector3s;
-  typedef typename MathBase::Matrix<Scalar, 1, 3> RowVector3s;
   /**
    * @brief Initialize the pair collision residual model
    *
@@ -140,12 +139,9 @@ struct ResidualDataVelocityAvoidanceTpl
   ResidualDataVelocityAvoidanceTpl(Model<Scalar> *const model,
                                    DataCollectorAbstract *const data)
       : Base(model, data),
-        pinocchio(d->pinocchio),
         geometry(pinocchio::GeometryData(model->get_geometry())),
         req(),
-        res(),
-        J1(6, model->get_state()->get_nv()),
-        J2(6, model->get_state()->get_nv()) {
+        res() {
     // Check that proper shared data has been passed
     DataCollectorMultibodyTpl<Scalar> *d =
         dynamic_cast<DataCollectorMultibodyTpl<Scalar> *>(shared);
@@ -154,9 +150,12 @@ struct ResidualDataVelocityAvoidanceTpl
           "Invalid argument: the shared data should be derived from "
           "DataCollectorActMultibodyTpl");
     }
+
+    // Avoids data casting at runtime
+    pinocchio = d->pinocchio;
   }
-  pinocchio::GeometryData geometry;             //!< Pinocchio geometry data
-  boost::shared_ptr<PinocchioModel> pinocchio;  //!< Pinocchio data
+  pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
+  pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
 
   using Base::r;
   using Base::Ru;

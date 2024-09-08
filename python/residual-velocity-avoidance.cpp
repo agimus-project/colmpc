@@ -85,38 +85,6 @@ void exposeResidualVelocityAvoidance() {
                     bp::make_getter(&ResidualDataVelocityAvoidance::pinocchio,
                                     bp::return_internal_reference<>()),
                     "pinocchio data")
-      .add_property("J1",
-                    bp::make_getter(&ResidualDataVelocityAvoidance::J1,
-                                    bp::return_internal_reference<>()),
-                    "J1")
-      .add_property("J2",
-                    bp::make_getter(&ResidualDataVelocityAvoidance::J2,
-                                    bp::return_internal_reference<>()),
-                    "J2")
-      .add_property("cp1",
-                    bp::make_getter(&ResidualDataVelocityAvoidance::cp1,
-                                    bp::return_internal_reference<>()),
-                    "cp1")
-      .add_property("cp2",
-                    bp::make_getter(&ResidualDataVelocityAvoidance::cp2,
-                                    bp::return_internal_reference<>()),
-                    "cp2")
-      .add_property("f1p1",
-                    bp::make_getter(&ResidualDataVelocityAvoidance::f1p1,
-                                    bp::return_internal_reference<>()),
-                    "f1p1")
-      .add_property("f2p2",
-                    bp::make_getter(&ResidualDataVelocityAvoidance::f2p2,
-                                    bp::return_internal_reference<>()),
-                    "f2p2")
-      .add_property("f1Mp1",
-                    bp::make_getter(&ResidualDataVelocityAvoidance::f1Mp1,
-                                    bp::return_internal_reference<>()),
-                    "f1Mp1")
-      .add_property("f2Mp2",
-                    bp::make_getter(&ResidualDataVelocityAvoidance::f2Mp2,
-                                    bp::return_internal_reference<>()),
-                    "f2Mp2")
       .add_property("oMg_id_1",
                     bp::make_getter(&ResidualDataVelocityAvoidance::oMg_id_1,
                                     bp::return_internal_reference<>()),
