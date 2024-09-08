@@ -93,7 +93,7 @@ struct ResidualModelVelocityAvoidanceTpl
   /**
    * @brief Return the Pinocchio geometry model
    */
-  const pinocchio::GeometryModel &get_geometry() const;
+  const GeometryModel &get_geometry() const;
 
   /**
    * @brief Return the reference collision pair id
@@ -114,12 +114,10 @@ struct ResidualModelVelocityAvoidanceTpl
  private:
   typename StateMultibody::PinocchioModel
       pin_model_;  //!< Pinocchio model used for internal computations
-  boost::shared_ptr<pinocchio::GeometryModel>
+  boost::shared_ptr<GeometryModel>
       geom_model_;  //!< Pinocchio geometry model containing collision pair
   pinocchio::PairIndex
       pair_id_;  //!< Index of the collision pair in geometry model
-  pinocchio::JointIndex joint_id_;  //!< Index of joint on which the collision
-                                    //!< body frame of the robot is attached
 };
 
 template <typename _Scalar>
@@ -133,7 +131,7 @@ struct ResidualDataVelocityAvoidanceTpl
   typedef StateMultibodyTpl<Scalar> StateMultibody;
   typedef DataCollectorAbstractTpl<Scalar> DataCollectorAbstract;
 
-  typedef pinocchio::ModelTpl<Scalar> PinocchioModel;
+  typedef pinocchio::DataTpl<Scalar> PinocchioData;
   typedef typename MathBase::VectorXs VectorXs;
   typedef typename MathBase::Matrix6xs Matrix6xs;
   typedef typename MathBase::Vector3s Vector3s;

@@ -22,7 +22,7 @@ ResidualModelVelocityAvoidanceTpl<Scalar>::ResidualModelVelocityAvoidanceTpl(
     boost::shared_ptr<StateMultibody> state, const std::size_t nu,
     boost::shared_ptr<GeometryModel> geom_model,
     const pinocchio::PairIndex pair_id)
-    : Base(state, 1, nu, true, false, false),
+    : Base(state, 1, nu, true, true, true),
       pin_model_(*state->get_pinocchio()),
       geom_model_(geom_model),
       pair_id_(pair_id) {
@@ -32,7 +32,6 @@ ResidualModelVelocityAvoidanceTpl<Scalar>::ResidualModelVelocityAvoidanceTpl(
         "Invalid argument: "
         << "the pair index is wrong (it does not exist in the geometry model)");
   }
-}
 
 template <typename Scalar>
 ResidualModelVelocityAvoidanceTpl<
@@ -66,17 +65,18 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
     d->oMg_id_2 = geom_2.placement;
   }
 
+  // compute distance between geometries
   const Scalar distance = hpp::fcl::distance(
       geom_1.geometry.get(), toFclTransform3f(d->oMg_id_1),
       geom_2.geometry.get(), toFclTransform3f(d->oMg_id_2), d->req, d->res);
 
-  // TODO just don't
-  auto rdata = d->pinocchio.createData();
-
-  const pinocchio::Motion m1 = pinocchio::getFrameVelocity(
-      d->pinocchio, rdata, geom_1.parentFrame, pinocchio::LOCAL_WORLD_ALIGNED);
+  // compute velocity
+  const pinocchio::Motion m1 =
+      pinocchio::getFrameVelocity(pin_model_, d->pinocchio, geom_1.parentFrame,
+                                  pinocchio::LOCAL_WORLD_ALIGNED);
   const pinocchio::Motion m2 pinocchio::getFrameVelocity(
-      d->pinocchio, rdata, geom_2.parentFrame, pinocchio::LOCAL_WORLD_ALIGNED);
+      pin_model_, d->pinocchio, geom_2.parentFrame,
+      pinocchio::LOCAL_WORLD_ALIGNED);
 
   const Vector3s &x1 = res.nearest_points[0].cast<Scalar>();
   const Vector3s &x2 = res.nearest_points[1].cast<Scalar>();
@@ -93,11 +93,8 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
       c2 * pinocchio::skew(x_diff) + x1.transpose() * pinocchio::skew(x2);
 
   const RowVector3s &Lc = x_diff.transposeInPlace();
-  const Vector3s &v1 = m1.linear;
-  const Vector3s &w1 = m1.angular;
-  const Vector3s &v2 = m2.linear;
-  const Vector3s &w2 = m2.angular;
-  const Scalar Ldot = Lc * (v1 - v2) + Lr1 * w1 + Lr2 * w2;
+  const Scalar Ldot =
+      Lc * (m1.linear - m2.linear) + Lr1 * m1.angular + Lr2 * m2.angular;
   d->r[0] = Ldot / distance;
 }
 
