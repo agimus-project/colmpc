@@ -6,8 +6,6 @@
 // All rights reserved.
 ///////////////////////////////////////////////////////////////////////////////
 
-#define PINOCCHIO_WITH_HPP_FCL
-
 #ifndef COLMPC_RESIDUAL_VELOCITY_AVOIDANCE_HXX_
 #define COLMPC_RESIDUAL_VELOCITY_AVOIDANCE_HXX_
 #ifdef PINOCCHIO_WITH_HPP_FCL
