@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // BSD 3-Clause License
 //
-// Copyright (C) 2021-2022, LAAS-CNRS, University of Edinburgh, INRIA
+// Copyright (c) 2024, CNRS
 // Copyright note valid unless otherwise stated in individual files.
 // All rights reserved.
 ///////////////////////////////////////////////////////////////////////////////
@@ -12,7 +12,7 @@
 #define COLMPC_RESIDUAL_VELOCITY_AVOIDANCE_HXX_
 #ifdef PINOCCHIO_WITH_HPP_FCL
 
-#include "colmpc/residual-model-velocity-avoidance.hpp"
+#include "colmpc/residual-velocity-avoidance.hpp"
 
 namespace colmpc {
 using namespace crocoddyl;

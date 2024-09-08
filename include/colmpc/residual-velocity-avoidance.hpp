@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // BSD 3-Clause License
 //
-// Copyright (C) 2021, University of Edinburgh
+// Copyright (c) 2024, CNRS
 // Copyright note valid unless otherwise stated in individual files.
 // All rights reserved.
 ///////////////////////////////////////////////////////////////////////////////
@@ -177,5 +177,5 @@ struct ResidualDataVelocityAvoidanceTpl
 /* --- Details -------------------------------------------------------------- */
 /* --- Details -------------------------------------------------------------- */
 /* --- Details -------------------------------------------------------------- */
-#include "colmpc/residual-distance-collision.hxx"
+#include "colmpc/residual-velocity-avoidance.hxx"
 #endif  // COLMPC_RESIDUAL_VELOCITY_AVOIDANCE_HPP_
