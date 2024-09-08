@@ -45,46 +45,27 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
   d->res.clear();
 
   // computes the distance for the collision pair pair_id_
-  const pinocchio::Model::JointIndex joint_id_1 =
-      geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first]
-          .parentJoint;
-  const pinocchio::Model::JointIndex joint_id_2 =
-      geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second]
-          .parentJoint;
+  const auto &cp = geom_model_->collisionPairs[pair_id_];
+  const auto &geom_1 = geom_model_->geometryObjects[cp.first];
+  const auto &geom_2 = geom_model_->geometryObjects[cp.second];
+  const pinocchio::Model::JointIndex joint_id_1 = geom_1.parentJoint;
+  const pinocchio::Model::JointIndex joint_id_2 = geom_2.parentJoint;
 
   if (joint_id_1 > 0) {
-    d->oMg_id_1 =
-        d->pinocchio->oMi[joint_id_1] *
-        geom_model_
-            ->geometryObjects[geom_model_->collisionPairs[pair_id_].first]
-            .placement;
+    d->oMg_id_1 = d->pinocchio->oMi[joint_id_1] * geom_1.placement;
   } else {
-    d->oMg_id_1 =
-        geom_model_
-            ->geometryObjects[geom_model_->collisionPairs[pair_id_].first]
-            .placement;
+    d->oMg_id_1 = geom_1.placement;
   }
 
   if (joint_id_2 > 0) {
-    d->oMg_id_2 =
-        d->pinocchio->oMi[joint_id_2] *
-        geom_model_
-            ->geometryObjects[geom_model_->collisionPairs[pair_id_].second]
-            .placement;
+    d->oMg_id_2 = d->pinocchio->oMi[joint_id_2] * geom_2.placement;
   } else {
-    d->oMg_id_2 =
-        geom_model_
-            ->geometryObjects[geom_model_->collisionPairs[pair_id_].second]
-            .placement;
+    d->oMg_id_2 = geom_2.placement;
   }
 
   d->r[0] = hpp::fcl::distance(
-      geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first]
-          .geometry.get(),
-      toFclTransform3f(d->oMg_id_1),
-      geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second]
-          .geometry.get(),
-      toFclTransform3f(d->oMg_id_2), d->req, d->res);
+      geom_1.geometry.get(), toFclTransform3f(d->oMg_id_1),
+      geom_2.geometry.get(), toFclTransform3f(d->oMg_id_2), d->req, d->res);
 }
 
 template <typename Scalar>
@@ -95,17 +76,15 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
 
   const std::size_t nv = state_->get_nv();
 
-  pinocchio::getFrameJacobian(
-      pin_model_, *d->pinocchio,
-      geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].first]
-          .parentFrame,
-      pinocchio::LOCAL_WORLD_ALIGNED, d->J1);
+  const auto &cp = geom_model_->collisionPairs[pair_id_];
+  const auto &geom_1 = geom_model_->geometryObjects[cp.first];
+  const auto &geom_2 = geom_model_->geometryObjects[cp.second];
 
-  pinocchio::getFrameJacobian(
-      pin_model_, *d->pinocchio,
-      geom_model_->geometryObjects[geom_model_->collisionPairs[pair_id_].second]
-          .parentFrame,
-      pinocchio::LOCAL_WORLD_ALIGNED, d->J2);
+  pinocchio::getFrameJacobian(pin_model_, *d->pinocchio, geom_1.parentFrame,
+                              pinocchio::LOCAL_WORLD_ALIGNED, d->J1);
+
+  pinocchio::getFrameJacobian(pin_model_, *d->pinocchio, geom_2.parentFrame,
+                              pinocchio::LOCAL_WORLD_ALIGNED, d->J2);
 
   // getting the nearest points belonging to the collision shapes
   const Vector3s &cp1 = d->res.nearest_points[0];
@@ -114,28 +93,14 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
   d->cp2 = cp2;
   // Transport the jacobian of frame 1 into the jacobian associated to cp1
   // Vector from frame 1 center to p1
-  d->f1p1 =
-      cp1 -
-      d->pinocchio
-          ->oMf[geom_model_
-                    ->geometryObjects[geom_model_->collisionPairs[pair_id_]
-                                          .first]
-                    .parentFrame]
-          .translation();
+  d->f1p1 = cp1 - d->pinocchio->oMf[geom_1.parentFrame].translation();
   d->f1Mp1.setIdentity();
   d->f1Mp1.translation(d->f1p1);
-  d->J1 =
-      d->f1Mp1.toActionMatrixInverse() * d->J1;  // todo change me for simpler
+  // todo change me for simpler
+  d->J1 = d->f1Mp1.toActionMatrixInverse() * d->J1;
   // Transport the jacobian of frame 2 into the jacobian associated to cp2
   // Vector from frame 2 center to p2
-  d->f2p2 =
-      cp2 -
-      d->pinocchio
-          ->oMf[geom_model_
-                    ->geometryObjects[geom_model_->collisionPairs[pair_id_]
-                                          .second]
-                    .parentFrame]
-          .translation();
+  d->f2p2 = cp2 - d->pinocchio->oMf[geom_2.parentFrame].translation();
   d->f2Mp2.setIdentity();
   d->f2Mp2.translation(d->f2p2);
   d->J2 = d->f2Mp2.toActionMatrixInverse() * d->J2;
