@@ -93,9 +93,8 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
   const Vector3s Lr2 = c2.transpose() * pinocchio::skew(Lc) +
                        x1.transpose() * pinocchio::skew(x2);
 
-  const Scalar Ldot = (Lc.transpose() * (m1.linear() - m2.linear())) +
-                      (Lr1.transpose() * m1.angular()) +
-                      (Lr2.transpose() * m2.angular());
+  const Scalar Ldot = Lc.dot(m1.linear() - m2.linear()) +
+                      Lr1.dot(m1.angular()) + Lr2.dot(m2.angular());
   d->r[0] = Ldot / distance;
 }
 
