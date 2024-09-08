@@ -8,7 +8,8 @@ namespace python {
 namespace bp = boost::python;
 
 void exposeResidualVelocityAvoidance() {
-  bp::register_ptr_to_python<boost::shared_ptr<ResidualModelVelocityAvoidance>>();
+  bp::register_ptr_to_python<
+      boost::shared_ptr<ResidualModelVelocityAvoidance>>();
 
   bp::class_<ResidualModelVelocityAvoidance, bp::bases<ResidualModelAbstract>>(
       "ResidualModelVelocityAvoidance",
