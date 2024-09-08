@@ -153,6 +153,11 @@ struct ResidualDataVelocityAvoidanceTpl
 
     // Avoids data casting at runtime
     pinocchio = d->pinocchio;
+
+    // Set default values for velocity dampening parameters
+    di = 1.0e-2;
+    ds = 1.0e-5;
+    ksi = 1.0e-2;
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
@@ -169,6 +174,10 @@ struct ResidualDataVelocityAvoidanceTpl
 
   pinocchio::SE3 oMg_id_1;
   pinocchio::SE3 oMg_id_2;
+
+  Scalar di;
+  Scalar ds;
+  Scalar ksi;
 };
 
 }  // namespace colmpc
