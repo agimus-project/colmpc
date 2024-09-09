@@ -1,14 +1,14 @@
-import crocoddyl
-import hppfcl
-import numpy as np
-import numdifftools as nd
-import pinocchio as pin
 import unittest
 
-from colmpc import ResidualDataVelocityAvoidance, ResidualModelVelocityAvoidance
-
+import crocoddyl
+import hppfcl
+import numdifftools as nd
+import numpy as np
+import pinocchio as pin
 from scenes import Scene
 from wrapper_panda import PandaWrapper
+
+from colmpc import ResidualDataVelocityAvoidance, ResidualModelVelocityAvoidance
 
 
 class TestResidualModelVelocityAvoidance:
