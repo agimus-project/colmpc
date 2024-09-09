@@ -19,11 +19,15 @@ template <typename Scalar>
 ResidualModelVelocityAvoidanceTpl<Scalar>::ResidualModelVelocityAvoidanceTpl(
     boost::shared_ptr<StateMultibody> state, const std::size_t nu,
     boost::shared_ptr<GeometryModel> geom_model,
-    const pinocchio::PairIndex pair_id)
+    const pinocchio::PairIndex pair_id, const Scalar di, const Scalar ds,
+    const Scalar ksi)
     : Base(state, 1, nu, true, true, true),
       pin_model_(*state->get_pinocchio()),
       geom_model_(geom_model),
-      pair_id_(pair_id) {
+      pair_id_(pair_id),
+      di_(di),
+      ds_(ds),
+      ksi_(ksi) {
   if (static_cast<pinocchio::FrameIndex>(geom_model_->collisionPairs.size()) <=
       pair_id) {
     throw_pretty(
@@ -93,7 +97,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
 
   const Scalar Ldot = Lc.dot(m1.linear() - m2.linear()) +
                       Lr1.dot(m1.angular()) + Lr2.dot(m2.angular());
-  d->r[0] = (Ldot / distance) + d->ksi * (distance - d->ds) / (d->di - d->ds);
+  d->r[0] = (Ldot / distance) + ksi_ * (distance - ds_) / (di_ - ds_);
 }
 
 template <typename Scalar>
@@ -126,6 +130,36 @@ template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::set_pair_id(
     const pinocchio::PairIndex pair_id) {
   pair_id_ = pair_id;
+}
+
+template <typename Scalar>
+Scalar ResidualModelVelocityAvoidanceTpl<Scalar>::get_di() const {
+  return di_;
+}
+
+template <typename Scalar>
+void ResidualModelVelocityAvoidanceTpl<Scalar>::set_di(const Scalar di) {
+  di_ = di;
+}
+
+template <typename Scalar>
+Scalar ResidualModelVelocityAvoidanceTpl<Scalar>::get_ds() const {
+  return ds_;
+}
+
+template <typename Scalar>
+void ResidualModelVelocityAvoidanceTpl<Scalar>::set_ds(const Scalar ds) {
+  ds_ = ds;
+}
+
+template <typename Scalar>
+Scalar ResidualModelVelocityAvoidanceTpl<Scalar>::get_ksi() const {
+  return ksi_;
+}
+
+template <typename Scalar>
+void ResidualModelVelocityAvoidanceTpl<Scalar>::set_ksi(const Scalar ksi) {
+  ksi_ = ksi;
 }
 
 }  // namespace colmpc

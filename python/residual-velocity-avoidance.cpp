@@ -63,7 +63,25 @@ void exposeResidualVelocityAvoidance() {
           bp::make_function(&ResidualModelVelocityAvoidance::get_pair_id,
                             bp::return_value_policy<bp::return_by_value>()),
           bp::make_function(&ResidualModelVelocityAvoidance::set_pair_id),
-          "reference collision pair id");
+          "reference collision pair id")
+      .add_property(
+          "di",
+          bp::make_function(&ResidualModelVelocityAvoidance::get_di,
+                            bp::return_value_policy<bp::return_by_value>()),
+          bp::make_function(&ResidualModelVelocityAvoidance::set_di),
+          "reference distance at which the robot starts to slow down")
+      .add_property(
+          "ds",
+          bp::make_function(&ResidualModelVelocityAvoidance::get_ds,
+                            bp::return_value_policy<bp::return_by_value>()),
+          bp::make_function(&ResidualModelVelocityAvoidance::set_ds),
+          "reference security distance")
+      .add_property(
+          "ksi",
+          bp::make_function(&ResidualModelVelocityAvoidance::get_ksi,
+                            bp::return_value_policy<bp::return_by_value>()),
+          bp::make_function(&ResidualModelVelocityAvoidance::set_ksi),
+          "reference convergence speed coefficient");
 
   bp::register_ptr_to_python<
       boost::shared_ptr<ResidualDataVelocityAvoidance>>();

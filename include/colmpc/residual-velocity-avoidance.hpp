@@ -56,12 +56,18 @@ struct ResidualModelVelocityAvoidanceTpl
    * @param[in] geom_model  Pinocchio geometry model containing the collision
    * pair
    * @param[in] pair_id     Index of the collision pair in the geometry model
+   * @param[in] di          Distance at which the robot starts to slow down
+   * @param[in] ds          Security distance
+   * @param[in] ksi         Convergence speed coefficient
    */
 
   ResidualModelVelocityAvoidanceTpl(boost::shared_ptr<StateMultibody> state,
                                     const std::size_t nu,
                                     boost::shared_ptr<GeometryModel> geom_model,
-                                    const pinocchio::PairIndex pair_id);
+                                    const pinocchio::PairIndex pair_id,
+                                    const Scalar di = 1.0e-2,
+                                    const Scalar ds = 1.0e-5,
+                                    const Scalar ksi = 1.0e-2);
   virtual ~ResidualModelVelocityAvoidanceTpl();
 
   /**
@@ -104,6 +110,36 @@ struct ResidualModelVelocityAvoidanceTpl
    */
   void set_pair_id(const pinocchio::PairIndex pair_id);
 
+  /**
+   * @brief Return the distance at which the robot starts to slow down
+   */
+  Scalar get_di() const;
+
+  /**
+   * @brief Modify the distance at which the robot starts to slow down
+   */
+  void set_di(const Scalar di);
+
+  /**
+   * @brief Return the security distance
+   */
+  Scalar get_ds() const;
+
+  /**
+   * @brief Modify the security distance
+   */
+  void set_ds(const Scalar ds);
+
+  /**
+   * @brief Return the convergence speed coefficient
+   */
+  Scalar get_ksi() const;
+
+  /**
+   * @brief Modify the convergence speed coefficient
+   */
+  void set_ksi(const Scalar ksi);
+
  protected:
   using Base::nu_;
   using Base::state_;
@@ -117,6 +153,10 @@ struct ResidualModelVelocityAvoidanceTpl
       geom_model_;  //!< Pinocchio geometry model containing collision pair
   pinocchio::PairIndex
       pair_id_;  //!< Index of the collision pair in geometry model
+
+  Scalar di_;   //!< Distance at which the robot starts to slow down
+  Scalar ds_;   //!< Security distance
+  Scalar ksi_;  //!< Convergence speed coefficient
 };
 
 template <typename _Scalar>
@@ -153,11 +193,6 @@ struct ResidualDataVelocityAvoidanceTpl
 
     // Avoids data casting at runtime
     pinocchio = d->pinocchio;
-
-    // Set default values for velocity dampening parameters
-    di = 1.0e-2;
-    ds = 1.0e-5;
-    ksi = 1.0e-2;
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
@@ -174,10 +209,6 @@ struct ResidualDataVelocityAvoidanceTpl
 
   pinocchio::SE3 oMg_id_1;
   pinocchio::SE3 oMg_id_2;
-
-  Scalar di;
-  Scalar ds;
-  Scalar ksi;
 };
 
 }  // namespace colmpc
