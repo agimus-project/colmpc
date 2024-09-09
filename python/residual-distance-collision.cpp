@@ -60,7 +60,7 @@ void exposeResidualDistanceCollision() {
       boost::shared_ptr<ResidualDataDistanceCollision>>();
 
   bp::class_<ResidualDataDistanceCollision, bp::bases<ResidualDataAbstract>>(
-      "ResidualDataDistanceCollisionTpl",
+      "ResidualDataDistanceCollision",
       "Data for vel collision residual.\n\n",
       bp::init<ResidualDistanceCollision*, DataCollectorAbstract*>(
           bp::args("self", "model", "data"),

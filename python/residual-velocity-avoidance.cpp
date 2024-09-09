@@ -87,7 +87,7 @@ void exposeResidualVelocityAvoidance() {
       boost::shared_ptr<ResidualDataVelocityAvoidance>>();
 
   bp::class_<ResidualDataVelocityAvoidance, bp::bases<ResidualDataAbstract>>(
-      "ResidualDataVelocityAvoidanceTpl",
+      "ResidualDataVelocityAvoidance",
       "Data for vel collision residual.\n\n",
       bp::init<ResidualModelVelocityAvoidance*, DataCollectorAbstract*>(
           bp::args("self", "model", "data"),
