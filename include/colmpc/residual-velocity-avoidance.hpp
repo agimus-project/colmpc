@@ -56,7 +56,7 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef Eigen::Matrix<Scalar, 3, 6> Matrix36s;
   typedef Eigen::Matrix<Scalar, 3, 12> Matrix312s;
   typedef Eigen::Matrix<Scalar, 12, 12> Matrix1212s;
-  typedef typename MathBase::Matrix6xLike Matrix6xLike;
+  typedef Eigen::Matrix<Scalar, 6, -1> Matrix6xLike;
   typedef Eigen::Matrix<Scalar, 12, -1> Matrix12xLike;
   /**
    * @brief Initialize the pair collision residual model
@@ -183,9 +183,13 @@ struct ResidualDataVelocityAvoidanceTpl
   typedef pinocchio::DataTpl<Scalar> PinocchioData;
   typedef typename MathBase::VectorXs VectorXs;
   typedef typename MathBase::Matrix6xs Matrix6xs;
+  typedef typename MathBase::Matrix3s Matrix3s;
   typedef typename MathBase::Vector3s Vector3s;
-  typedef typename MathBase::Matrix6xLike Matrix6xLike;
-  typedef Eigen::Matrix<Scalar, 12, -1> Matrix12xLike;
+  typedef Eigen::Matrix<Scalar, 8, 8> Matrix8s;
+  typedef Eigen::Matrix<Scalar, 8, 6> Matrix86s;
+  typedef Eigen::Matrix<Scalar, 3, 6> Matrix36s;
+  typedef Eigen::Matrix<Scalar, 6, Eigen::Dynamic> Matrix6xLike;
+  typedef Eigen::Matrix<Scalar, 12, Eigen::Dynamic> Matrix12xLike;
 
   template <template <typename Scalar> class Model>
   ResidualDataVelocityAvoidanceTpl(Model<Scalar> *const model,
@@ -194,17 +198,17 @@ struct ResidualDataVelocityAvoidanceTpl
         geometry(pinocchio::GeometryData(model->get_geometry())),
         req(),
         res(),
+        ddistdot_dq_val(model->get_state()->get_nv()),
+        d_dist_dot_dq(model->get_state()->get_nv()),
+        J(model->get_state()->get_nv()),
         q(model->get_state()->get_nv()),
         v(model->get_state()->get_nv()),
-        J(model->get_state()->get_nv()),
-        d_dist_dot_dq(model->get_state()->get_nv()),
-        ddistdot_dq_val(model->get_state()->get_nv()),
         d_theta1_dq(6, model->get_state()->get_nv()),
         d_theta2_dq(6, model->get_state()->get_nv()),
         d_theta_dot_dq(6, model->get_state()->get_nv()),
-        dJ(12, model->get_state()->get_nv()),
         jacobian1(6, model->get_state()->get_nv()),
-        jacobian2(6, model->get_state()->get_nv()) {
+        jacobian2(6, model->get_state()->get_nv()),
+        dJ(12, model->get_state()->get_nv()) {
     // Check that proper shared data has been passed
     DataCollectorMultibodyTpl<Scalar> *d =
         dynamic_cast<DataCollectorMultibodyTpl<Scalar> *>(shared);
@@ -217,28 +221,29 @@ struct ResidualDataVelocityAvoidanceTpl
     // Avoids data casting at runtime
     pinocchio = d->pinocchio;
 
-    q.fill(0.0);
-    v.fill(0.0);
-    d_dist_dot_dq.fill(0.0);
-    ddistdot_dq_val.fill(0.0);
-    J.fill(0.0);
-    d_theta1_dq.fill(0.0);
-    d_theta2_dq.fill(0.0);
-    d_theta_dot_dq.fill(0.0);
-    dJ.fill(0.0);
-    jacobian1.fill(0.0);
-    jacobian2.fill(0.0);
+    ddistdot_dq_val.setZero();
+    d_dist_dot_dq.setZero();
+    J.setZero();
+    q.setZero();
+    v.setZero();
+    d_theta1_dq.setZero();
+    d_theta2_dq.setZero();
+    d_theta_dot_dq.setZero();
+    jacobian1.setZero();
+    jacobian2.setZero();
+    dJ.setZero();
 
     f1Mp1.Identity();
     f2Mp2.Identity();
 
     // Set values to the parts of the matrix that never change
-    Lyy.fill(0.0) Lyy.template.block<3, 3>(0, 3) = -Matrix3s::Identity();
-    Lyy.template.block<3, 3>(3, 3) = -Matrix3s::Identity();
-    Lyy.template.block<3, 3>(3, 0) = -Matrix3s::Identity();
+    Lyy.setZero();
+    Lyy.template block<3, 3>(0, 3) = -Matrix3s::Identity();
+    Lyy.template block<3, 3>(3, 3) = -Matrix3s::Identity();
+    Lyy.template block<3, 3>(3, 0) = -Matrix3s::Identity();
 
-    Lyc.fill(0.0);
-    Lyr.fill(0.0);
+    Lyc.setZero();
+    Lyr.setZero();
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
@@ -264,11 +269,11 @@ struct ResidualDataVelocityAvoidanceTpl
   pinocchio::Motion m1;
   pinocchio::Motion m2;
 
+  VectorXs ddistdot_dq_val;
+  VectorXs d_dist_dot_dq;
+  VectorXs J;
   VectorXs q;
   VectorXs v;
-  VectorXs d_dist_dot_dq;
-  VectorXs ddistdot_dq_val;
-  VectorXs J;
   Matrix6xLike d_theta1_dq;
   Matrix6xLike d_theta2_dq;
   Matrix6xLike d_theta_dot_dq;
