@@ -90,12 +90,12 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
 
   Vector3s Lc = x2 - x1;
   const Vector3s Lr1.noalias() = c1.transpose() * pinocchio::skew(Lc) +
-                       x2.transpose() * pinocchio::skew(x1);
+                                 x2.transpose() * pinocchio::skew(x1);
 
   // Negate Lc inverting order of substraction to x1 - x2
   Lc.noalias() = -1.0 * Lc;
   const Vector3s Lr2.noalias() = c2.transpose() * pinocchio::skew(Lc) +
-                       x1.transpose() * pinocchio::skew(x2);
+                                 x1.transpose() * pinocchio::skew(x2);
 
   const Scalar Ldot = Lc.dot(d->m1.linear() - d->m2.linear()) +
                       Lr1.dot(d->m1.angular()) + Lr2.dot(d->m2.angular());
@@ -123,12 +123,14 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Vector3s &w1 = d->m1.angular();
   const Vector3s &w2 = d->m2.angular();
   // Convert sphere representation to a diagonal matrix
-  const DiagonalMatrix3s D1 = static_cast<hppfcl::Elipsoid>(geom_1.geometry).radii.asDiagonal();
-  const DiagonalMatrix3s D2 = static_cast<hppfcl::Elipsoid>(geom_2.geometry).radii.asDiagonal();
+  const DiagonalMatrix3s D1 =
+      static_cast<hppfcl::Elipsoid>(geom_1.geometry).radii.asDiagonal();
+  const DiagonalMatrix3s D2 =
+      static_cast<hppfcl::Elipsoid>(geom_2.geometry).radii.asDiagonal();
   // Store rotations of geometries in matrices
   const Matrix3s &R1 = geom_1.rotation();
   const Matrix3s &R2 = geom_2.rotation();
-  
+
   const Matrix3s A1.noalias() = R1 * D1 * R1.transpose();
   const Matrix3s A2.noalias() = R1 * D1 * R1.transpose();
 
@@ -145,20 +147,17 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
 
   const Vector12s theta_dot(v1, v2, w1, w2);
 
-  const Scalar Ldot = 
-      x_diff.dot(v1 - v2)
-      - x_diff_cross_x1_c1_diff.dot(w1)
-      + x_diff_cross_x2_c2_diff.dot(w2);
+  const Scalar Ldot = x_diff.dot(v1 - v2) - x_diff_cross_x1_c1_diff.dot(w1) +
+                      x_diff_cross_x2_c2_diff.dot(w2);
 
   const Scalar distance_inv = 1.0 / distance;
   const Scalar dist_dot = Ldot * distance_inv;
 
-
   // const Matrix8s Lyy = np.r_[
-  //     np.c_[np.eye(3) + sol_lam1 * A1, -np.eye(3), A1 @ (x1_c1_diff), np.zeros(3)],
-  //     np.c_[-np.eye(3), np.eye(3) + sol_lam2 * A2, np.zeros(3), A2 @ (x2_c2_diff)],
-  //     [np.r_[A1 @ (x1_c1_diff), np.zeros(3), np.zeros(2)]],
-  //     [np.r_[np.zeros(3), A2 @ (x2_c2_diff), np.zeros(2)]],
+  //     np.c_[np.eye(3) + sol_lam1 * A1, -np.eye(3), A1 @ (x1_c1_diff),
+  //     np.zeros(3)], np.c_[-np.eye(3), np.eye(3) + sol_lam2 * A2, np.zeros(3),
+  //     A2 @ (x2_c2_diff)], [np.r_[A1 @ (x1_c1_diff), np.zeros(3),
+  //     np.zeros(2)]], [np.r_[np.zeros(3), A2 @ (x2_c2_diff), np.zeros(2)]],
   // ]
   // const Matrix86s Lyc = np.r_[
   //     np.c_[-sol_lam1 * A1, np.zeros([3, 3])],
@@ -168,12 +167,13 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   // ]
   // const Matrix86s Lyr = np.r_[
   //     np.c_[
-  //         sol_lam1 * (A1 @ pin.skew(x1_c1_diff) - pin.skew(A1 @ (x1_c1_diff))),
-  //         np.zeros([3, 3]),
+  //         sol_lam1 * (A1 @ pin.skew(x1_c1_diff) - pin.skew(A1 @
+  //         (x1_c1_diff))), np.zeros([3, 3]),
   //     ],
   //     np.c_[
   //         np.zeros([3, 3]),
-  //         sol_lam2 * (A2 @ pin.skew(x2_c2_diff) - pin.skew(A2 @ (x2_c2_diff))),
+  //         sol_lam2 * (A2 @ pin.skew(x2_c2_diff) - pin.skew(A2 @
+  //         (x2_c2_diff))),
   //     ],
   //     [np.r_[(x1_c1_diff) @ A1 @ pin.skew(x1_c1_diff), np.zeros(3)]],
   //     [np.r_[np.zeros(3), (x2_c2_diff) @ A2 @ pin.skew(x2_c2_diff)]],
@@ -184,16 +184,17 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Matrix86s yc.noalias() = Lyy_inv * Lyc;
   const Matrix86s yr.noalias() = Lyy_inv * Lyr;
 
-  const Matrix36s &xc = yc.template .<3>topRows();
-  const Matrix36s &xr = yr.template .<3>topRows();
+  const Matrix36s &xc = yc.template.<3>topRows();
+  const Matrix36s &xr = yr.template.<3>topRows();
 
   const Matrix312s dx1(xc, xr);
-  const Matrix312s dx2(yc.template .<3, 6>middleRows(), yr.template .<3, 6>middleRows() );
+  const Matrix312s dx2(yc.template.<3, 6>middleRows(),
+                       yr.template.<3, 6>middleRows());
   // Precompute difference of vectors
   const Matrix312s dx_diff.noalias() = dx1 - dx2;
 
-  const Vector12s dL_dtheta(x_diff, -x_diff, -x_diff_cross_x1_c1_diff, x_diff_cross_x2_c2_diff);
-
+  const Vector12s dL_dtheta(x_diff, -x_diff, -x_diff_cross_x1_c1_diff,
+                            x_diff_cross_x2_c2_diff);
 
   // const Matrix1212s ddL_dtheta2 = (
   //     np.r_[
@@ -210,32 +211,38 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   // )
 
   const Scalara distance_inv_pow = distance_inv * distance_inv;
-  const Vector12s d_dist_dot_dtheta.noalias() = ((theta_dot.transpose() * ddL_dtheta2) * distance_inv) - (dist_dot * distance_inv_pow * dL_dtheta);
+  const Vector12s d_dist_dot_dtheta.noalias() =
+      ((theta_dot.transpose() * ddL_dtheta2) * distance_inv) -
+      (dist_dot * distance_inv_pow * dL_dtheta);
 
-  pinocchio::computeFrameJacobian(pin_model_, *d->pinocchio, d->q, geom_1.parentFrame, pinocchio::LOCAL_WORLD_ALIGNED, d->d_theta1_dq);
-  pinocchio::computeFrameJacobian(pin_model_, *d->pinocchio, d->q, geom_2.parentFrame, pinocchio::LOCAL_WORLD_ALIGNED, d->d_theta2_dq);
+  pinocchio::computeFrameJacobian(
+      pin_model_, *d->pinocchio, d->q, geom_1.parentFrame,
+      pinocchio::LOCAL_WORLD_ALIGNED, d->d_theta1_dq);
+  pinocchio::computeFrameJacobian(
+      pin_model_, *d->pinocchio, d->q, geom_2.parentFrame,
+      pinocchio::LOCAL_WORLD_ALIGNED, d->d_theta2_dq);
 
-  
-  const Matrix12xLike d_theta_dq(
-    d_theta1_dq.template .topRows<3>(),
-    d_theta2_dq.template .topRows<3>(),
-    d_theta1_dq.template .bottomRows<3>(),
-    d_theta2_dq.template .bottomRows<3>(),
-  );
-  
-  pinocchio::computeJointJacobiansTimeVariation(pin_model_, *d->pinocchio, d->q, d->v, d->d_theta_dot_dq);
+  const Matrix12xLike d_theta_dq(d_theta1_dq.template.topRows<3>(),
+                                 d_theta2_dq.template.topRows<3>(),
+                                 d_theta1_dq.template.bottomRows<3>(),
+                                 d_theta2_dq.template.bottomRows<3>(), );
 
-  dJ.setZero() // TODO move to initialization
-  dJ.template .topRows<3>() = d_theta_dot_dq.template .topRows<3>();
-  dJ.template .block<3, 6>() = d_theta_dot_dq.template .topRows<3>();
+  pinocchio::computeJointJacobiansTimeVariation(pin_model_, *d->pinocchio, d->q,
+                                                d->v, d->d_theta_dot_dq);
+
+  dJ.setZero()  // TODO move to initialization
+      dJ.template.topRows<3>() = d_theta_dot_dq.template.topRows<3>();
+  dJ.template.block<3, 6>() = d_theta_dot_dq.template.topRows<3>();
 
   const Vector12s d_dist_dot_dtheta_dot.noalias() = distance_inv * dL_dtheta;
 
-  d->d_dist_dot_dq.noalias() = d_dist_dot_dtheta * d_theta_dq + d_dist_dot_dtheta_dot * dJ;
+  d->d_dist_dot_dq.noalias() =
+      d_dist_dot_dtheta * d_theta_dq + d_dist_dot_dtheta_dot * dJ;
 
   // Assume memory is allocated
-  d->ddistdot_dq_val.topRows(pin_model_.nq).noalias() = d_dist_dot_dq; 
-  d->ddistdot_dq_val.bottomRows(pin_model_.nq).noalias() = d_dist_dot_dtheta_dot * d_theta_dq;
+  d->ddistdot_dq_val.topRows(pin_model_.nq).noalias() = d_dist_dot_dq;
+  d->ddistdot_dq_val.bottomRows(pin_model_.nq).noalias() =
+      d_dist_dot_dtheta_dot * d_theta_dq;
 }
 template <typename Scalar>
 boost::shared_ptr<ResidualDataAbstractTpl<Scalar> >
