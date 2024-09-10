@@ -89,6 +89,9 @@ class TestResidualModelVelocityAvoidance:
 class TestVelocityAvoidance(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        # Create random number generator
+        cls.rng = np.random.default_rng(2137)
+
         # Load robot
         robot_wrapper = PandaWrapper(capsule=False)
         cls.rmodel, cmodel, _ = robot_wrapper()
@@ -127,7 +130,7 @@ class TestVelocityAvoidance(unittest.TestCase):
         for _ in range(200):
             # Generate new random configuration
             q = pin.randomConfiguration(self.rmodel)
-            v = np.random.rand(*q.shape)
+            v = self.rng.random(q.shape)
 
             # Update poses and compute new residual value
             self._update_placement(q, v)
@@ -161,7 +164,7 @@ class TestVelocityAvoidance(unittest.TestCase):
         for _ in range(200):
             # Generate new random configuration
             q = pin.randomConfiguration(self.rmodel)
-            v = np.random.rand(*q.shape)
+            v = self.rng.random(q.shape)
 
             # Update poses and compute new residual value
             self._update_placement(q, v)

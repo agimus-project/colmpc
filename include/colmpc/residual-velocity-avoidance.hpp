@@ -46,8 +46,18 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef pinocchio::GeometryModel GeometryModel;
   typedef typename MathBase::VectorXs VectorXs;
   typedef typename MathBase::MatrixXs MatrixXs;
+  typedef typename MathBase::MatrixXs Matrix3s;
   typedef typename MathBase::Matrix6xs Matrix6xs;
   typedef typename MathBase::Vector3s Vector3s;
+  typedef Eigen::DiagonalMatrix<Scalar, 3> DiagonalMatrix3s;
+  typedef Eigen::Matrix<Scalar, 12, 1> Vector12s;
+  typedef Eigen::Matrix<Scalar, 8, 8> Matrix8s;
+  typedef Eigen::Matrix<Scalar, 8, 6> Matrix86s;
+  typedef Eigen::Matrix<Scalar, 3, 6> Matrix36s;
+  typedef Eigen::Matrix<Scalar, 3, 12> Matrix312s;
+  typedef Eigen::Matrix<Scalar, 12, 12> Matrix1212s;
+  typedef typename MathBase::Matrix6xLike Matrix6xLike;
+  typedef Eigen::Matrix<Scalar, 12, -1> Matrix12xLike;
   /**
    * @brief Initialize the pair collision residual model
    *
@@ -174,6 +184,8 @@ struct ResidualDataVelocityAvoidanceTpl
   typedef typename MathBase::VectorXs VectorXs;
   typedef typename MathBase::Matrix6xs Matrix6xs;
   typedef typename MathBase::Vector3s Vector3s;
+  typedef typename MathBase::Matrix6xLike Matrix6xLike;
+  typedef Eigen::Matrix<Scalar, 12, -1> Matrix12xLike;
 
   template <template <typename Scalar> class Model>
   ResidualDataVelocityAvoidanceTpl(Model<Scalar> *const model,
@@ -193,6 +205,7 @@ struct ResidualDataVelocityAvoidanceTpl
 
     // Avoids data casting at runtime
     pinocchio = d->pinocchio;
+    q = VectorXs(pinocchio.)
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
@@ -209,6 +222,20 @@ struct ResidualDataVelocityAvoidanceTpl
 
   pinocchio::SE3 oMg_id_1;
   pinocchio::SE3 oMg_id_2;
+
+  Scalar distance;
+
+  pinocchio::Motion m1;
+  pinocchio::Motion m2;
+
+  VectorXs q;
+  VectorXs v;
+  VectorXs d_dist_dot_dq;
+  VectorXs ddistdot_dq_val;
+  Matrix6xLike d_theta1_dq;
+  Matrix6xLike d_theta2_dq;
+  Matrix6xLike d_theta_dot_dq;
+  Matrix12xLike dJ;
 };
 
 }  // namespace colmpc
