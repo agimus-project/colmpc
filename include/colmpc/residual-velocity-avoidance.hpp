@@ -193,7 +193,19 @@ struct ResidualDataVelocityAvoidanceTpl
       : Base(model, data),
         geometry(pinocchio::GeometryData(model->get_geometry())),
         req(),
-        res() {
+        res(),
+        q(model->get_state()->get_nv()),
+        v(model->get_state()->get_nv()),
+        J(model->get_state()->get_nv()),
+        d_dist_dot_dq(model->get_state()->get_nv()),
+        ddistdot_dq_val(model->get_state()->get_nv()),
+        d_theta1_dq(6, model->get_state()->get_nv()),
+        d_theta2_dq(6, model->get_state()->get_nv()),
+        d_theta_dot_dq(6, model->get_state()->get_nv()),
+        dJ(12, model->get_state()->get_nv()),
+        jacobian1(6, model->get_state()->get_nv()),
+        jacobian2(6, model->get_state()->get_nv())
+  {
     // Check that proper shared data has been passed
     DataCollectorMultibodyTpl<Scalar> *d =
         dynamic_cast<DataCollectorMultibodyTpl<Scalar> *>(shared);
@@ -205,7 +217,30 @@ struct ResidualDataVelocityAvoidanceTpl
 
     // Avoids data casting at runtime
     pinocchio = d->pinocchio;
-    q = VectorXs(pinocchio.)
+
+    q.fill(0.0);
+    v.fill(0.0);
+    d_dist_dot_dq.fill(0.0);
+    ddistdot_dq_val.fill(0.0);
+    J.fill(0.0);
+    d_theta1_dq.fill(0.0);
+    d_theta2_dq.fill(0.0);
+    d_theta_dot_dq.fill(0.0);
+    dJ.fill(0.0);
+    jacobian1.fill(0.0);
+    jacobian2.fill(0.0);
+
+    f1Mp1.Identity();
+    f2Mp2.Identity();
+
+    // Set values to the parts of the matrix that never change
+    Lyy.fill(0.0)
+    Lyy.template .block<3,3>(0, 3) = -Matrix3s::Identity();
+    Lyy.template .block<3,3>(3, 3) = -Matrix3s::Identity();
+    Lyy.template .block<3,3>(3, 0) = -Matrix3s::Identity();
+
+    Lyc.fill(0.0);
+    Lyr.fill(0.0);
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
@@ -223,6 +258,9 @@ struct ResidualDataVelocityAvoidanceTpl
   pinocchio::SE3 oMg_id_1;
   pinocchio::SE3 oMg_id_2;
 
+  pinocchio::SE3 f1Mp1;
+  pinocchio::SE3 f2Mp2;
+
   Scalar distance;
 
   pinocchio::Motion m1;
@@ -232,10 +270,17 @@ struct ResidualDataVelocityAvoidanceTpl
   VectorXs v;
   VectorXs d_dist_dot_dq;
   VectorXs ddistdot_dq_val;
+  VectorXs J;
   Matrix6xLike d_theta1_dq;
   Matrix6xLike d_theta2_dq;
   Matrix6xLike d_theta_dot_dq;
+  Matrix6xLike jacobian1;
+  Matrix6xLike jacobian2;
   Matrix12xLike dJ;
+
+  Matrix8s Lyy;
+  Matrix86s Lyc;
+  Matrix86s Lyr;
 };
 
 }  // namespace colmpc
