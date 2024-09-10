@@ -204,8 +204,7 @@ struct ResidualDataVelocityAvoidanceTpl
         d_theta_dot_dq(6, model->get_state()->get_nv()),
         dJ(12, model->get_state()->get_nv()),
         jacobian1(6, model->get_state()->get_nv()),
-        jacobian2(6, model->get_state()->get_nv())
-  {
+        jacobian2(6, model->get_state()->get_nv()) {
     // Check that proper shared data has been passed
     DataCollectorMultibodyTpl<Scalar> *d =
         dynamic_cast<DataCollectorMultibodyTpl<Scalar> *>(shared);
@@ -234,10 +233,9 @@ struct ResidualDataVelocityAvoidanceTpl
     f2Mp2.Identity();
 
     // Set values to the parts of the matrix that never change
-    Lyy.fill(0.0)
-    Lyy.template .block<3,3>(0, 3) = -Matrix3s::Identity();
-    Lyy.template .block<3,3>(3, 3) = -Matrix3s::Identity();
-    Lyy.template .block<3,3>(3, 0) = -Matrix3s::Identity();
+    Lyy.fill(0.0) Lyy.template.block<3, 3>(0, 3) = -Matrix3s::Identity();
+    Lyy.template.block<3, 3>(3, 3) = -Matrix3s::Identity();
+    Lyy.template.block<3, 3>(3, 0) = -Matrix3s::Identity();
 
     Lyc.fill(0.0);
     Lyr.fill(0.0);
