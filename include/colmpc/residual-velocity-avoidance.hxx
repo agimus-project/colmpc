@@ -151,8 +151,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Scalar sol_lam1 = -x1_c1_diff.dot(x_diff);
   const Scalar sol_lam2 = -x2_c2_diff.dot(x_diff);
 
-  Vector12s theta_dot;
-  theta_dot << v1, v2, w1, w2;
+  const Vector12s theta_dot = (Vector12s() << v1, v2, w1, w2).finished();
 
   const Scalar Ldot = x_diff.dot(v1 - v2) - x_diff_cross_x1_c1_diff.dot(w1) +
                       x_diff_cross_x2_c2_diff.dot(w2);
@@ -199,17 +198,19 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Matrix36s &xc = yc.template topRows<3>();
   const Matrix36s &xr = yr.template topRows<3>();
 
-  Matrix312s dx1;
-  dx1 << xc, xr;
-  Matrix312s dx2;
-  dx2 << yc.template middleRows<3>(3), yr.template middleRows<3>(3);
+  const Matrix312s dx1 = (Matrix312s() << xc, xr).finished();
+  const Matrix312s dx2 = (Matrix312s() << yc.template middleRows<3>(3),
+                          yr.template middleRows<3>(3))
+                             .finished();
 
   // Precompute difference of vectors
   const Matrix312s dx_diff = dx1 - dx2;
 
-  Vector12s dL_dtheta;
-  dL_dtheta << x_diff, -x_diff, -x_diff_cross_x1_c1_diff,
-      x_diff_cross_x2_c2_diff;
+  const Vector12s dL_dtheta =
+      (Vector12s() << x_diff, -x_diff, -x_diff_cross_x1_c1_diff,
+       x_diff_cross_x2_c2_diff)
+          .finished();
+
   const Matrix3s x_diff_skew = pinocchio::skew(x_diff);
 
   Matrix1212s ddL_dtheta2;
@@ -233,10 +234,14 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
       pin_model_, *d->pinocchio, d->q, geom_2.parentFrame,
       pinocchio::LOCAL_WORLD_ALIGNED, d->d_theta2_dq);
 
-  Matrix12xLike d_theta_dq;
-  d_theta_dq << d->d_theta1_dq.template topRows<3>(),
-      d->d_theta2_dq.template topRows<3>(),
-      d->d_theta1_dq.template bottomRows<3>(),
+  // Assign valued to preallocated d_theta_dq matrix
+  d->d_theta_dq.template topRows<3>().noalias() =
+      d->d_theta1_dq.template topRows<3>();
+  d->d_theta_dq.template middleRows<3>(3).noalias() =
+      d->d_theta2_dq.template topRows<3>();
+  d->d_theta_dq.template middleRows<3>(6).noalias() =
+      d->d_theta1_dq.template bottomRows<3>();
+  d->d_theta_dq.template bottomRows<3>().noalias() =
       d->d_theta2_dq.template bottomRows<3>();
 
   d->d_theta_dot_dq = pinocchio::computeJointJacobiansTimeVariation(
@@ -247,13 +252,13 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
 
   const Vector12s d_dist_dot_dtheta_dot = distance_inv * dL_dtheta;
 
-  d->d_dist_dot_dq.noalias() = d_dist_dot_dtheta.transpose() * d_theta_dq +
+  d->d_dist_dot_dq.noalias() = d_dist_dot_dtheta.transpose() * d->d_theta_dq +
                                d_dist_dot_dtheta_dot.transpose() * d->dJ;
 
   // Assume memory is allocated
   d->ddistdot_dq_val.topRows(pin_model_.nq).noalias() = d->d_dist_dot_dq;
   d->ddistdot_dq_val.bottomRows(pin_model_.nq).noalias() =
-      d_dist_dot_dtheta_dot.transpose() * d_theta_dq;
+      d_dist_dot_dtheta_dot.transpose() * d->d_theta_dq;
 
   // Transport the jacobian of frame 1 into the jacobian associated to x1
   // TODO I have no idea which one is cdata and rdata in here

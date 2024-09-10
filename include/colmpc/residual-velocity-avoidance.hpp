@@ -208,6 +208,7 @@ struct ResidualDataVelocityAvoidanceTpl
         d_theta_dot_dq(6, model->get_state()->get_nv()),
         jacobian1(6, model->get_state()->get_nv()),
         jacobian2(6, model->get_state()->get_nv()),
+        d_theta_dq(12, model->get_state()->get_nv()),
         dJ(12, model->get_state()->get_nv()) {
     // Check that proper shared data has been passed
     DataCollectorMultibodyTpl<Scalar> *d =
@@ -231,6 +232,7 @@ struct ResidualDataVelocityAvoidanceTpl
     d_theta_dot_dq.setZero();
     jacobian1.setZero();
     jacobian2.setZero();
+    d_theta_dq.setZero();
     dJ.setZero();
 
     f1Mp1.Identity();
@@ -279,6 +281,7 @@ struct ResidualDataVelocityAvoidanceTpl
   Matrix6xLike d_theta_dot_dq;
   Matrix6xLike jacobian1;
   Matrix6xLike jacobian2;
+  Matrix12xLike d_theta_dq;
   Matrix12xLike dJ;
 
   Matrix8s Lyy;
