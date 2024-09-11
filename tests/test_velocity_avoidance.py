@@ -49,16 +49,83 @@ class TestResidualModelVelocityAvoidance:
         self._nq = self._pinocchio.nq
 
     def calc(self, x: np.array, u: np.array) -> float:
-        q = x[: self._pinocchio.nq]
-        v = x[self._pinocchio.nq :]
+        return self.f(x)
+    
+    def f(self, x):
+        ddist_dt_val = self.ddist_dt(self._pinocchio, self._geom_model, x)
+
+        d = self.dist(self._pinocchio, self._geom_model, x)
+        return ddist_dt_val + self._ksi * (d - self._ds) / (self._di - self._ds)
+
+    def dist(self, rmodel, cmodel, x: np.ndarray):
+        """Computing the distance between the two shapes.
+
+        Args:
+            rmodel (_type_): _description_
+            cmodel (_type_): _description_
+            x (np.ndarray): _description_
+        """
+        q = x[: rmodel.nq]
+        v = x[rmodel.nq :]
 
         # Creating the data models
-        rdata = self._pinocchio.createData()
-        cdata = self._geom_model.createData()
+        rdata = rmodel.createData()
+        cdata = cmodel.createData()
 
         # Updating the position of the joints & the geometry objects.
-        pin.forwardKinematics(self._pinocchio, rdata, q, v)
-        pin.updateGeometryPlacements(self._pinocchio, rdata, self._geom_model, cdata)
+        pin.forwardKinematics(rmodel, rdata, q, v)
+        pin.updateGeometryPlacements(rmodel, rdata, cmodel, cdata)
+
+        # Poses and geometries of the shapes
+        shape1_placement = cdata.oMg[self._shape1_id]
+        shape2_placement = cdata.oMg[self._shape2_id]
+
+        req = hppfcl.DistanceRequest()
+        res = hppfcl.DistanceResult()
+        distance = hppfcl.distance(
+            self._shape1.geometry,
+            shape1_placement,
+            self._shape2.geometry,
+            shape2_placement,
+            req,
+            res,
+        )
+        return distance
+
+    def calcDiff(self, data, x, u=None):
+        
+        ddistdot_dq_val = self.ddistdot_dq(self._pinocchio, self._geom_model, x)
+        ddist_dq = np.r_[self.ddist_dq(self._pinocchio, self._geom_model, x), np.zeros(self._nq)]
+        nd = numdiff(self.f, x)
+        return ddistdot_dq_val - ddist_dq * self._ksi / (self._di - self._ds)
+        # print(f"ddotdq: {(data.Rx - nd)[:7]}")
+        # print(f"ddotdvq: {(data.Rx - nd)[7:]}")
+        
+        # print(f"no nd: {np.linalg.norm(ddistdot_dq_val)}")
+        # print(f"nd : {np.linalg.norm(nd)}")
+        # print(np.max(nd -ddistdot_dq_val))
+        # print("---------")
+        # data.Rx[:] = nd
+
+    def ddist_dt(self, rmodel, cmodel, x: np.ndarray):
+        """Computing the derivative of the distance w.r.t. time.
+
+        Args:
+            rmodel (_type_): _description_
+            cmodel (_type_): _description_
+            x (np.ndarray): _description_
+        """
+
+        q = x[: rmodel.nq]
+        v = x[rmodel.nq :]
+
+        # Creating the data models
+        rdata = rmodel.createData()
+        cdata = cmodel.createData()
+
+        # Updating the position of the joints & the geometry objects.
+        pin.forwardKinematics(rmodel, rdata, q, v)
+        pin.updateGeometryPlacements(rmodel, rdata, cmodel, cdata)
 
         # Poses and geometries of the shapes
         shape1_placement = cdata.oMg[self._shape1_id]
@@ -81,16 +148,16 @@ class TestResidualModelVelocityAvoidance:
         c2 = shape2_placement.translation
 
         v1 = pin.getFrameVelocity(
-            self._pinocchio, rdata, self._shape1.parentFrame, pin.LOCAL_WORLD_ALIGNED
+            rmodel, rdata, self._shape1.parentFrame, pin.LOCAL_WORLD_ALIGNED
         ).linear
         v2 = pin.getFrameVelocity(
-            self._pinocchio, rdata, self._shape2.parentFrame, pin.LOCAL_WORLD_ALIGNED
+            rmodel, rdata, self._shape2.parentFrame, pin.LOCAL_WORLD_ALIGNED
         ).linear
         w1 = pin.getFrameVelocity(
-            self._pinocchio, rdata, self._shape1.parentFrame, pin.LOCAL_WORLD_ALIGNED
+            rmodel, rdata, self._shape1.parentFrame, pin.LOCAL_WORLD_ALIGNED
         ).angular
         w2 = pin.getFrameVelocity(
-            self._pinocchio, rdata, self._shape2.parentFrame, pin.LOCAL_WORLD_ALIGNED
+            rmodel, rdata, self._shape2.parentFrame, pin.LOCAL_WORLD_ALIGNED
         ).angular
 
         Lc = (x1 - x2).T
@@ -99,26 +166,8 @@ class TestResidualModelVelocityAvoidance:
 
         Ldot = Lc @ (v1 - v2) + Lr1 @ w1 + Lr2 @ w2
         d_dot = Ldot / distance
-        return d_dot + self._ksi * (distance - self._ds) / (self._di - self._ds)
+        return d_dot
     
-    def f(self, x):
-        return self.calc(x, None)
-
-    def calcDiff(self, data, x, u=None):
-        
-        ddistdot_dq_val = self.ddistdot_dq(self._pinocchio, self._geom_model, x)
-        ddist_dq = np.r_[self.ddist_dq(self._pinocchio, self._geom_model, x), np.zeros(self._nq)]
-        nd = numdiff(self.f, x)
-        return ddistdot_dq_val - ddist_dq * self._ksi / (self._di - self._ds)
-        # print(f"ddotdq: {(data.Rx - nd)[:7]}")
-        # print(f"ddotdvq: {(data.Rx - nd)[7:]}")
-        
-        # print(f"no nd: {np.linalg.norm(ddistdot_dq_val)}")
-        # print(f"nd : {np.linalg.norm(nd)}")
-        # print(np.max(nd -ddistdot_dq_val))
-        # print("---------")
-        # data.Rx[:] = nd
-
     def ddist_dq(self, rmodel, cmodel, x: np.ndarray):
         
         
@@ -243,7 +292,6 @@ class TestResidualModelVelocityAvoidance:
 
         D1 = np.diagflat(self._shape1.geometry.radii)
         D2 = np.diagflat(self._shape2.geometry.radii)
-
         
         R1 = shape1_placement.rotation
         R2 = shape2_placement.rotation
