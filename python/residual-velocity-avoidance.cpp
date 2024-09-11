@@ -34,7 +34,8 @@ void exposeResidualVelocityAvoidance() {
           "collision pair\n"
           ":param pair_id: Index of the collision pair in the geometry "
           "model\n"
-          ":param di: Distance at which the robot starts to slow down, defaults to 1.0e-2.\n"
+          ":param di: Distance at which the robot starts to slow down, "
+          "defaults to 1.0e-2.\n"
           ":param ds: Security distance, defaults to 1.0e-5\n"
           ":param ksi: Convergence speed coefficient, defaults to 1.0e-2\n"))
       .def("calc", &ResidualModelVelocityAvoidance::calc,
