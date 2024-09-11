@@ -198,18 +198,21 @@ struct ResidualDataVelocityAvoidanceTpl
         geometry(pinocchio::GeometryData(model->get_geometry())),
         req(),
         res(),
-        ddistdot_dq_val(model->get_state()->get_nv()),
+        ddistdot_dq_val(model->get_state()->get_nv() * 2),
         d_dist_dot_dq(model->get_state()->get_nv()),
         J(model->get_state()->get_nv()),
         q(model->get_state()->get_nv()),
         v(model->get_state()->get_nv()),
+        __a(model->get_state()->get_nv()),
         d_theta1_dq(6, model->get_state()->get_nv()),
         d_theta2_dq(6, model->get_state()->get_nv()),
-        d_theta_dot_dq(6, model->get_state()->get_nv()),
         jacobian1(6, model->get_state()->get_nv()),
         jacobian2(6, model->get_state()->get_nv()),
+        d_theta1_dot_dq(6, model->get_state()->get_nv()),
+        d_theta2_dot_dq(6, model->get_state()->get_nv()),
+        __dv(6, model->get_state()->get_nv()),
         d_theta_dq(12, model->get_state()->get_nv()),
-        dJ(12, model->get_state()->get_nv()) {
+        d_theta_dot_dq(12, model->get_state()->get_nv()) {
     // Check that proper shared data has been passed
     DataCollectorMultibodyTpl<Scalar> *d =
         dynamic_cast<DataCollectorMultibodyTpl<Scalar> *>(shared);
@@ -227,16 +230,19 @@ struct ResidualDataVelocityAvoidanceTpl
     J.setZero();
     q.setZero();
     v.setZero();
+    __a.setZero();
     d_theta1_dq.setZero();
     d_theta2_dq.setZero();
-    d_theta_dot_dq.setZero();
     jacobian1.setZero();
     jacobian2.setZero();
+    d_theta1_dot_dq.setZero();
+    d_theta2_dot_dq.setZero();
+    __dv.setZero();
     d_theta_dq.setZero();
-    dJ.setZero();
+    d_theta_dot_dq.setZero();
 
-    f1Mp1.Identity();
-    f2Mp2.Identity();
+    f1Mp1.setIdentity();
+    f2Mp2.setIdentity();
 
     // Set values to the parts of the matrix that never change
     Lyy.setZero();
@@ -276,13 +282,16 @@ struct ResidualDataVelocityAvoidanceTpl
   VectorXs J;
   VectorXs q;
   VectorXs v;
+  VectorXs __a;
   Matrix6xLike d_theta1_dq;
   Matrix6xLike d_theta2_dq;
-  Matrix6xLike d_theta_dot_dq;
   Matrix6xLike jacobian1;
   Matrix6xLike jacobian2;
+  Matrix6xLike d_theta1_dot_dq;
+  Matrix6xLike d_theta2_dot_dq;
+  Matrix6xLike __dv;
   Matrix12xLike d_theta_dq;
-  Matrix12xLike dJ;
+  Matrix12xLike d_theta_dot_dq;
 
   Matrix8s Lyy;
   Matrix86s Lyc;
