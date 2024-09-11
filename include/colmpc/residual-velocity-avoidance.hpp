@@ -46,7 +46,7 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef pinocchio::GeometryModel GeometryModel;
   typedef typename MathBase::VectorXs VectorXs;
   typedef typename MathBase::MatrixXs MatrixXs;
-  typedef typename MathBase::MatrixXs Matrix3s;
+  typedef typename MathBase::Matrix3s Matrix3s;
   typedef typename MathBase::Matrix6xs Matrix6xs;
   typedef typename MathBase::Vector3s Vector3s;
   typedef Eigen::DiagonalMatrix<Scalar, 3> DiagonalMatrix3s;
@@ -241,6 +241,8 @@ struct ResidualDataVelocityAvoidanceTpl
     d_theta_dq.setZero();
     d_theta_dot_dq.setZero();
 
+    oMg_id_1.setIdentity();
+    oMg_id_2.setIdentity();
     f1Mp1.setIdentity();
     f2Mp2.setIdentity();
 
