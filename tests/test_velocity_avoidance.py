@@ -9,14 +9,16 @@ from scenes import Scene
 from wrapper_panda import PandaWrapper
 
 from colmpc import ResidualDataVelocityAvoidance, ResidualModelVelocityAvoidance
-np.set_printoptions(precision=7, linewidth=350, suppress=True,threshold=1e6)
+
+np.set_printoptions(precision=7, linewidth=350, suppress=True, threshold=1e6)
+
 
 def numdiff(f, q, h=1e-6):
     # print(f"numdiff")
     # print(f"q: {q[:7]}")
     # print(f"v: {q[7:]}")
     # print("---------")
-        
+
     j_diff = np.zeros(len(q))
     fx = f(q)
     for i in range(len(q)):
@@ -24,6 +26,7 @@ def numdiff(f, q, h=1e-6):
         e[i] = h
         j_diff[i] = (f(q + e) - fx) / e[i]
     return j_diff
+
 
 class TestResidualModelVelocityAvoidance:
     def __init__(
@@ -100,19 +103,20 @@ class TestResidualModelVelocityAvoidance:
         Ldot = Lc @ (v1 - v2) + Lr1 @ w1 + Lr2 @ w2
         d_dot = Ldot / distance
         return d_dot + self._ksi * (distance - self._ds) / (self._di - self._ds)
-    
+
     def f(self, x):
         return self.calc(x, None)
 
     def calcDiff(self, data, x, u=None):
-        
         ddistdot_dq_val = self.ddistdot_dq(self._pinocchio, self._geom_model, x)
-        ddist_dq = np.r_[self.ddist_dq(self._pinocchio, self._geom_model, x), np.zeros(self._nq)]
+        ddist_dq = np.r_[
+            self.ddist_dq(self._pinocchio, self._geom_model, x), np.zeros(self._nq)
+        ]
         nd = numdiff(self.f, x)
         return ddistdot_dq_val - ddist_dq * self._ksi / (self._di - self._ds)
         # print(f"ddotdq: {(data.Rx - nd)[:7]}")
         # print(f"ddotdvq: {(data.Rx - nd)[7:]}")
-        
+
         # print(f"no nd: {np.linalg.norm(ddistdot_dq_val)}")
         # print(f"nd : {np.linalg.norm(nd)}")
         # print(np.max(nd -ddistdot_dq_val))
@@ -120,12 +124,10 @@ class TestResidualModelVelocityAvoidance:
         # data.Rx[:] = nd
 
     def ddist_dq(self, rmodel, cmodel, x: np.ndarray):
-        
-        
         q = x[: rmodel.nq]
         v = x[rmodel.nq :]
-        
-                # Creating the data models
+
+        # Creating the data models
         rdata = rmodel.createData()
         cdata = cmodel.createData()
         # Updating the position of the joints & the geometry objects.
@@ -135,7 +137,7 @@ class TestResidualModelVelocityAvoidance:
         # Poses and geometries of the shapes
         shape1_placement = cdata.oMg[self._shape1_id]
         shape2_placement = cdata.oMg[self._shape2_id]
-        
+
         jacobian1 = pin.computeFrameJacobian(
             rmodel,
             rdata,
@@ -192,20 +194,22 @@ class TestResidualModelVelocityAvoidance:
 
     def ddistdot_dq(self, rmodel, cmodel, x: np.ndarray):
         q = x[: rmodel.nq]
-        v = x[rmodel.nq :] 
-        
+        v = x[rmodel.nq :]
+
         # print(f"not numdiff")
         # print(f"q: {q}")
         # print(f"v: {v}")
         # print("---------")
-        
+
         # Creating the data models
         rdata = rmodel.createData()
         cdata = cmodel.createData()
 
         # Updating the position of the joints & the geometry objects.
         pin.forwardKinematics(rmodel, rdata, q, v)
-        pin.computeForwardKinematicsDerivatives(rmodel, rdata, q, v, np.zeros(rmodel.nq))
+        pin.computeForwardKinematicsDerivatives(
+            rmodel, rdata, q, v, np.zeros(rmodel.nq)
+        )
         pin.updateGeometryPlacements(rmodel, rdata, cmodel, cdata)
 
         # Poses and geometries of the shapes
@@ -244,12 +248,11 @@ class TestResidualModelVelocityAvoidance:
         D1 = np.diagflat(self._shape1.geometry.radii)
         D2 = np.diagflat(self._shape2.geometry.radii)
 
-        
         R1 = shape1_placement.rotation
         R2 = shape2_placement.rotation
         A1, A2 = R1 @ D1 @ R1.T, R2 @ D2 @ R2.T  # From pinocchio A = RDR.T
 
-        sol_lam1, sol_lam2 =  - (x1 - c1).T @ (x1 - x2) , (x2 - c2).T @ (x1 - x2) 
+        sol_lam1, sol_lam2 = -(x1 - c1).T @ (x1 - x2), (x2 - c2).T @ (x1 - x2)
 
         theta_dot = np.r_[v1, v2, w1, w2]
 
@@ -292,7 +295,6 @@ class TestResidualModelVelocityAvoidance:
         dx1 = np.c_[yc[:3], yr[:3]]
         dx2 = np.c_[yc[3:6], yr[3:6]]
 
-
         dL_dtheta = np.r_[
             x1 - x2,
             -(x1 - x2),
@@ -309,41 +311,57 @@ class TestResidualModelVelocityAvoidance:
             ]
             + np.r_[
                 np.zeros([6, 12]),
-                np.c_[pin.skew(x1 - x2), np.zeros([3, 9])], ###! Changed from np.c_[pin.skew(x1 - x2)
-                np.c_[np.zeros([3, 3]), - pin.skew(x1 - x2), np.zeros([3, 6])], ###!  - pin.skew(x1 - x2)
+                np.c_[
+                    pin.skew(x1 - x2), np.zeros([3, 9])
+                ],  ###! Changed from np.c_[pin.skew(x1 - x2)
+                np.c_[
+                    np.zeros([3, 3]), -pin.skew(x1 - x2), np.zeros([3, 6])
+                ],  ###!  - pin.skew(x1 - x2)
             ]
         )
 
-        d_dist_dot_dtheta = theta_dot.T @ ddL_dtheta2 / distance - dist_dot / distance**2 * dL_dtheta
+        d_dist_dot_dtheta = (
+            theta_dot.T @ ddL_dtheta2 / distance - dist_dot / distance**2 * dL_dtheta
+        )
 
         # d_dist_dot_dtheta_dot = dL_dtheta / distance
-        
-        d_dist_dot_dtheta_dot = theta_dot.T @ ddL_dtheta2 / distance 
-        
-        d_theta1_dq = pin.computeFrameJacobian(rmodel, rdata,q, self._shape1.parentFrame, pin.LOCAL_WORLD_ALIGNED)
-        d_theta2_dq = pin.computeFrameJacobian(rmodel, rdata,q, self._shape2.parentFrame, pin.LOCAL_WORLD_ALIGNED)
-        
+
+        d_dist_dot_dtheta_dot = theta_dot.T @ ddL_dtheta2 / distance
+
+        d_theta1_dq = pin.computeFrameJacobian(
+            rmodel, rdata, q, self._shape1.parentFrame, pin.LOCAL_WORLD_ALIGNED
+        )
+        d_theta2_dq = pin.computeFrameJacobian(
+            rmodel, rdata, q, self._shape2.parentFrame, pin.LOCAL_WORLD_ALIGNED
+        )
+
         d_c1_dq = d_theta1_dq[:3]
         d_r1_dq = d_theta1_dq[3:]
-        
+
         d_c2_dq = d_theta2_dq[:3]
         d_r2_dq = d_theta2_dq[3:]
-        
+
         d_theta_dq = np.r_[d_c1_dq, d_c2_dq, d_r1_dq, d_r2_dq]
-        
-        d_theta1_dot_dq = pin.getFrameVelocityDerivatives(rmodel, rdata, frame_id=self._shape1.parentFrame, reference_frame=pin.WORLD)[0]
-        d_theta2_dot_dq = pin.getFrameVelocityDerivatives(rmodel, rdata, frame_id=self._shape2.parentFrame, reference_frame=pin.WORLD)[0]
 
+        d_theta1_dot_dq = pin.getFrameVelocityDerivatives(
+            rmodel, rdata, frame_id=self._shape1.parentFrame, reference_frame=pin.WORLD
+        )[0]
+        d_theta2_dot_dq = pin.getFrameVelocityDerivatives(
+            rmodel, rdata, frame_id=self._shape2.parentFrame, reference_frame=pin.WORLD
+        )[0]
 
-        d_v1_dq = d_theta1_dot_dq[:3,:]
-        d_w1_dq = d_theta1_dot_dq[3:,:]
-        
-        d_v2_dq = d_theta2_dot_dq[:3,:]
-        d_w2_dq = d_theta2_dot_dq[:3,:]
-        
-        d_theta_dot_dq = np.r_[d_v1_dq, d_v2_dq, d_w1_dq, d_w2_dq]        
-        d_dist_dot_dq = d_dist_dot_dtheta @ d_theta_dq + d_dist_dot_dtheta_dot @ d_theta_dot_dq
+        d_v1_dq = d_theta1_dot_dq[:3, :]
+        d_w1_dq = d_theta1_dot_dq[3:, :]
+
+        d_v2_dq = d_theta2_dot_dq[:3, :]
+        d_w2_dq = d_theta2_dot_dq[:3, :]
+
+        d_theta_dot_dq = np.r_[d_v1_dq, d_v2_dq, d_w1_dq, d_w2_dq]
+        d_dist_dot_dq = (
+            d_dist_dot_dtheta @ d_theta_dq + d_dist_dot_dtheta_dot @ d_theta_dot_dq
+        )
         return np.r_[d_dist_dot_dq, self.ddist_dq(rmodel, cmodel, x)]
+
 
 class TestVelocityAvoidance(unittest.TestCase):
     @classmethod
@@ -438,7 +456,9 @@ class TestVelocityAvoidance(unittest.TestCase):
                 self.residual_data, x, np.zeros(q.shape)
             )
 
-            Rx_py = self.test_residual.calcDiff(self.residual_data, x, np.zeros(q.shape))
+            Rx_py = self.test_residual.calcDiff(
+                self.residual_data, x, np.zeros(q.shape)
+            )
 
             np.testing.assert_allclose(
                 self.residual_data.Rx,
@@ -448,7 +468,6 @@ class TestVelocityAvoidance(unittest.TestCase):
                 "between C++ implementation and python implementation!.",
             )
 
-            
             # Compute approximate derivative
             Rx_num = calcDiff_numerical(x)
 
