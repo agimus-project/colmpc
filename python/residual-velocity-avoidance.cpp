@@ -23,14 +23,20 @@ void exposeResidualVelocityAvoidance() {
       "ResidualModelVelocityAvoidance",
       bp::init<boost::shared_ptr<StateMultibody>, const std::size_t,
                boost::shared_ptr<pinocchio::GeometryModel>,
-               const pinocchio::PairIndex>(
-          bp::args("self", "state", "nu", "geom_model", "pair_id"),
+               const pinocchio::PairIndex,
+               bp::optional<const double, const double, const double>>(
+          bp::args("self", "state", "nu", "geom_model", "pair_id", "di", "ds",
+                   "ksi"),
           "Initialize the residual model.\n\n"
-          ":param state: state of the multibody system\n"
+          ":param state: State of the multibody system\n"
+          ":param nu: Dimension of the control vector\n"
           ":param geom_model: Pinocchio geometry model containing the "
           "collision pair\n"
           ":param pair_id: Index of the collision pair in the geometry "
-          "model\n"))
+          "model\n"
+          ":param di: Distance at which the robot starts to slow down, defaults to 1.0e-2.\n"
+          ":param ds: Security distance, defaults to 1.0e-5\n"
+          ":param ksi: Convergence speed coefficient, defaults to 1.0e-2\n"))
       .def("calc", &ResidualModelVelocityAvoidance::calc,
            bp::args("self", "data", "x", "u"),
            "Compute the residual.\n\n"
