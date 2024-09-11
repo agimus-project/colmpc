@@ -53,7 +53,7 @@ class TestResidualModelVelocityAvoidance:
 
     def calc(self, x: np.array, u: np.array) -> float:
         return self.f(x)
-    
+
     def f(self, x):
         ddist_dt_val = self.ddist_dt(self._pinocchio, self._geom_model, x)
 
@@ -96,14 +96,15 @@ class TestResidualModelVelocityAvoidance:
         return distance
 
     def calcDiff(self, data, x, u=None):
-        
         ddistdot_dq_val = self.ddistdot_dq(self._pinocchio, self._geom_model, x)
-        ddist_dq = np.r_[self.ddist_dq(self._pinocchio, self._geom_model, x), np.zeros(self._nq)]
+        ddist_dq = np.r_[
+            self.ddist_dq(self._pinocchio, self._geom_model, x), np.zeros(self._nq)
+        ]
         nd = numdiff(self.f, x)
         return ddistdot_dq_val - ddist_dq * self._ksi / (self._di - self._ds)
         # print(f"ddotdq: {(data.Rx - nd)[:7]}")
         # print(f"ddotdvq: {(data.Rx - nd)[7:]}")
-        
+
         # print(f"no nd: {np.linalg.norm(ddistdot_dq_val)}")
         # print(f"nd : {np.linalg.norm(nd)}")
         # print(np.max(nd -ddistdot_dq_val))
@@ -170,7 +171,7 @@ class TestResidualModelVelocityAvoidance:
         Ldot = Lc @ (v1 - v2) + Lr1 @ w1 + Lr2 @ w2
         d_dot = Ldot / distance
         return d_dot
-    
+
     def ddist_dq(self, rmodel, cmodel, x: np.ndarray):
         q = x[: rmodel.nq]
         v = x[rmodel.nq :]
@@ -295,7 +296,7 @@ class TestResidualModelVelocityAvoidance:
 
         D1 = np.diagflat(self._shape1.geometry.radii)
         D2 = np.diagflat(self._shape2.geometry.radii)
-        
+
         R1 = shape1_placement.rotation
         R2 = shape2_placement.rotation
         A1, A2 = R1 @ D1 @ R1.T, R2 @ D2 @ R2.T  # From pinocchio A = RDR.T
