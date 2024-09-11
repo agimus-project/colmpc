@@ -93,9 +93,9 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
   const Vector3s &w2 = d->m2.angular();
 
   // Precompute differences as they are often used;
-  d->x_diff.noalias() = x1 - x2;
-  d->x1_c1_diff.noalias() = x1 - c1;
-  d->x2_c2_diff.noalias() = x2 - c2;
+  d->x_diff = x1 - x2;
+  d->x1_c1_diff = x1 - c1;
+  d->x2_c2_diff = x2 - c2;
   // Precompute cross products as they are used many times
   d->x_diff_cross_x1_c1_diff.noalias() = d->x_diff.cross(d->x1_c1_diff);
   d->x_diff_cross_x2_c2_diff.noalias() = d->x_diff.cross(d->x2_c2_diff);
@@ -160,20 +160,19 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Matrix3s x1_c1_diff_skew = pinocchio::skew(d->x1_c1_diff);
   const Matrix3s x2_c2_diff_skew = pinocchio::skew(d->x2_c2_diff);
   // Fill Lyy matrix only with the blocks that are changing
-  d->Lyy.template topLeftCorner<3, 3>().noalias() =
+  d->Lyy.template topLeftCorner<3, 3>() =
       Matrix3s::Identity(3, 3) + sol_lam1_A1;
-  d->Lyy.template block<3, 1>(0, 6).noalias() = A1_x1_c1_diff;
-  d->Lyy.template block<3, 3>(3, 3).noalias() =
-      Matrix3s::Identity(3, 3) + sol_lam2_A2;
-  d->Lyy.template block<3, 1>(3, 7).noalias() = A2_x2_c2_diff;
-  d->Lyy.template block<1, 3>(6, 0).noalias() = A1_x1_c1_diff;
-  d->Lyy.template block<1, 3>(7, 3).noalias() = A2_x2_c2_diff;
+  d->Lyy.template block<3, 1>(0, 6) = A1_x1_c1_diff;
+  d->Lyy.template block<3, 3>(3, 3) = Matrix3s::Identity(3, 3) + sol_lam2_A2;
+  d->Lyy.template block<3, 1>(3, 7) = A2_x2_c2_diff;
+  d->Lyy.template block<1, 3>(6, 0) = A1_x1_c1_diff;
+  d->Lyy.template block<1, 3>(7, 3) = A2_x2_c2_diff;
 
   // Fill Lyc matrix only with the blocks that are changing
-  d->Lyc.template topLeftCorner<3, 3>().noalias() = -sol_lam1_A1;
-  d->Lyc.template block<3, 3>(3, 3).noalias() = -sol_lam2_A2;
-  d->Lyc.template block<1, 3>(6, 0).noalias() = -A1_x1_c1_diff;
-  d->Lyc.template bottomRightCorner<1, 3>().noalias() = -A2_x2_c2_diff;
+  d->Lyc.template topLeftCorner<3, 3>() = -sol_lam1_A1;
+  d->Lyc.template block<3, 3>(3, 3) = -sol_lam2_A2;
+  d->Lyc.template block<1, 3>(6, 0) = -A1_x1_c1_diff;
+  d->Lyc.template bottomRightCorner<1, 3>() = -A2_x2_c2_diff;
 
   // Fill Lyr matrix only with the blocks that are changing
   d->Lyr.template topLeftCorner<3, 3>().noalias() =
@@ -213,10 +212,9 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
       -x_diff_skew * dx1 + x1_c1_diff_skew * dx_diff,
       x_diff_skew * dx2 - x2_c2_diff_skew * dx_diff;
   // Update only certain blocks of the matrix
-  // Aliasing occurs but is harmless in this case
-  ddL_dtheta2.template block<3, 3>(6, 0).noalias() =
+  ddL_dtheta2.template block<3, 3>(6, 0) =
       ddL_dtheta2.template block<3, 3>(6, 0) + x_diff_skew;
-  ddL_dtheta2.template block<3, 3>(9, 3).noalias() =
+  ddL_dtheta2.template block<3, 3>(9, 3) =
       ddL_dtheta2.template block<3, 3>(9, 3) - x_diff_skew;
 
   // Compute (1 / distance)^2
@@ -234,13 +232,12 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
       pinocchio::LOCAL_WORLD_ALIGNED, d->d_theta2_dq);
 
   // Assign valued to preallocated d_theta_dq matrix
-  d->d_theta_dq.template topRows<3>().noalias() =
-      d->d_theta1_dq.template topRows<3>();
-  d->d_theta_dq.template middleRows<3>(3).noalias() =
+  d->d_theta_dq.template topRows<3>() = d->d_theta1_dq.template topRows<3>();
+  d->d_theta_dq.template middleRows<3>(3) =
       d->d_theta2_dq.template topRows<3>();
-  d->d_theta_dq.template middleRows<3>(6).noalias() =
+  d->d_theta_dq.template middleRows<3>(6) =
       d->d_theta1_dq.template bottomRows<3>();
-  d->d_theta_dq.template bottomRows<3>().noalias() =
+  d->d_theta_dq.template bottomRows<3>() =
       d->d_theta2_dq.template bottomRows<3>();
 
   pinocchio::getFrameVelocityDerivatives(pin_model_, *d->pinocchio,
@@ -251,13 +248,13 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
                                          d->d_theta2_dot_dq, d->__dv);
 
   // Rewrite data to d_theta_dot_dq vector. Only rows 0:3 and 6:9 are non zero
-  d->d_theta_dot_dq.template topRows<3>().noalias() =
+  d->d_theta_dot_dq.template topRows<3>() =
       d->d_theta1_dot_dq.template topRows<3>();
-  d->d_theta_dot_dq.template middleRows<3>(3).noalias() =
+  d->d_theta_dot_dq.template middleRows<3>(3) =
       d->d_theta2_dot_dq.template topRows<3>();
-  d->d_theta_dot_dq.template middleRows<3>(6).noalias() =
+  d->d_theta_dot_dq.template middleRows<3>(6) =
       d->d_theta1_dot_dq.template bottomRows<3>();
-  d->d_theta_dot_dq.template bottomRows<3>().noalias() =
+  d->d_theta_dot_dq.template bottomRows<3>() =
       d->d_theta2_dot_dq.template bottomRows<3>();
 
   const Vector12s d_dist_dot_dtheta_dot =
@@ -279,11 +276,11 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
       distance_inv * d->x_diff.transpose() *
       (d->jacobian1.template topRows<3>() - d->jacobian2.template topRows<3>());
 
-  d->ddistdot_dq_val.topRows(nq).noalias() =
+  d->ddistdot_dq_val.topRows(nq) =
       d->d_dist_dot_dq - (d->J * ksi_ / (di_ - ds_));
-  d->ddistdot_dq_val.bottomRows(nq).noalias() = d->J;
+  d->ddistdot_dq_val.bottomRows(nq) = d->J;
 
-  d->Rx.noalias() = d->ddistdot_dq_val;
+  d->Rx = d->ddistdot_dq_val;
 }
 template <typename Scalar>
 boost::shared_ptr<ResidualDataAbstractTpl<Scalar> >
