@@ -291,8 +291,6 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
       d->d_dist_dot_dq - (d->J * ksi_ / (di_ - ds_));
   d->ddistdot_dq_val.bottomRows(nq).noalias() = d->J;
 
-  std::cout << d->ddistdot_dq_val << std::endl << std::flush;
-
   d->Rx.noalias() = d->ddistdot_dq_val;
 }
 template <typename Scalar>
