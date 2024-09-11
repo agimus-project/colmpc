@@ -9,5 +9,4 @@ BOOST_PYTHON_MODULE(colmpc) {
   eigenpy::enableEigenPy();
   eigenpy::enableEigenPySpecific<Eigen::VectorXi>();
   colmpc::python::exposeResidualDistanceCollision();
-  colmpc::python::exposeResidualVelocityAvoidance();
 }

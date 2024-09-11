@@ -139,4 +139,4 @@ void ResidualDistanceCollisionTpl<Scalar>::set_pair_id(
 }  // namespace colmpc
 
 #endif  // PINOCCHIO_WITH_HPP_FCL
-#endif  // COLMPC_RESIDUAL_HXX_
+#endif  // PINOCCHIO_WITH_HPP_FCL
