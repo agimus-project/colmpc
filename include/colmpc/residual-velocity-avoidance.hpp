@@ -272,7 +272,14 @@ struct ResidualDataVelocityAvoidanceTpl
   pinocchio::SE3 f1Mp1;
   pinocchio::SE3 f2Mp2;
 
+  Scalar Ldot;
   Scalar distance;
+
+  Vector3s x_diff;
+  Vector3s x1_c1_diff;
+  Vector3s x2_c2_diff;
+  Vector3s x_diff_cross_x1_c1_diff;
+  Vector3s x_diff_cross_x2_c2_diff;
 
   pinocchio::Motion m1;
   pinocchio::Motion m2;

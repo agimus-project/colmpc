@@ -81,23 +81,28 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
       pinocchio::getFrameVelocity(pin_model_, *d->pinocchio, geom_2.parentFrame,
                                   pinocchio::LOCAL_WORLD_ALIGNED);
 
+  // Crate labels for points
   const Vector3s &x1 = d->res.nearest_points[0];
   const Vector3s &x2 = d->res.nearest_points[1];
   const Vector3s &c1 = d->oMg_id_1.translation();
   const Vector3s &c2 = d->oMg_id_2.translation();
+  // Create labels for velocities
+  const Vector3s &v1 = d->m1.linear();
+  const Vector3s &v2 = d->m2.linear();
+  const Vector3s &w1 = d->m1.angular();
+  const Vector3s &w2 = d->m2.angular();
 
-  Vector3s Lc = x2 - x1;
-  const Vector3s Lr1 = c1.transpose() * pinocchio::skew(Lc) +
-                       x2.transpose() * pinocchio::skew(x1);
+  // Precompute differences as they are often used;
+  d->x_diff.noalias() = x1 - x2;
+  d->x1_c1_diff.noalias() = x1 - c1;
+  d->x2_c2_diff.noalias() = x2 - c2;
+  // Precompute cross products as they are used many times
+  d->x_diff_cross_x1_c1_diff.noalias() = d->x_diff.cross(d->x1_c1_diff);
+  d->x_diff_cross_x2_c2_diff.noalias() = d->x_diff.cross(d->x2_c2_diff);
 
-  // Negate Lc inverting order of substraction to x1 - x2
-  Lc.noalias() = -1.0 * Lc;
-  const Vector3s Lr2 = c2.transpose() * pinocchio::skew(Lc) +
-                       x1.transpose() * pinocchio::skew(x2);
-
-  const Scalar Ldot = Lc.dot(d->m1.linear() - d->m2.linear()) +
-                      Lr1.dot(d->m1.angular()) + Lr2.dot(d->m2.angular());
-  d->r[0] = (Ldot / d->distance) + ksi_ * (d->distance - ds_) / (di_ - ds_);
+  d->Ldot = d->x_diff.dot(v1 - v2) - d->x_diff_cross_x1_c1_diff.dot(w1) +
+            d->x_diff_cross_x2_c2_diff.dot(w2);
+  d->r[0] = (d->Ldot / d->distance) + ksi_ * (d->distance - ds_) / (di_ - ds_);
 }
 
 template <typename Scalar>
@@ -117,8 +122,6 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   // Crate labels for points
   const Vector3s &x1 = d->res.nearest_points[0];
   const Vector3s &x2 = d->res.nearest_points[1];
-  const Vector3s &c1 = d->oMg_id_1.translation();
-  const Vector3s &c2 = d->oMg_id_2.translation();
   // Create labels for velocities
   const Vector3s &v1 = d->m1.linear();
   const Vector3s &v2 = d->m2.linear();
@@ -142,31 +145,20 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Matrix3s A1 = R1 * D1 * R1.transpose();
   const Matrix3s A2 = R2 * D2 * R2.transpose();
 
-  // Precompute differences as they are often used;
-  const Vector3s x_diff = x1 - x2;
-  const Vector3s x1_c1_diff = x1 - c1;
-  const Vector3s x2_c2_diff = x2 - c2;
-  // Precompute cross products as they are used many times
-  const Vector3s x_diff_cross_x1_c1_diff = x_diff.cross(x1_c1_diff);
-  const Vector3s x_diff_cross_x2_c2_diff = x_diff.cross(x2_c2_diff);
-
-  const Scalar sol_lam1 = -x1_c1_diff.dot(x_diff);
-  const Scalar sol_lam2 = x2_c2_diff.dot(x_diff);
-
-  const Scalar Ldot = x_diff.dot(v1 - v2) - x_diff_cross_x1_c1_diff.dot(w1) +
-                      x_diff_cross_x2_c2_diff.dot(w2);
+  const Scalar sol_lam1 = -d->x1_c1_diff.dot(d->x_diff);
+  const Scalar sol_lam2 = d->x2_c2_diff.dot(d->x_diff);
 
   // Precompute inverse od distance for faster operations
   const Scalar distance_inv = 1.0 / d->distance;
-  const Scalar dist_dot = Ldot * distance_inv;
+  const Scalar dist_dot = d->Ldot * distance_inv;
 
   // Precompute components of the matrix that are repeating
-  const Vector3s A1_x1_c1_diff = A1 * x1_c1_diff;
-  const Vector3s A2_x2_c2_diff = A2 * x2_c2_diff;
+  const Vector3s A1_x1_c1_diff = A1 * d->x1_c1_diff;
+  const Vector3s A2_x2_c2_diff = A2 * d->x2_c2_diff;
   const Matrix3s sol_lam1_A1 = sol_lam1 * A1;
   const Matrix3s sol_lam2_A2 = sol_lam2 * A2;
-  const Matrix3s x1_c1_diff_skew = pinocchio::skew(x1_c1_diff);
-  const Matrix3s x2_c2_diff_skew = pinocchio::skew(x2_c2_diff);
+  const Matrix3s x1_c1_diff_skew = pinocchio::skew(d->x1_c1_diff);
+  const Matrix3s x2_c2_diff_skew = pinocchio::skew(d->x2_c2_diff);
   // Fill Lyy matrix only with the blocks that are changing
   d->Lyy.template topLeftCorner<3, 3>().noalias() =
       Matrix3s::Identity(3, 3) + sol_lam1_A1;
@@ -189,9 +181,9 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   d->Lyr.template block<3, 3>(3, 3).noalias() =
       sol_lam2 * (A2 * x2_c2_diff_skew - pinocchio::skew(A2_x2_c2_diff));
   d->Lyr.template block<1, 3>(6, 0).noalias() =
-      x1_c1_diff.transpose() * A1 * x1_c1_diff_skew;
+      d->x1_c1_diff.transpose() * A1 * x1_c1_diff_skew;
   d->Lyr.template bottomRightCorner<1, 3>().noalias() =
-      x2_c2_diff.transpose() * A2 * x2_c2_diff_skew;
+      d->x2_c2_diff.transpose() * A2 * x2_c2_diff_skew;
 
   // TODO find better matrix inversion
   const Matrix8s Lyy_inv = -1.0 * d->Lyy.inverse();
@@ -209,11 +201,11 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Matrix312s dx_diff = dx1 - dx2;
 
   const Vector12s dL_dtheta =
-      (Vector12s() << x_diff, -x_diff, -x_diff_cross_x1_c1_diff,
-       x_diff_cross_x2_c2_diff)
+      (Vector12s() << d->x_diff, -d->x_diff, -d->x_diff_cross_x1_c1_diff,
+       d->x_diff_cross_x2_c2_diff)
           .finished();
 
-  const Matrix3s x_diff_skew = pinocchio::skew(x_diff);
+  const Matrix3s x_diff_skew = pinocchio::skew(d->x_diff);
 
   Matrix1212s ddL_dtheta2;
   // Initialize matrix
@@ -284,7 +276,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   d->jacobian2.noalias() = d->f2Mp2.toActionMatrixInverse() * d->d_theta2_dq;
 
   d->J.noalias() =
-      distance_inv * x_diff.transpose() *
+      distance_inv * d->x_diff.transpose() *
       (d->jacobian1.template topRows<3>() - d->jacobian2.template topRows<3>());
 
   d->ddistdot_dq_val.topRows(nq).noalias() =
