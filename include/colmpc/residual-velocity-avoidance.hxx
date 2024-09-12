@@ -220,12 +220,10 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
           .inverse();
   const Matrix62s M_inv_b_N = M_inv_b * N;
   const Matrix8s Lyy_inv =
-      -(Matrix8s() << M_inv - M_inv_b_N * M_inv_b.transpose(), -M_inv_b_N,
-        -M_inv_b_N.transpose(), N)
-           .finished();
+      (Matrix8s() << M_inv_b_N * M_inv_b.transpose() - M_inv, -M_inv_b_N,
+       -M_inv_b_N.transpose(), N)
+          .finished();
 
-  // TODO find better matrix inversion
-  // const Matrix8s Lyy_inv = -1.0 * d->Lyy.inverse();
   const Matrix86s yc = Lyy_inv * d->Lyc;
   const Matrix86s yr = Lyy_inv * d->Lyr;
 
