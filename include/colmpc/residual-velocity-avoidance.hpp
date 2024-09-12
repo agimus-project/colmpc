@@ -188,6 +188,7 @@ struct ResidualDataVelocityAvoidanceTpl
   typedef Eigen::Matrix<Scalar, 8, 8> Matrix8s;
   typedef Eigen::Matrix<Scalar, 8, 6> Matrix86s;
   typedef Eigen::Matrix<Scalar, 3, 6> Matrix36s;
+  typedef Eigen::Matrix<Scalar, 2, 6> Matrix26s;
   typedef Eigen::Matrix<Scalar, 6, Eigen::Dynamic> Matrix6xLike;
   typedef Eigen::Matrix<Scalar, 12, Eigen::Dynamic> Matrix12xLike;
 

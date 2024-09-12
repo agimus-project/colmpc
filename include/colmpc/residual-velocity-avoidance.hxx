@@ -184,8 +184,55 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   d->Lyr.template bottomRightCorner<1, 3>().noalias() =
       d->x2_c2_diff.transpose() * A2 * x2_c2_diff_skew;
 
+  // Optimized Lyy explicit inversion
+  // Inversion is done as inversion of a block matrix in a form
+  // |  M   b.T |-1   | M^-1 + M^-1 b N b^T M^-1   -M^-1 b N |
+  // |          |   = |                                      |
+  // |  b    0  |     |      (-M^-1 b N)^T              N    |
+  // Where N = (b^T M^-1 b)^-1
+
+  // Invert upper left block of Lyy matrix
+  //
+  //     | M1  -I |-1   |    (M1 - M2^-1)^-1     M2^-1 (M1 - M2^-1)^-1 |
+  // M = |        |   = |                                              |
+  //     | -I  M2 |     | M1^-1 (M2 - M1^-1)^-1     (M2 - M1^-1)^-1    |
+  //
+  const Matrix3s M1 = Matrix3s::Identity(3, 3) + sol_lam1_A1;
+  const Matrix3s M2 = Matrix3s::Identity(3, 3) + sol_lam2_A2;
+  const Matrix3s M1_inv = M1.inverse();
+  const Matrix3s M2_inv = M2.inverse();
+  const Matrix3s M1_M2_inv_inv = (M1 - M2_inv).inverse();
+  const Matrix3s M2_M1_inv_inv = (M2 - M1_inv).inverse();
+  // Compute upper left, upper right, lower left and lower right block of M^-1
+  const Matrix3s &M_up_l = M1_M2_inv_inv;
+  const Matrix3s M_up_r = M2_inv * M1_M2_inv_inv;
+  const Matrix3s M_ls_l = M1_inv * M2_M1_inv_inv;
+  const Matrix3s &M_ls_r = M2_M1_inv_inv;
+  // Compose final M inverse matrix
+  const Matrix6s M_inv =
+      (Matrix3s << M_up_l, M_up_r, M_ls_l, M_ls_r).finished();
+  // Compose final inverse of Lyy.
+  // b vector is block sparse, hence full matrix dot product can be composed of
+  // series of smaller vector X matrix X vector products.
+  const Vector3s &b1 = A1_x1_c1_diff;  // First non zero vector of b
+  const Vector3s &b2 = A2_x2_c2_diff;  // Second non zero vector of b
+  // Precompute M^-1 b
+  const Matrix26s M_inv_b =
+      (Matrix26s << M_up_l * b1, M_up_r * b2, M_ls_l * b1, M_ls_r * b2)
+          .finished();
+  // Use only non zero components of the b vector to finish computing N
+  const Matrix2s N =
+      (Matrix2s << b1.transpose() * M_inv_b.template topRows<3>(),
+       b2.transpose() * M_inv_b.template bottomRows<3>())
+          .finished()
+          .inverse();
+  const Matrix26s M_inv_b_N = M_inv_b * N;
+  const Matrix8s Lyy_inv = -(Matrix8s << M_inv - M_inv_b_N * M_inv_b.transpose(),
+                            -M_inv_b_N, -M_inv_b_N.transpose(), N)
+                               .finished();
+
   // TODO find better matrix inversion
-  const Matrix8s Lyy_inv = -1.0 * d->Lyy.inverse();
+  // const Matrix8s Lyy_inv = -1.0 * d->Lyy.inverse();
   const Matrix86s yc = Lyy_inv * d->Lyc;
   const Matrix86s yr = Lyy_inv * d->Lyr;
 
