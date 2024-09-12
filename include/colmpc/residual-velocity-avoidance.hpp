@@ -47,13 +47,16 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef typename MathBase::VectorXs VectorXs;
   typedef typename MathBase::MatrixXs MatrixXs;
   typedef typename MathBase::Matrix3s Matrix3s;
+  typedef typename MathBase::Matrix2s Matrix2s;
   typedef typename MathBase::Matrix6xs Matrix6xs;
   typedef typename MathBase::Vector3s Vector3s;
   typedef Eigen::DiagonalMatrix<Scalar, 3> DiagonalMatrix3s;
   typedef Eigen::Matrix<Scalar, 12, 1> Vector12s;
+  typedef Eigen::Matrix<Scalar, 6, 6> Matrix6s;
   typedef Eigen::Matrix<Scalar, 8, 8> Matrix8s;
   typedef Eigen::Matrix<Scalar, 8, 6> Matrix86s;
   typedef Eigen::Matrix<Scalar, 3, 6> Matrix36s;
+  typedef Eigen::Matrix<Scalar, 6, 2> Matrix62s;
   typedef Eigen::Matrix<Scalar, 3, 12> Matrix312s;
   typedef Eigen::Matrix<Scalar, 12, 12> Matrix1212s;
   typedef Eigen::Matrix<Scalar, 6, -1> Matrix6xLike;
@@ -188,7 +191,6 @@ struct ResidualDataVelocityAvoidanceTpl
   typedef Eigen::Matrix<Scalar, 8, 8> Matrix8s;
   typedef Eigen::Matrix<Scalar, 8, 6> Matrix86s;
   typedef Eigen::Matrix<Scalar, 3, 6> Matrix36s;
-  typedef Eigen::Matrix<Scalar, 2, 6> Matrix26s;
   typedef Eigen::Matrix<Scalar, 6, Eigen::Dynamic> Matrix6xLike;
   typedef Eigen::Matrix<Scalar, 12, Eigen::Dynamic> Matrix12xLike;
 
