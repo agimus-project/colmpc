@@ -1,9 +1,10 @@
-import hppfcl
-import numpy as np
 import pinocchio as pin
+import numpy as np
+import hppfcl
 
 
 class Scene:
+
     def __init__(self):
         pass
 
@@ -22,6 +23,7 @@ class Scene:
         print(scene)
 
         if scene == 1:
+
             # OBS CONSTANTS
             self.PLACEMENT_OBS = [
                 pin.SE3(
@@ -80,6 +82,7 @@ class Scene:
                 )
             )
         elif scene == 2:
+
             # OBS CONSTANTS
             self.PLACEMENT_OBS = [
                 pin.SE3(pin.utils.rotate("y", np.pi / 2), np.array([0.0, 0.0, 0.9])),
@@ -220,12 +223,7 @@ class Scene:
 
             # ELLIPS ON THE ROBOT
             self.PLACEMENT_ROB = [
-                pin.SE3(
-                    pin.utils.rotate("y", np.pi / 4)
-                    @ pin.utils.rotate("x", np.pi / 4)
-                    @ pin.utils.rotate("z", np.pi / 4),
-                    np.array([0, 0, 0.17]),
-                ),
+                pin.SE3(pin.utils.rotate("y", np.pi/4) @ pin.utils.rotate("x", np.pi/4) @  pin.utils.rotate("z", np.pi/4), np.array([0, 0, 0.17])),
             ]
             self.DIM_ROB = [[0.05, 0.035, 0.035]]
 
@@ -259,16 +257,11 @@ class Scene:
                     np.array([0, 0.1, 1.5]),
                 )
             ]
-            self.DIM_OBS = [[0.1, 0.2, 1]]
+            self.DIM_OBS = [[0.1, 0.2,1]]
 
             # ELLIPS ON THE ROBOT
             self.PLACEMENT_ROB = [
-                pin.SE3(
-                    pin.utils.rotate("y", np.pi / 4)
-                    @ pin.utils.rotate("x", np.pi / 4)
-                    @ pin.utils.rotate("z", np.pi / 4),
-                    np.array([0, 0, 0.17]),
-                ),
+                pin.SE3(pin.utils.rotate("y", np.pi/4) @ pin.utils.rotate("x", np.pi/4) @  pin.utils.rotate("z", np.pi/4), np.array([0, 0, 0.17])),
             ]
             self.DIM_ROB = [[0.05, 0.035, 0.035]]
 
@@ -402,6 +395,7 @@ class Scene:
             raise ValueError("Scene not implemented")
 
     def get_hyperparams(self, scene=1):
+
         if scene == 1:
             self.ksi = 1e-2
             self.di = 5e-3
@@ -418,6 +412,7 @@ class Scene:
             self.ksi = 1e-3
             self.di = 2.5e-1
             self.ds = 1e-7
+
 
         return self.ksi, self.di, self.ds
 

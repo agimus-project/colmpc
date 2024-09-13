@@ -53,6 +53,7 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef Eigen::Matrix<Scalar, 12, 1> Vector12s;
   typedef Eigen::Matrix<Scalar, 8, 8> Matrix8s;
   typedef Eigen::Matrix<Scalar, 8, 6> Matrix86s;
+  typedef Eigen::Matrix<Scalar, 8, 12> Matrix812s;
   typedef Eigen::Matrix<Scalar, 3, 6> Matrix36s;
   typedef Eigen::Matrix<Scalar, 3, 12> Matrix312s;
   typedef Eigen::Matrix<Scalar, 12, 12> Matrix1212s;
@@ -204,13 +205,15 @@ struct ResidualDataVelocityAvoidanceTpl
         q(model->get_state()->get_nv()),
         v(model->get_state()->get_nv()),
         __a(model->get_state()->get_nv()),
-        d_theta1_dq(6, model->get_state()->get_nv()),
-        d_theta2_dq(6, model->get_state()->get_nv()),
+        J1(6, model->get_state()->get_nv()),
+        J2(6, model->get_state()->get_nv()),
         jacobian1(6, model->get_state()->get_nv()),
         jacobian2(6, model->get_state()->get_nv()),
-        d_theta1_dot_dq(6, model->get_state()->get_nv()),
+        in1_dnu1_dq(6, model->get_state()->get_nv()),
+        in2_dnu2_dq(6, model->get_state()->get_nv()),
         d_theta2_dot_dq(6, model->get_state()->get_nv()),
-        __dv(6, model->get_state()->get_nv()),
+        in1_dnu1_dqdot(6, model->get_state()->get_nv()),
+        in2_dnu2_dqdot(6, model->get_state()->get_nv()),
         d_theta_dq(12, model->get_state()->get_nv()),
         d_theta_dot_dq(12, model->get_state()->get_nv()) {
     // Check that proper shared data has been passed
@@ -231,13 +234,15 @@ struct ResidualDataVelocityAvoidanceTpl
     q.setZero();
     v.setZero();
     __a.setZero();
-    d_theta1_dq.setZero();
-    d_theta2_dq.setZero();
+    J1.setZero();
+    J2.setZero();
     jacobian1.setZero();
     jacobian2.setZero();
-    d_theta1_dot_dq.setZero();
+    in1_dnu1_dq.setZero();
+    in2_dnu2_dq.setZero();
     d_theta2_dot_dq.setZero();
-    __dv.setZero();
+    in1_dnu1_dqdot.setZero();
+    in2_dnu2_dqdot.setZero();
     d_theta_dq.setZero();
     d_theta_dot_dq.setZero();
 
@@ -292,13 +297,15 @@ struct ResidualDataVelocityAvoidanceTpl
   VectorXs q;
   VectorXs v;
   VectorXs __a;
-  Matrix6xLike d_theta1_dq;
-  Matrix6xLike d_theta2_dq;
+  Matrix6xLike J1;
+  Matrix6xLike J2;
   Matrix6xLike jacobian1;
   Matrix6xLike jacobian2;
-  Matrix6xLike d_theta1_dot_dq;
+  Matrix6xLike in1_dnu1_dq;
+  Matrix6xLike in2_dnu2_dq;
   Matrix6xLike d_theta2_dot_dq;
-  Matrix6xLike __dv;
+  Matrix6xLike in1_dnu1_dqdot;
+  Matrix6xLike in2_dnu2_dqdot;
   Matrix12xLike d_theta_dq;
   Matrix12xLike d_theta_dot_dq;
 
