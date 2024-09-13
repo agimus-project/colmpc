@@ -55,17 +55,18 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef Eigen::Matrix<Scalar, 6, 6> Matrix6s;
   typedef Eigen::Matrix<Scalar, 8, 8> Matrix8s;
   typedef Eigen::Matrix<Scalar, 8, 6> Matrix86s;
+  typedef Eigen::Matrix<Scalar, 8, 12> Matrix812s;
   typedef Eigen::Matrix<Scalar, 3, 6> Matrix36s;
   typedef Eigen::Matrix<Scalar, 6, 2> Matrix62s;
   typedef Eigen::Matrix<Scalar, 3, 12> Matrix312s;
-  typedef Eigen::Matrix<Scalar, 12, 12> Matrix1212s;
-  typedef Eigen::Matrix<Scalar, 6, -1> Matrix6xLike;
-  typedef Eigen::Matrix<Scalar, 12, -1> Matrix12xLike;
+  typedef Eigen::Matrix<Scalar, 12, 12> Matrix12s;
+  typedef Eigen::Matrix<Scalar, 6, Eigen::Dynamic> Matrix6xLike;
+  typedef Eigen::Matrix<Scalar, 12, Eigen::Dynamic> Matrix12xLike;
   /**
    * @brief Initialize the pair collision residual model
    *
    * @param[in] state       State of the multibody system
-   * @param[in] nu          Dimension of the control vector
+   * @param[in] nr          Dimension of residual vector
    * @param[in] geom_model  Pinocchio geometry model containing the collision
    * pair
    * @param[in] pair_id     Index of the collision pair in the geometry model
@@ -75,7 +76,6 @@ struct ResidualModelVelocityAvoidanceTpl
    */
 
   ResidualModelVelocityAvoidanceTpl(boost::shared_ptr<StateMultibody> state,
-                                    const std::size_t nu,
                                     boost::shared_ptr<GeometryModel> geom_model,
                                     const pinocchio::PairIndex pair_id,
                                     const Scalar di = 1.0e-2,
@@ -88,7 +88,6 @@ struct ResidualModelVelocityAvoidanceTpl
    *
    * @param[in] data  Pair collision residual data
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
-   * @param[in] u     Control input \f$\mathbf{u}\in\mathbb{R}^{nu}\f$
    */
   virtual void calc(const boost::shared_ptr<ResidualDataAbstract> &data,
                     const Eigen::Ref<const VectorXs> &x,
@@ -99,7 +98,6 @@ struct ResidualModelVelocityAvoidanceTpl
    *
    * @param[in] data  Pair collision residual data
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
-   * @param[in] u     Control input \f$\mathbf{u}\in\mathbb{R}^{nu}\f$
    */
   virtual void calcDiff(const boost::shared_ptr<ResidualDataAbstract> &data,
                         const Eigen::Ref<const VectorXs> &x,
@@ -154,7 +152,7 @@ struct ResidualModelVelocityAvoidanceTpl
   void set_ksi(const Scalar ksi);
 
  protected:
-  using Base::nu_;
+  using Base::nr_;
   using Base::state_;
   using Base::unone_;
   using Base::v_dependent_;
@@ -201,21 +199,23 @@ struct ResidualDataVelocityAvoidanceTpl
         geometry(pinocchio::GeometryData(model->get_geometry())),
         req(),
         res(),
-        ddistdot_dq_val(model->get_state()->get_nv() * 2),
-        d_dist_dot_dq(model->get_state()->get_nv()),
-        J(model->get_state()->get_nv()),
-        q(model->get_state()->get_nv()),
-        v(model->get_state()->get_nv()),
-        __a(model->get_state()->get_nv()),
-        d_theta1_dq(6, model->get_state()->get_nv()),
-        d_theta2_dq(6, model->get_state()->get_nv()),
-        jacobian1(6, model->get_state()->get_nv()),
-        jacobian2(6, model->get_state()->get_nv()),
-        d_theta1_dot_dq(6, model->get_state()->get_nv()),
-        d_theta2_dot_dq(6, model->get_state()->get_nv()),
-        __dv(6, model->get_state()->get_nv()),
-        d_theta_dq(12, model->get_state()->get_nv()),
-        d_theta_dot_dq(12, model->get_state()->get_nv()) {
+        ddistdot_dq_val(model->get_state()->get_nx()),
+        d_dist_dot_dq(model->get_state()->get_nq()),
+        J(model->get_state()->get_nq()),
+        q(model->get_state()->get_nq()),
+        v(model->get_state()->get_nq()),
+        __a(model->get_state()->get_nq()),
+        J1(6, model->get_state()->get_nq()),
+        J2(6, model->get_state()->get_nq()),
+        jacobian1(6, model->get_state()->get_nq()),
+        jacobian2(6, model->get_state()->get_nq()),
+        in1_dnu1_dq(6, model->get_state()->get_nq()),
+        in2_dnu2_dq(6, model->get_state()->get_nq()),
+        d_theta2_dot_dq(6, model->get_state()->get_nq()),
+        in1_dnu1_dqdot(6, model->get_state()->get_nq()),
+        in2_dnu2_dqdot(6, model->get_state()->get_nq()),
+        d_theta_dq(12, model->get_state()->get_nq()),
+        d_theta_dot_dq(12, model->get_state()->get_nq()) {
     // Check that proper shared data has been passed
     DataCollectorMultibodyTpl<Scalar> *d =
         dynamic_cast<DataCollectorMultibodyTpl<Scalar> *>(shared);
@@ -234,13 +234,15 @@ struct ResidualDataVelocityAvoidanceTpl
     q.setZero();
     v.setZero();
     __a.setZero();
-    d_theta1_dq.setZero();
-    d_theta2_dq.setZero();
+    J1.setZero();
+    J2.setZero();
     jacobian1.setZero();
     jacobian2.setZero();
-    d_theta1_dot_dq.setZero();
+    in1_dnu1_dq.setZero();
+    in2_dnu2_dq.setZero();
     d_theta2_dot_dq.setZero();
-    __dv.setZero();
+    in1_dnu1_dqdot.setZero();
+    in2_dnu2_dqdot.setZero();
     d_theta_dq.setZero();
     d_theta_dot_dq.setZero();
 
@@ -257,6 +259,10 @@ struct ResidualDataVelocityAvoidanceTpl
 
     Lyc.setZero();
     Lyr.setZero();
+
+    req.gjk_max_iterations = 20000;
+    req.abs_err = 0;
+    req.gjk_tolerance = 1e-9;
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
@@ -295,13 +301,15 @@ struct ResidualDataVelocityAvoidanceTpl
   VectorXs q;
   VectorXs v;
   VectorXs __a;
-  Matrix6xLike d_theta1_dq;
-  Matrix6xLike d_theta2_dq;
+  Matrix6xLike J1;
+  Matrix6xLike J2;
   Matrix6xLike jacobian1;
   Matrix6xLike jacobian2;
-  Matrix6xLike d_theta1_dot_dq;
+  Matrix6xLike in1_dnu1_dq;
+  Matrix6xLike in2_dnu2_dq;
   Matrix6xLike d_theta2_dot_dq;
-  Matrix6xLike __dv;
+  Matrix6xLike in1_dnu1_dqdot;
+  Matrix6xLike in2_dnu2_dqdot;
   Matrix12xLike d_theta_dq;
   Matrix12xLike d_theta_dot_dq;
 
