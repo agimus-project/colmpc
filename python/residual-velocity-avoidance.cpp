@@ -37,12 +37,13 @@ void exposeResidualVelocityAvoidance() {
           ":param ds: Security distance, defaults to 1.0e-5\n"
           ":param ksi: Convergence speed coefficient, defaults to 1.0e-2\n"))
       .def("calc", &ResidualModelVelocityAvoidance::calc,
-           bp::args("self", "data", "x"),
+           bp::args("self", "data", "x", "u"),
            "Compute the residual.\n\n"
            ":param data: residual data\n"
-           ":param x: time-discrete state vector\n")
+           ":param x: time-discrete state vector\n"
+           ":param u: time-discrete control input")
       .def("calcDiff", &ResidualModelVelocityAvoidance::calcDiff,
-           bp::args("self", "data", "x"),
+           bp::args("self", "data", "x", "u"),
            "Compute the Jacobians of the residual.\n\n"
            "It assumes that calc has been run first.\n"
            ":param data: action data\n"

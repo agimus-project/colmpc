@@ -87,7 +87,8 @@ struct ResidualModelVelocityAvoidanceTpl
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    */
   virtual void calc(const boost::shared_ptr<ResidualDataAbstract> &data,
-                    const Eigen::Ref<const VectorXs> &x);
+                    const Eigen::Ref<const VectorXs> &x,
+                    const Eigen::Ref<const VectorXs> &u);
 
   /**
    * @brief Compute the derivatives of the pair collision residual
@@ -96,7 +97,8 @@ struct ResidualModelVelocityAvoidanceTpl
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    */
   virtual void calcDiff(const boost::shared_ptr<ResidualDataAbstract> &data,
-                        const Eigen::Ref<const VectorXs> &x);
+                        const Eigen::Ref<const VectorXs> &x,
+                        const Eigen::Ref<const VectorXs> &u);
 
   virtual boost::shared_ptr<ResidualDataAbstract> createData(
       DataCollectorAbstract *const data);
