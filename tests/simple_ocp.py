@@ -4,7 +4,6 @@ import mim_solvers
 import numpy as np
 import pinocchio as pin
 from numpy import r_
-from viewer import add_cube_to_viewer, add_sphere_to_viewer, create_viewer
 from wrapper_panda import PandaWrapper
 
 np.set_printoptions(precision=4, linewidth=350, suppress=True, threshold=1e6)
@@ -84,10 +83,11 @@ idg2 = gmodel.addGeometryObject(elips2_geom)
 rdata, gdata = rmodel.createData(), gmodel.createData()
 
 gmodel.addCollisionPair(
-                pin.CollisionPair(
-                    gmodel.getGeometryId("el1"),
-                    gmodel.getGeometryId("el2"),
-                ))
+    pin.CollisionPair(
+        gmodel.getGeometryId("el1"),
+        gmodel.getGeometryId("el2"),
+    )
+)
 
 #### Creating the OCP
 
@@ -210,18 +210,18 @@ ddp.solve(XS_init, US_init, 100)
 
 
 # while True:
-    # for i,xs in enumerate(ddp.xs):
-        # q = np.array(xs[:7].tolist())
-        # pin.framesForwardKinematics(rmodel, rdata, q)
-        # add_cube_to_viewer(viz, "vcolmpc" + str(i), [2e-2,2e-2, 2e-2], rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation, color=100000000)
-        # viz.display(np.array(xs[:7].tolist()))
-        # input()
+# for i,xs in enumerate(ddp.xs):
+# q = np.array(xs[:7].tolist())
+# pin.framesForwardKinematics(rmodel, rdata, q)
+# add_cube_to_viewer(viz, "vcolmpc" + str(i), [2e-2,2e-2, 2e-2], rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation, color=100000000)
+# viz.display(np.array(xs[:7].tolist()))
+# input()
 d = []
-for i,xs in enumerate(ddp.xs):
+for i, xs in enumerate(ddp.xs):
     q = np.array(xs[:7].tolist())
     pin.framesForwardKinematics(rmodel, rdata, q)
     pin.updateGeometryPlacements(rmodel, rdata, gmodel, gdata, q)
-           
+
     req = hppfcl.DistanceRequest()
     req.gjk_max_iterations = 20000
     req.abs_err = 0
@@ -240,5 +240,5 @@ for i,xs in enumerate(ddp.xs):
 import matplotlib.pyplot as plt
 
 plt.plot(d)
-plt.plot([0]*len(d))
+plt.plot([0] * len(d))
 plt.show()
