@@ -259,6 +259,10 @@ struct ResidualDataVelocityAvoidanceTpl
 
     Lyc.setZero();
     Lyr.setZero();
+
+    req.gjk_max_iterations = 20000;
+    req.abs_err = 0;
+    req.gjk_tolerance = 1e-9;
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
