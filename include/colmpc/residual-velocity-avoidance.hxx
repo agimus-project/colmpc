@@ -179,16 +179,16 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
 
   // Optimized Lyy explicit inversion
   // Inversion is done as inversion of a block matrix in a form
-  // |  M   b.T |-1   | M^-1 + M^-1 b N b^T M^-1   -M^-1 b N |
+  // |  M   b.T |-1   | M^-1 + M^-1 b N b^T M^-1   -N M^-1 b |
   // |          |   = |                                      |
-  // |  b    0  |     |      (-M^-1 b N)^T              N    |
+  // |  b    0  |     |      (-N M^-1 b)^T              N    |
   // Where N = (b^T M^-1 b)^-1
 
   // Invert upper left block of Lyy matrix
   //
-  //     | M1  -I |-1   |    (M1 - M2^-1)^-1     M2^-1 (M1 - M2^-1)^-1 |
+  //     | M1  -I |-1   |    (M1 - M2^-1)^-1     (M1 - M2^-1)^-1 M2^-1 |
   // M = |        |   = |                                              |
-  //     | -I  M2 |     | M1^-1 (M2 - M1^-1)^-1     (M2 - M1^-1)^-1    |
+  //     | -I  M2 |     | (M2 - M1^-1)^-1 M1^-1     (M2 - M1^-1)^-1    |
   //
   const Matrix3s M1 = Matrix3s::Identity(3, 3) + sol_lam1_A1;
   const Matrix3s M2 = Matrix3s::Identity(3, 3) + sol_lam2_A2;
@@ -198,12 +198,12 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Matrix3s M2_M1_inv_inv = (M2 - M1_inv).inverse();
   // Compute upper left, upper right, lower left and lower right block of M^-1
   const Matrix3s &M_up_l = M1_M2_inv_inv;
-  const Matrix3s M_up_r = M2_inv * M1_M2_inv_inv;
-  const Matrix3s M_ls_l = M1_inv * M2_M1_inv_inv;
-  const Matrix3s &M_ls_r = M2_M1_inv_inv;
+  const Matrix3s M_up_r = M1_M2_inv_inv * M2_inv;
+  const Matrix3s M_lw_l = M2_M1_inv_inv * M1_inv;
+  const Matrix3s &M_lw_r = M2_M1_inv_inv;
   // Compose final M inverse matrix
   const Matrix6s M_inv =
-      (Matrix6s() << M_up_l, M_up_r, M_ls_l, M_ls_r).finished();
+      (Matrix6s() << M_up_l, M_up_r, M_lw_l, M_lw_r).finished();
   // Compose final inverse of Lyy.
   // b vector is block sparse, hence full matrix dot product can be composed of
   // series of smaller vector X matrix X vector products.
@@ -211,7 +211,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Vector3s &b2 = A2_x2_c2_diff;  // Second non zero vector of b
   // Precompute M^-1 b
   const Matrix62s M_inv_b =
-      (Matrix62s() << M_up_l * b1, M_up_r * b2, M_ls_l * b1, M_ls_r * b2)
+      (Matrix62s() << M_up_l * b1, M_up_r * b2, M_lw_l * b1, M_lw_r * b2)
           .finished();
   // Use only non zero components of the b vector to finish computing N
   const Matrix2s N =
@@ -221,19 +221,17 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
           .inverse();
   const Matrix62s M_inv_b_N = M_inv_b * N;
   const Matrix8s Lyy_inv =
-      (Matrix8s() << M_inv_b_N * M_inv_b.transpose() - M_inv, -M_inv_b_N,
-       -M_inv_b_N.transpose(), N)
+      (Matrix8s() << M_inv - M_inv_b_N * M_inv_b.transpose(), M_inv_b_N,
+       M_inv_b_N.transpose(), -N)
           .finished();
 
-  const Matrix86s yc = Lyy_inv * d->Lyc;
-  const Matrix86s yr = Lyy_inv * d->Lyr;
   const Matrix812s Lyth =
       (Matrix812s() << d->Lyc.template leftCols<3>(),
        d->Lyr.template leftCols<3>(), d->Lyc.template rightCols<3>(),
        d->Lyr.template rightCols<3>())
           .finished();
 
-  const Matrix812s yth = Lyy_inv * Lyth;
+  const Matrix812s yth = -Lyy_inv * Lyth;
 
   const Matrix312s dx1 = yth.template topRows<3>();
   const Matrix312s dx2 = yth.template middleRows<3>(3);
