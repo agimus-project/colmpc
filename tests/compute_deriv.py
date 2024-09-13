@@ -274,7 +274,6 @@ def compute_d_d_dot_dq_dq_dot(rmodel, gmodel, q, vq, idg1, idg2):
     )
 
     dist_dot = Ldot / distance
-
     # theta = (c1,c2,r1,r2)
     theta_dot = r_[v1, w1, v2, w2]
 
@@ -357,7 +356,6 @@ def compute_d_d_dot_dq_dq_dot(rmodel, gmodel, q, vq, idg1, idg2):
     assert np.allclose(nu2.vector, J2 @ vq)
 
     dtheta_dq = r_[J1, J2]
-
     assert np.allclose(dtheta_dq @ vq, theta_dot)
 
     dtheta_dot_dqdot = r_[J1, J2]
@@ -377,11 +375,11 @@ def compute_d_d_dot_dq_dq_dot(rmodel, gmodel, q, vq, idg1, idg2):
     inLWA2_dw2_dq = R2 @ in2_dnu2_dq[3:]
 
     dtheta_dot_dq = r_[inLWA1_dv1_dq, inLWA1_dw1_dq, inLWA2_dv2_dq, inLWA2_dw2_dq]
-
     # TODO: here a 0* is needed. WHHHHYYYYYYYYYYYYYYYYYYYYY!
 
     d_dist_dot_dq = (
         d_dist_dot_dtheta @ dtheta_dq + d_dist_dot_dtheta_dot @ dtheta_dot_dq
     )
     d_dist_dot_dqdot = d_dist_dot_dtheta_dot @ dtheta_dot_dqdot
+    # print(f"ddistdotdqdot {d_dist_dot_dqdot}")
     return d_dist_dot_dq, d_dist_dot_dqdot
