@@ -1,5 +1,5 @@
-from pinocchio import visualize
 import meshcat
+from pinocchio import visualize
 
 
 def create_viewer(rmodel, cmodel, vmodel):
@@ -69,7 +69,6 @@ def add_sphere_to_viewer(viz, sphere_name, radius, position, color=int):
     )
 
 
-def display_closest_points(viz, cp1, cp2, cp1_name: str, cp2_name:str):
-
+def display_closest_points(viz, cp1, cp2, cp1_name: str, cp2_name: str):
     add_sphere_to_viewer(viz, sphere_name=cp1_name, radius=0.05, position=cp1)
     add_sphere_to_viewer(viz, sphere_name=cp2_name, radius=0.05, position=cp2)
