@@ -25,11 +25,11 @@ void exposeResidualVelocityAvoidance() {
                boost::shared_ptr<pinocchio::GeometryModel>,
                const pinocchio::PairIndex,
                bp::optional<const double, const double, const double>>(
-          bp::args("self", "state", "nu", "geom_model", "pair_id", "di", "ds",
+          bp::args("self", "state", "nr", "geom_model", "pair_id", "di", "ds",
                    "ksi"),
           "Initialize the residual model.\n\n"
           ":param state: State of the multibody system\n"
-          ":param nu: Dimension of the control vector\n"
+          ":param nr: Dimension of the control vector\n"
           ":param geom_model: Pinocchio geometry model containing the "
           "collision pair\n"
           ":param pair_id: Index of the collision pair in the geometry "
@@ -39,18 +39,16 @@ void exposeResidualVelocityAvoidance() {
           ":param ds: Security distance, defaults to 1.0e-5\n"
           ":param ksi: Convergence speed coefficient, defaults to 1.0e-2\n"))
       .def("calc", &ResidualModelVelocityAvoidance::calc,
-           bp::args("self", "data", "x", "u"),
+           bp::args("self", "data", "x"),
            "Compute the residual.\n\n"
            ":param data: residual data\n"
-           ":param x: time-discrete state vector\n"
-           ":param u: time-discrete control input")
+           ":param x: time-discrete state vector\n")
       .def("calcDiff", &ResidualModelVelocityAvoidance::calcDiff,
-           bp::args("self", "data", "x", "u"),
+           bp::args("self", "data", "x"),
            "Compute the Jacobians of the residual.\n\n"
            "It assumes that calc has been run first.\n"
            ":param data: action data\n"
-           ":param x: time-discrete state vector\n"
-           ":param u: time-discrete control input\n")
+           ":param x: time-discrete state vector\n")
       .def("createData", &ResidualModelVelocityAvoidance::createData,
            bp::with_custodian_and_ward_postcall<0, 2>(),
            bp::args("self", "data"),

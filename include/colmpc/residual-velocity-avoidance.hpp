@@ -63,7 +63,7 @@ struct ResidualModelVelocityAvoidanceTpl
    * @brief Initialize the pair collision residual model
    *
    * @param[in] state       State of the multibody system
-   * @param[in] nu          Dimension of the control vector
+   * @param[in] nr          Dimension of residual vector
    * @param[in] geom_model  Pinocchio geometry model containing the collision
    * pair
    * @param[in] pair_id     Index of the collision pair in the geometry model
@@ -73,7 +73,7 @@ struct ResidualModelVelocityAvoidanceTpl
    */
 
   ResidualModelVelocityAvoidanceTpl(boost::shared_ptr<StateMultibody> state,
-                                    const std::size_t nu,
+                                    const std::size_t nr,
                                     boost::shared_ptr<GeometryModel> geom_model,
                                     const pinocchio::PairIndex pair_id,
                                     const Scalar di = 1.0e-2,
@@ -86,22 +86,18 @@ struct ResidualModelVelocityAvoidanceTpl
    *
    * @param[in] data  Pair collision residual data
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
-   * @param[in] u     Control input \f$\mathbf{u}\in\mathbb{R}^{nu}\f$
    */
   virtual void calc(const boost::shared_ptr<ResidualDataAbstract> &data,
-                    const Eigen::Ref<const VectorXs> &x,
-                    const Eigen::Ref<const VectorXs> &u);
+                    const Eigen::Ref<const VectorXs> &x);
 
   /**
    * @brief Compute the derivatives of the pair collision residual
    *
    * @param[in] data  Pair collision residual data
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
-   * @param[in] u     Control input \f$\mathbf{u}\in\mathbb{R}^{nu}\f$
    */
   virtual void calcDiff(const boost::shared_ptr<ResidualDataAbstract> &data,
-                        const Eigen::Ref<const VectorXs> &x,
-                        const Eigen::Ref<const VectorXs> &u);
+                        const Eigen::Ref<const VectorXs> &x);
 
   virtual boost::shared_ptr<ResidualDataAbstract> createData(
       DataCollectorAbstract *const data);
@@ -152,7 +148,7 @@ struct ResidualModelVelocityAvoidanceTpl
   void set_ksi(const Scalar ksi);
 
  protected:
-  using Base::nu_;
+  using Base::nr_;
   using Base::state_;
   using Base::unone_;
   using Base::v_dependent_;

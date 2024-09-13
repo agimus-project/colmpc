@@ -154,14 +154,10 @@ class TestVelocityAvoidance(unittest.TestCase):
             # Create state vector
             x = np.concatenate((q, v))
 
-            self.velocity_avoidance_residual.calc(
-                self.residual_data, x, np.zeros(q.shape)
-            )
+            self.velocity_avoidance_residual.calc(self.residual_data, x)
 
             # Compute value of reference residual
-            test_residual_result = self.test_residual.calc(
-                self.residual_data, x, np.zeros(q.shape)
-            )
+            test_residual_result = self.test_residual.calc(self.residual_data, x)
 
             self.assertAlmostEqual(
                 self.residual_data.r[0],
@@ -191,22 +187,16 @@ class TestVelocityAvoidance(unittest.TestCase):
             x = np.concatenate((q, v))
 
             # Compute exact derivative
-            self.velocity_avoidance_residual.calc(
-                self.residual_data, x, np.zeros(q.shape)
-            )
-            self.velocity_avoidance_residual.calcDiff(
-                self.residual_data, x, np.zeros(q.shape)
-            )
+            self.velocity_avoidance_residual.calc(self.residual_data, x)
+            self.velocity_avoidance_residual.calcDiff(self.residual_data, x)
 
-            Rx_py = self.test_residual.calcDiff(
-                self.residual_data, x, np.zeros(q.shape)
-            )
+            Rx_py = self.test_residual.calcDiff(self.residual_data, x)
 
             np.testing.assert_allclose(
                 self.residual_data.Rx,
                 Rx_py,
-                rtol=1e-9,
-                atol=1e-9,
+                rtol=1e-14,
+                atol=1e-14,
                 err_msg="Result missmatch in function ``calcDiff`` "
                 "between C++ implementation and python implementation!.",
             )

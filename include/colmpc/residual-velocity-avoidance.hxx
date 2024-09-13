@@ -17,11 +17,11 @@ using namespace crocoddyl;
 
 template <typename Scalar>
 ResidualModelVelocityAvoidanceTpl<Scalar>::ResidualModelVelocityAvoidanceTpl(
-    boost::shared_ptr<StateMultibody> state, const std::size_t nu,
+    boost::shared_ptr<StateMultibody> state, const std::size_t nr,
     boost::shared_ptr<GeometryModel> geom_model,
     const pinocchio::PairIndex pair_id, const Scalar di, const Scalar ds,
     const Scalar ksi)
-    : Base(state, 1, nu, true, true, false),
+    : Base(state, nr, true, true, false),
       pin_model_(*state->get_pinocchio()),
       geom_model_(geom_model),
       pair_id_(pair_id),
@@ -43,7 +43,7 @@ ResidualModelVelocityAvoidanceTpl<
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
     const boost::shared_ptr<ResidualDataAbstract> &data,
-    const Eigen::Ref<const VectorXs> &, const Eigen::Ref<const VectorXs> &) {
+    const Eigen::Ref<const VectorXs> &) {
   Data *d = static_cast<Data *>(data.get());
 
   // clear the hppfcl results
@@ -109,7 +109,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
     const boost::shared_ptr<ResidualDataAbstract> &data,
-    const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
+    const Eigen::Ref<const VectorXs> &x) {
   Data *d = static_cast<Data *>(data.get());
 
   const std::size_t nq = pin_model_.nq;
