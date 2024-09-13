@@ -102,7 +102,8 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
 
   d->Ldot = d->x_diff.dot(v1 - v2) - d->x_diff_cross_x1_c1_diff.dot(w1) +
             d->x_diff_cross_x2_c2_diff.dot(w2);
-  data->r[0] = (d->Ldot / d->distance) + ksi_ * (d->distance - ds_) / (di_ - ds_);
+  data->r[0] =
+      (d->Ldot / d->distance) + ksi_ * (d->distance - ds_) / (di_ - ds_);
 }
 
 template <typename Scalar>
