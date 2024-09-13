@@ -179,9 +179,9 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
 
   // Optimized Lyy explicit inversion
   // Inversion is done as inversion of a block matrix in a form
-  // |  M   b.T |-1   | M^-1 + M^-1 b N b^T M^-1   -N M^-1 b |
-  // |          |   = |                                      |
-  // |  b    0  |     |      (-N M^-1 b)^T              N    |
+  // |  M   b.T |-1   | M^-1 - M^-1 b N b^T M^-1   N M^-1 b |
+  // |          |   = |                                     |
+  // |  b    0  |     |      (N M^-1 b)^T             -N    |
   // Where N = (b^T M^-1 b)^-1
 
   // Invert upper left block of Lyy matrix
@@ -233,8 +233,8 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
 
   const Matrix812s yth = -Lyy_inv * Lyth;
 
-  const Matrix312s dx1 = yth.template topRows<3>();
-  const Matrix312s dx2 = yth.template middleRows<3>(3);
+  const Matrix312s &dx1 = yth.template topRows<3>();
+  const Matrix312s &dx2 = yth.template middleRows<3>(3);
 
   // Precompute difference of vectors
   const Matrix312s dx_diff = dx1 - dx2;
