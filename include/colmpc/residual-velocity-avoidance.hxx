@@ -265,7 +265,6 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Vector3s &p1 = d->pinocchio->oMf[geom_1.parentFrame].translation();
   d->f1Mp1.translation(x1 - p1);
   d->jacobian1.noalias() = d->f1Mp1.toActionMatrixInverse() * d->J1;
-  std::cout << d_dist_dot_dqdot << std::endl << std::flush;
 
   const Vector3s &p2 = d->pinocchio->oMf[geom_2.parentFrame].translation();
   d->f2Mp2.translation(x2 - p2);
