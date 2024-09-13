@@ -17,11 +17,11 @@ using namespace crocoddyl;
 
 template <typename Scalar>
 ResidualModelVelocityAvoidanceTpl<Scalar>::ResidualModelVelocityAvoidanceTpl(
-    boost::shared_ptr<StateMultibody> state, const std::size_t nr,
+    boost::shared_ptr<StateMultibody> state,
     boost::shared_ptr<GeometryModel> geom_model,
     const pinocchio::PairIndex pair_id, const Scalar di, const Scalar ds,
     const Scalar ksi)
-    : Base(state, 1, nr, true, true, false),
+    : Base(state, 1, true, true, false),
       pin_model_(*state->get_pinocchio()),
       geom_model_(geom_model),
       pair_id_(pair_id),

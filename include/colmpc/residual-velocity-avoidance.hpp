@@ -73,7 +73,6 @@ struct ResidualModelVelocityAvoidanceTpl
    */
 
   ResidualModelVelocityAvoidanceTpl(boost::shared_ptr<StateMultibody> state,
-                                    const std::size_t nr,
                                     boost::shared_ptr<GeometryModel> geom_model,
                                     const pinocchio::PairIndex pair_id,
                                     const Scalar di = 1.0e-2,

@@ -125,7 +125,7 @@ class TestVelocityAvoidance(unittest.TestCase):
 
         # Initialize C++ implementation
         cls.velocity_avoidance_residual = ResidualModelVelocityAvoidance(
-            cls.state, 7, cls.cmodel, 0, ksi=1, di=5e-2, ds=1e-4
+            cls.state, cls.cmodel, 0, ksi=1, di=5e-2, ds=1e-4
         )
         cls.residual_data = cls.velocity_avoidance_residual.createData(shared_data)
 
