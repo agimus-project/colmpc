@@ -1,20 +1,19 @@
 import unittest
 
 import crocoddyl
-import hppfcl
 import numdifftools as nd
 import numpy as np
 import pinocchio as pin
+from compute_deriv import (
+    compute_d_d_dot_dq_dq_dot,
+    compute_d_dist_dq,
+    compute_ddot,
+    compute_dist,
+)
 from scenes import Scene
 from wrapper_panda import PandaWrapper
 
-from colmpc import ResidualDataVelocityAvoidance, ResidualModelVelocityAvoidance
-from compute_deriv import (
-    compute_ddot,
-    compute_d_d_dot_dq_dq_dot,
-    compute_dist,
-    compute_d_dist_dq,
-)
+from colmpc import ResidualModelVelocityAvoidance
 
 np.set_printoptions(precision=7, linewidth=350, suppress=True, threshold=1e6)
 
@@ -62,7 +61,6 @@ class TestResidualModelVelocityAvoidance(crocoddyl.ResidualModelAbstract):
         self.ds = ds
 
     def f(self, x, u=None):
-
         d_dot = compute_ddot(
             self._pinocchio, self._geom_model, x[:7], x[7:], self.idg1, self.idg2
         )
@@ -76,7 +74,6 @@ class TestResidualModelVelocityAvoidance(crocoddyl.ResidualModelAbstract):
         return self.f(x, u)
 
     def calcDiff(self, data, x, u=None):
-
         ddistdot_dq, ddistdot_dq_dot = compute_d_d_dot_dq_dq_dot(
             self._pinocchio, self._geom_model, x[:7], x[7:], self.idg1, self.idg2
         )

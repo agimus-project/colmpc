@@ -253,14 +253,14 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
           pinocchio::skew(v2) * R2 * d->in2_dnu2_dqdot.template bottomRows<3>(),
       R2 * d->in2_dnu2_dq.template bottomRows<3>();
 
-
   const Vector12s d_dist_dot_dtheta_dot = dL_dtheta * distance_inv;
   d->d_dist_dot_dq.noalias() =
       d_dist_dot_dtheta.transpose() * d->d_theta_dq +
       d_dist_dot_dtheta_dot.transpose() * d->d_theta_dot_dq;
 
   const auto &dtheta_dot_dqdot = d->d_theta_dq;
-  const VectorXs d_dist_dot_dqdot = d_dist_dot_dtheta_dot.transpose() * dtheta_dot_dqdot;
+  const VectorXs d_dist_dot_dqdot =
+      d_dist_dot_dtheta_dot.transpose() * dtheta_dot_dqdot;
   // Transport the jacobian of frame 1 into the jacobian associated to x1
   const Vector3s &p1 = d->pinocchio->oMf[geom_1.parentFrame].translation();
   d->f1Mp1.translation(x1 - p1);
