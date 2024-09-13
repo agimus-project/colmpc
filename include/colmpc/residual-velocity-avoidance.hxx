@@ -207,7 +207,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
 
   const Matrix3s x_diff_skew = pinocchio::skew(d->x_diff);
 
-  Matrix1212s ddL_dtheta2;
+  Matrix12s ddL_dtheta2;
   // Initialize matrix
   ddL_dtheta2 << dx_diff, -x_diff_skew * dx1 + x1_c1_diff_skew * dx_diff,
       -dx_diff, x_diff_skew * dx2 - x2_c2_diff_skew * dx_diff;

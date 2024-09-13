@@ -56,9 +56,9 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef Eigen::Matrix<Scalar, 8, 12> Matrix812s;
   typedef Eigen::Matrix<Scalar, 3, 6> Matrix36s;
   typedef Eigen::Matrix<Scalar, 3, 12> Matrix312s;
-  typedef Eigen::Matrix<Scalar, 12, 12> Matrix1212s;
-  typedef Eigen::Matrix<Scalar, 6, -1> Matrix6xLike;
-  typedef Eigen::Matrix<Scalar, 12, -1> Matrix12xLike;
+  typedef Eigen::Matrix<Scalar, 12, 12> Matrix12s;
+  typedef Eigen::Matrix<Scalar, 6, Eigen::Dynamic> Matrix6xLike;
+  typedef Eigen::Matrix<Scalar, 12, Eigen::Dynamic> Matrix12xLike;
   /**
    * @brief Initialize the pair collision residual model
    *
