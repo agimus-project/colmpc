@@ -5,7 +5,6 @@ import crocoddyl
 import mim_solvers
 from numpy import r_, c_, eye
 from wrapper_panda import PandaWrapper
-from viewer import create_viewer, add_sphere_to_viewer, add_cube_to_viewer
 np.set_printoptions(precision=4, linewidth=350, suppress=True,threshold=1e6)
 
 # from VelocityResidual import ResidualModelVelocityAvoidance
@@ -77,12 +76,6 @@ gmodel.addCollisionPair(
                     gmodel.getGeometryId("el1"),
                     gmodel.getGeometryId("el2"),
                 ))
-#### Creating the visualizer
-viz = create_viewer(rmodel, gmodel, vmodel)
-
-viz.display(INITIAL_CONFIG)
-add_sphere_to_viewer(viz, "goal", 5e-2, TARGET_POSE.translation, color=100000)
-
 
 #### Creating the OCP 
 
@@ -228,10 +221,36 @@ US_init = ddp.problem.quasiStatic(XS_init[:-1])
 ddp.solve(XS_init, US_init, 100)
 
 
-while True:
-    for i,xs in enumerate(ddp.xs):
-        q = np.array(xs[:7].tolist())
-        pin.framesForwardKinematics(rmodel, rdata, q)
-        add_cube_to_viewer(viz, "vcolmpc" + str(i), [2e-2,2e-2, 2e-2], rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation, color=100000000)
-        viz.display(np.array(xs[:7].tolist()))
-        input()
+# while True:
+    # for i,xs in enumerate(ddp.xs):
+        # q = np.array(xs[:7].tolist())
+        # pin.framesForwardKinematics(rmodel, rdata, q)
+        # add_cube_to_viewer(viz, "vcolmpc" + str(i), [2e-2,2e-2, 2e-2], rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation, color=100000000)
+        # viz.display(np.array(xs[:7].tolist()))
+        # input()
+d = []
+for i,xs in enumerate(ddp.xs):
+    q = np.array(xs[:7].tolist())
+    pin.framesForwardKinematics(rmodel, rdata, q)
+    pin.updateGeometryPlacements(rmodel, rdata, gmodel, gdata, q)
+           
+    req = hppfcl.DistanceRequest()
+    req.gjk_max_iterations = 20000
+    req.abs_err = 0
+    req.gjk_tolerance = 1e-9
+    res = hppfcl.DistanceResult()
+    distance = hppfcl.distance(
+        elips1,
+        gdata.oMg[idg1],
+        elips2,
+        gdata.oMg[idg2],
+        req,
+        res,
+    )
+    d.append(distance)
+
+import matplotlib.pyplot as plt
+
+plt.plot(d)
+plt.plot([0]*len(d))
+plt.show()
