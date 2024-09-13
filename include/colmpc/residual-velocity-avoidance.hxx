@@ -243,10 +243,12 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
                                          d->in2_dnu2_dq, d->in2_dnu2_dqdot);
 
   // Rewrite data to d_theta_dot_dq vector. Only rows 0:3 and 6:9 are non zero
-  d->d_theta_dot_dq << 
-      R1 * d->in1_dnu1_dq.template topRows<3>() - pinocchio::skew(v1) * R1 * d->in1_dnu1_dqdot.template bottomRows<3>(),
+  d->d_theta_dot_dq << R1 * d->in1_dnu1_dq.template topRows<3>() -
+                           pinocchio::skew(v1) * R1 *
+                               d->in1_dnu1_dqdot.template bottomRows<3>(),
       R1 * d->in1_dnu1_dq.template bottomRows<3>(),
-      R2 * d->in2_dnu2_dq.template topRows<3>() - pinocchio::skew(v2) * R2 * d->in2_dnu2_dqdot.template bottomRows<3>(),
+      R2 * d->in2_dnu2_dq.template topRows<3>() -
+          pinocchio::skew(v2) * R2 * d->in2_dnu2_dqdot.template bottomRows<3>(),
       R2 * d->in2_dnu2_dq.template bottomRows<3>();
 
   const Vector12s d_dist_dot_dtheta_dot = dL_dtheta * distance_inv;
@@ -271,7 +273,9 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
       d->d_dist_dot_dq - (d->J * ksi_ / (di_ - ds_));
   // Compute and store d_dist_dot_dqdot
   const Matrix12xLike &dtheta_dot_dqdot = d->d_theta_dq;
-  d->ddistdot_dq_val.bottomRows(nq).noalias() = d_dist_dot_dtheta_dot.transpose() * dtheta_dot_dqdot;;
+  d->ddistdot_dq_val.bottomRows(nq).noalias() =
+      d_dist_dot_dtheta_dot.transpose() * dtheta_dot_dqdot;
+  ;
 
   data->Rx = d->ddistdot_dq_val;
 }
