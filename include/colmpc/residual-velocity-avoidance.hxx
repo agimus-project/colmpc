@@ -21,7 +21,7 @@ ResidualModelVelocityAvoidanceTpl<Scalar>::ResidualModelVelocityAvoidanceTpl(
     boost::shared_ptr<GeometryModel> geom_model,
     const pinocchio::PairIndex pair_id, const Scalar di, const Scalar ds,
     const Scalar ksi)
-    : Base(state, nr, true, true, false),
+    : Base(state, 1, nr, true, true, false),
       pin_model_(*state->get_pinocchio()),
       geom_model_(geom_model),
       pair_id_(pair_id),
@@ -112,9 +112,10 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
     const Eigen::Ref<const VectorXs> &x) {
   Data *d = static_cast<Data *>(data.get());
 
-  const std::size_t nq = pin_model_.nq;
+  const std::size_t nq = state_->get_nq();
+  const std::size_t nv = state_->get_nv();
   d->q = x.head(nq);
-  d->v = x.tail(nq);
+  d->v = x.tail(nv);
 
   // Create labels for geometries
   const auto &cp = geom_model_->collisionPairs[pair_id_];
@@ -274,10 +275,10 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
       d->d_dist_dot_dq - (d->J * ksi_ / (di_ - ds_));
   // Compute and store d_dist_dot_dqdot
   const Matrix12xLike &dtheta_dot_dqdot = d->d_theta_dq;
-  d->ddistdot_dq_val.bottomRows(nq).noalias() =
+  d->ddistdot_dq_val.bottomRows(nv).noalias() =
       d_dist_dot_dtheta_dot.transpose() * dtheta_dot_dqdot;
 
-  data->Rx = d->ddistdot_dq_val;
+  data->Rx = d->ddistdot_dq_val.transpose().eval();
 }
 template <typename Scalar>
 boost::shared_ptr<ResidualDataAbstractTpl<Scalar> >
