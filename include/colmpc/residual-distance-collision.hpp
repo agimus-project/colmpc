@@ -190,6 +190,9 @@ struct ResidualDataDistanceCollisionTpl
 
   pinocchio::SE3 oMg_id_1;
   pinocchio::SE3 oMg_id_2;
+
+  pinocchio::Motion m1;
+  pinocchio::Motion m2;
 };
 
 }  // namespace colmpc

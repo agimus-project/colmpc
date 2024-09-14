@@ -62,10 +62,35 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
   } else {
     d->oMg_id_2 = geom_2.placement;
   }
-
+  std::cout << "oMg_id_1.placement.tr" << d->oMg_id_1.translation() << std::endl;
+  std::cout << "oMg_id_2.placement.tr" << d->oMg_id_2.translation() << std::endl;
   d->r[0] = hpp::fcl::distance(
       geom_1.geometry.get(), toFclTransform3f(d->oMg_id_1),
       geom_2.geometry.get(), toFclTransform3f(d->oMg_id_2), d->req, d->res);
+
+  d->m1 =
+      pinocchio::getFrameVelocity(pin_model_, *d->pinocchio, geom_1.parentFrame,
+                            pinocchio::LOCAL_WORLD_ALIGNED);
+  d->m2 =
+      pinocchio::getFrameVelocity(pin_model_, *d->pinocchio, geom_2.parentFrame,
+                                  pinocchio::LOCAL_WORLD_ALIGNED);
+
+
+  // Crate labels for points
+  const Vector3s &x1 = d->res.nearest_points[0];
+  const Vector3s &x2 = d->res.nearest_points[1];
+  const Vector3s &c1 = d->oMg_id_1.translation();
+  const Vector3s &c2 = d->oMg_id_2.translation();
+  // Create labels for velocities
+  const Vector3s &v1 = d->m1.linear();
+  const Vector3s &v2 = d->m2.linear();
+  const Vector3s &w1 = d->m1.angular();
+  const Vector3s &w2 = d->m2.angular();
+
+  std::cout << "&v1" << v1 << std::endl; 
+  std::cout << "&v2" << v2 << std::endl; 
+  std::cout << "&w1" << w1 << std::endl; 
+  std::cout << "&w2" << w2 << std::endl; 
 }
 
 template <typename Scalar>
