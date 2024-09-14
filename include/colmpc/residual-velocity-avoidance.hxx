@@ -49,10 +49,9 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
   // clear the hppfcl results
   d->res.clear();
 
-  pinocchio::forwardKinematics(pin_model_, *d->pinocchio,
-                                                 d->q, d->v);
-  std::cout <<  "d->q" <<  d->q << std::endl;
-  std::cout <<  "d->v" <<  d->v << std::endl;
+  pinocchio::forwardKinematics(pin_model_, *d->pinocchio, d->q, d->v);
+  std::cout << "d->q" << d->q << std::endl;
+  std::cout << "d->v" << d->v << std::endl;
   const auto &cp = geom_model_->collisionPairs[pair_id_];
   const auto &geom_1 = geom_model_->geometryObjects[cp.first];
   const auto &geom_2 = geom_model_->geometryObjects[cp.second];
@@ -71,8 +70,10 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
   } else {
     d->oMg_id_2 = geom_2.placement;
   }
-  std::cout << "geom_1.placement.tr" << geom_1.placement.translation() << std::endl;
-  std::cout << "geom_2.placement.tr" << geom_2.placement.translation() << std::endl;
+  std::cout << "geom_1.placement.tr" << geom_1.placement.translation()
+            << std::endl;
+  std::cout << "geom_2.placement.tr" << geom_2.placement.translation()
+            << std::endl;
 
   // compute distance between geometries
   d->distance = hpp::fcl::distance(
@@ -98,10 +99,10 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
   const Vector3s &w1 = d->m1.angular();
   const Vector3s &w2 = d->m2.angular();
 
-  std::cout << "&v1" << v1 << std::endl; 
-  std::cout << "&v2" << v2 << std::endl; 
-  std::cout << "&w1" << w1 << std::endl; 
-  std::cout << "&w2" << w2 << std::endl; 
+  std::cout << "&v1" << v1 << std::endl;
+  std::cout << "&v2" << v2 << std::endl;
+  std::cout << "&w1" << w1 << std::endl;
+  std::cout << "&w2" << w2 << std::endl;
   std::cout << "toto" << std::endl << std::flush;
   // Precompute differences as they are often used;
   d->x_diff = x1 - x2;
@@ -142,17 +143,18 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Vector3s &w2 = d->m2.angular();
   // Convert sphere representation to a diagonal matrix
 
-// For geom_1
-// For geom_1
-const double radius1 = std::static_pointer_cast<hpp::fcl::Sphere>(geom_1.geometry)->radius;
-DiagonalMatrix3s D1;
-D1.diagonal() << 1.0 / radius1, 1.0 / radius1, 1.0 / radius1;
+  // For geom_1
+  // For geom_1
+  const double radius1 =
+      std::static_pointer_cast<hpp::fcl::Sphere>(geom_1.geometry)->radius;
+  DiagonalMatrix3s D1;
+  D1.diagonal() << 1.0 / radius1, 1.0 / radius1, 1.0 / radius1;
 
-// For geom_2
-const double radius2 = std::static_pointer_cast<hpp::fcl::Sphere>(geom_2.geometry)->radius;
-DiagonalMatrix3s D2;
-D2.diagonal() << 1.0 / radius2, 1.0 / radius2, 1.0 / radius2;
-
+  // For geom_2
+  const double radius2 =
+      std::static_pointer_cast<hpp::fcl::Sphere>(geom_2.geometry)->radius;
+  DiagonalMatrix3s D2;
+  D2.diagonal() << 1.0 / radius2, 1.0 / radius2, 1.0 / radius2;
 
   // const DiagonalMatrix3s D1 =
   //     1/ std::static_pointer_cast<hpp::fcl::Sphere>(geom_1.geometry)
