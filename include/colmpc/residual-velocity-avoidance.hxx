@@ -24,16 +24,30 @@ ResidualModelVelocityAvoidanceTpl<Scalar>::ResidualModelVelocityAvoidanceTpl(
     : Base(state, 1, true, true, true),
       pin_model_(*state->get_pinocchio()),
       geom_model_(geom_model),
-      pair_id_(pair_id),
       di_(di),
       ds_(ds),
       ksi_(ksi) {
   if (static_cast<pinocchio::FrameIndex>(geom_model_->collisionPairs.size()) <=
       pair_id) {
-    throw_pretty(
-        "Invalid argument: "
-        << "the pair index is wrong (it does not exist in the geometry model)");
+    throw_pretty("Invalid argument: "
+                 << "the pair index is wrong "
+                 << "(it does not exist in the geometry model!)");
   }
+
+  if (di_ <= 0.0) {
+    throw_pretty("Invalid value '"
+                 << di_ << "' for parameter 'di'. Has to be positive!");
+  }
+  if (ds_ <= 0.0) {
+    throw_pretty("Invalid value '"
+                 << ds_ << "' for parameter 'ds'. Has to be positive!");
+  }
+  if (ksi_ <= 0.0) {
+    throw_pretty("Invalid value '"
+                 << ksi_ << "' for parameter 'ksi'. Has to be positive!");
+  }
+
+  set_pair_id(pair_id);
 }
 
 template <typename Scalar>
@@ -50,8 +64,6 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
   d->res.clear();
 
   pinocchio::forwardKinematics(pin_model_, *d->pinocchio, d->q, d->v);
-  std::cout << "d->q" << d->q << std::endl;
-  std::cout << "d->v" << d->v << std::endl;
   const auto &cp = geom_model_->collisionPairs[pair_id_];
   const auto &geom_1 = geom_model_->geometryObjects[cp.first];
   const auto &geom_2 = geom_model_->geometryObjects[cp.second];
@@ -114,6 +126,8 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
 
   d->Ldot = d->x_diff.dot(v1 - v2) - d->x_diff_cross_x1_c1_diff.dot(w1) +
             d->x_diff_cross_x2_c2_diff.dot(w2);
+  // Precompute inverse od distance for faster operations
+  d->distance_inv = 1.0 / d->distance;
   data->r[0] =
       (d->Ldot / d->distance) + ksi_ * (d->distance - ds_) / (di_ - ds_);
 }
@@ -141,43 +155,18 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Vector3s &v2 = d->m2.linear();
   const Vector3s &w1 = d->m1.angular();
   const Vector3s &w2 = d->m2.angular();
-  // Convert sphere representation to a diagonal matrix
-
-  // For geom_1
-  // For geom_1
-  const double radius1 =
-      std::static_pointer_cast<hpp::fcl::Sphere>(geom_1.geometry)->radius;
-  DiagonalMatrix3s D1;
-  D1.diagonal() << 1.0 / radius1, 1.0 / radius1, 1.0 / radius1;
-
-  // For geom_2
-  const double radius2 =
-      std::static_pointer_cast<hpp::fcl::Sphere>(geom_2.geometry)->radius;
-  DiagonalMatrix3s D2;
-  D2.diagonal() << 1.0 / radius2, 1.0 / radius2, 1.0 / radius2;
-
-  // const DiagonalMatrix3s D1 =
-  //     1/ std::static_pointer_cast<hpp::fcl::Sphere>(geom_1.geometry)
-  //       ->radius
-  //         .asDiagonal();
-  // const DiagonalMatrix3s D2 =
-  //     1 / std::static_pointer_cast<hpp::fcl::Sphere>(geom_2.geometry)
-  //       ->radius
-  //         .asDiagonal();
 
   // Store rotations of geometries in matrices
   const Matrix3s &R1 = d->oMg_id_1.rotation();
   const Matrix3s &R2 = d->oMg_id_2.rotation();
 
-  const Matrix3s A1 = R1 * D1 * D1 * R1.transpose();
-  const Matrix3s A2 = R2 * D2 * D2 * R2.transpose();
+  const Matrix3s A1 = R1 * D1_inv_pow_ * R1.transpose();
+  const Matrix3s A2 = R2 * D2_inv_pow_ * R2.transpose();
 
   const Scalar sol_lam1 = -d->x1_c1_diff.dot(d->x_diff);
   const Scalar sol_lam2 = d->x2_c2_diff.dot(d->x_diff);
 
-  // Precompute inverse od distance for faster operations
-  const Scalar distance_inv = 1.0 / d->distance;
-  const Scalar dist_dot = d->Ldot * distance_inv;
+  const Scalar dist_dot = d->Ldot * d->distance_inv;
 
   // Precompute components of the matrix that are repeating
   const Vector3s A1_x1_c1_diff = A1 * d->x1_c1_diff;
@@ -283,10 +272,10 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
       ddL_dtheta2.template block<3, 3>(9, 6) - x_diff_skew;
 
   // Compute (1 / distance)^2
-  const Scalar distance_inv_pow = distance_inv * distance_inv;
+  const Scalar distance_inv_pow = d->distance_inv * d->distance_inv;
   const Vector12s theta_dot = (Vector12s() << v1, w1, v2, w2).finished();
   const Vector12s d_dist_dot_dtheta =
-      ((theta_dot.transpose() * ddL_dtheta2) * distance_inv).transpose() -
+      ((theta_dot.transpose() * ddL_dtheta2) * d->distance_inv).transpose() -
       (dist_dot * distance_inv_pow * dL_dtheta);
 
   pinocchio::computeJointJacobians(pin_model_, *d->pinocchio, d->q);
@@ -317,7 +306,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
           pinocchio::skew(v2) * R2 * d->in2_dnu2_dqdot.template bottomRows<3>(),
       R2 * d->in2_dnu2_dq.template bottomRows<3>();
 
-  const Vector12s d_dist_dot_dtheta_dot = dL_dtheta * distance_inv;
+  const Vector12s d_dist_dot_dtheta_dot = dL_dtheta * d->distance_inv;
   d->d_dist_dot_dq.noalias() =
       d_dist_dot_dtheta.transpose() * d->d_theta_dq +
       d_dist_dot_dtheta_dot.transpose() * d->d_theta_dot_dq;
@@ -332,7 +321,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   d->jacobian2.noalias() = d->f2Mp2.toActionMatrixInverse() * d->J2;
 
   d->J.noalias() =
-      distance_inv * d->x_diff.transpose() *
+      d->distance_inv * d->x_diff.transpose() *
       (d->jacobian1.template topRows<3>() - d->jacobian2.template topRows<3>());
 
   d->ddistdot_dq_val.topRows(nq) =
@@ -367,6 +356,29 @@ pinocchio::PairIndex ResidualModelVelocityAvoidanceTpl<Scalar>::get_pair_id()
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::set_pair_id(
     const pinocchio::PairIndex pair_id) {
+  if (static_cast<pinocchio::FrameIndex>(geom_model_->collisionPairs.size()) <=
+      pair_id) {
+    throw_pretty("Invalid argument: "
+                 << "the pair index is wrong "
+                 << "(it does not exist in the geometry model!)");
+  }
+
+  const auto &cp = geom_model_->collisionPairs[pair_id];
+  try {
+    const auto &geom_1 = geom_model_->geometryObjects[cp.first];
+    D1_inv_pow_ = cast_geom_to_d(geom_1.geometry);
+  } catch (const std::runtime_error &e) {
+    throw_pretty("Error for geometry 1 in collision pair number '"
+                 << pair_id << "'! " << e.what());
+  }
+  try {
+    const auto &geom_2 = geom_model_->geometryObjects[cp.second];
+    D2_inv_pow_ = cast_geom_to_d(geom_2.geometry);
+  } catch (const std::runtime_error &e) {
+    throw_pretty("Error for geometry 2 in collision pair number '"
+                 << pair_id << "'! " << e.what());
+  }
+
   pair_id_ = pair_id;
 }
 
@@ -377,6 +389,10 @@ Scalar ResidualModelVelocityAvoidanceTpl<Scalar>::get_di() const {
 
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::set_di(const Scalar di) {
+  if (di <= 0.0) {
+    throw_pretty("Invalid value '" << di << "' for parameter 'di'."
+                                   << " Has to be positive!");
+  }
   di_ = di;
 }
 
@@ -387,6 +403,10 @@ Scalar ResidualModelVelocityAvoidanceTpl<Scalar>::get_ds() const {
 
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::set_ds(const Scalar ds) {
+  if (ds <= 0.0) {
+    throw_pretty("Invalid value '" << ds << "' for parameter 'ds'."
+                                   << " Has to be positive!");
+  }
   ds_ = ds;
 }
 
@@ -397,8 +417,34 @@ Scalar ResidualModelVelocityAvoidanceTpl<Scalar>::get_ksi() const {
 
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::set_ksi(const Scalar ksi) {
+  if (ksi <= 0.0) {
+    throw_pretty("Invalid value '" << ksi << "' for parameter 'ksi'."
+                                   << " Has to be positive!");
+  }
   ksi_ = ksi;
 }
+
+template <typename Scalar>
+inline typename ResidualModelVelocityAvoidanceTpl<Scalar>::DiagonalMatrix3s
+ResidualModelVelocityAvoidanceTpl<Scalar>::cast_geom_to_d(
+    const std::shared_ptr<hpp::fcl::CollisionGeometry> &geom) {
+  Vector3s D;
+  if (std::dynamic_pointer_cast<hpp::fcl::Ellipsoid>(geom) != nullptr) {
+    // Check for Ellipsoid
+    D = std::static_pointer_cast<hpp::fcl::Ellipsoid>(geom)->radii;
+  } else if (std::dynamic_pointer_cast<hpp::fcl::Sphere>(geom) != nullptr) {
+    // Check for Sphere
+    const double r = std::static_pointer_cast<hpp::fcl::Sphere>(geom)->radius;
+    D << r, r, r;
+  } else {
+    // No supported type was matched
+    std::stringstream ss;
+    ss << "Unsupported collision geometry type '" << typeid(*geom).name()
+       << "'!";
+    throw std::runtime_error(ss.str());
+  }
+  return D.array().sqrt().inverse().matrix().asDiagonal();
+};
 
 }  // namespace colmpc
 

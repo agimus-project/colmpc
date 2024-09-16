@@ -158,12 +158,22 @@ struct ResidualModelVelocityAvoidanceTpl
   using Base::v_dependent_;
 
  private:
+  /**
+   * @brief Evaluate type of geometry object and create corresponding D matrix
+   * @param[in] geom Collision geometry object to obtain D matrix
+   */
+  inline DiagonalMatrix3s cast_geom_to_d(
+      const std::shared_ptr<hpp::fcl::CollisionGeometry> &geom);
+
   typename StateMultibody::PinocchioModel
       pin_model_;  //!< Pinocchio model used for internal computations
   boost::shared_ptr<GeometryModel>
       geom_model_;  //!< Pinocchio geometry model containing collision pair
   pinocchio::PairIndex
       pair_id_;  //!< Index of the collision pair in geometry model
+
+  DiagonalMatrix3s D1_inv_pow_;
+  DiagonalMatrix3s D2_inv_pow_;
 
   Scalar di_;   //!< Distance at which the robot starts to slow down
   Scalar ds_;   //!< Security distance
@@ -285,6 +295,7 @@ struct ResidualDataVelocityAvoidanceTpl
 
   Scalar Ldot;
   Scalar distance;
+  Scalar distance_inv;
 
   Vector3s x_diff;
   Vector3s x1_c1_diff;
