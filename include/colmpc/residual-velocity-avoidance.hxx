@@ -128,7 +128,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const std::size_t nv = state_->get_nv();
   d->q = x.head(nq);
   d->v = x.tail(nv);
-
+  
   // Create labels for geometries
   const auto &cp = geom_model_->collisionPairs[pair_id_];
   const auto &geom_1 = geom_model_->geometryObjects[cp.first];
@@ -252,10 +252,8 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   ddL_dtheta2 << dx_diff, -x_diff_skew * dx1 + x1_c1_diff_skew * dx_diff,
       -dx_diff, x_diff_skew * dx2 - x2_c2_diff_skew * dx_diff;
   // Update only certain blocks of the matrix
-  ddL_dtheta2.template block<3, 3>(3, 0) =
-      ddL_dtheta2.template block<3, 3>(3, 0) + x_diff_skew;
-  ddL_dtheta2.template block<3, 3>(9, 6) =
-      ddL_dtheta2.template block<3, 3>(9, 6) - x_diff_skew;
+  ddL_dtheta2.template block<3, 3>(3, 0) += x_diff_skew;
+  ddL_dtheta2.template block<3, 3>(9, 6) -= x_diff_skew;
 
   // Compute (1 / distance)^2
   const Scalar distance_inv_pow = d->distance_inv * d->distance_inv;
@@ -283,13 +281,15 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
                                          geom_2.parentFrame, pinocchio::LOCAL,
                                          d->in2_dnu2_dq, d->in2_dnu2_dqdot);
 
-  // Rewrite data to d_theta_dot_dq vector. Only rows 0:3 and 6:9 are non zero
-  d->d_theta_dot_dq << R1 * d->in1_dnu1_dq.template topRows<3>() -
-                           pinocchio::skew(v1) * R1 *
-                               d->in1_dnu1_dqdot.template bottomRows<3>(),
-      R1 * d->in1_dnu1_dq.template bottomRows<3>(),
+  d->d_theta_dot_dq.template topRows<3>().noalias() =
+      R1 * d->in1_dnu1_dq.template topRows<3>() -
+      pinocchio::skew(v1) * R1 * d->in1_dnu1_dqdot.template bottomRows<3>();
+  d->d_theta_dot_dq.template middleRows<3>(3).noalias() =
+      R1 * d->in1_dnu1_dq.template bottomRows<3>();
+  d->d_theta_dot_dq.template middleRows<3>(6).noalias() =
       R2 * d->in2_dnu2_dq.template topRows<3>() -
-          pinocchio::skew(v2) * R2 * d->in2_dnu2_dqdot.template bottomRows<3>(),
+      pinocchio::skew(v2) * R2 * d->in2_dnu2_dqdot.template bottomRows<3>();
+  d->d_theta_dot_dq.template bottomRows<3>().noalias() =
       R2 * d->in2_dnu2_dq.template bottomRows<3>();
 
   const Vector12s d_dist_dot_dtheta_dot = dL_dtheta * d->distance_inv;
@@ -317,7 +317,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   d->ddistdot_dq_val.bottomRows(nv).noalias() =
       d_dist_dot_dtheta_dot.transpose() * dtheta_dot_dqdot;
 
-  data->Rx = d->ddistdot_dq_val.transpose().eval();
+  data->Rx = d->ddistdot_dq_val.transpose();
 }
 template <typename Scalar>
 boost::shared_ptr<ResidualDataAbstractTpl<Scalar> >
