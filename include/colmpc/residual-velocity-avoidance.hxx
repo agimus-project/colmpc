@@ -128,7 +128,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const std::size_t nv = state_->get_nv();
   d->q = x.head(nq);
   d->v = x.tail(nv);
-  
+
   // Create labels for geometries
   const auto &cp = geom_model_->collisionPairs[pair_id_];
   const auto &geom_1 = geom_model_->geometryObjects[cp.first];
