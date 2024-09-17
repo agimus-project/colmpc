@@ -6,8 +6,8 @@
 // All rights reserved.
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef COLMPC_RESIDUAL_HPP_
-#define COLMPC_RESIDUAL_HPP_
+#ifndef COLMPC_RESIDUAL_DISTANCE_COLLISION_HPP_
+#define COLMPC_RESIDUAL_DISTANCE_COLLISION_HPP_
 
 #include "colmpc/fwd.hpp"
 // include fwd first
@@ -198,4 +198,4 @@ struct ResidualDataDistanceCollisionTpl
 /* --- Details -------------------------------------------------------------- */
 /* --- Details -------------------------------------------------------------- */
 #include "colmpc/residual-distance-collision.hxx"
-#endif  // PINOCCHIO_WITH_HPP_FCL
+#endif  // COLMPC_RESIDUAL_DISTANCE_COLLISION_HPP_
