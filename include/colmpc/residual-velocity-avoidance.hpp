@@ -221,7 +221,6 @@ struct ResidualDataVelocityAvoidanceTpl
         jacobian2(6, model->get_state()->get_nq()),
         in1_dnu1_dq(6, model->get_state()->get_nq()),
         in2_dnu2_dq(6, model->get_state()->get_nq()),
-        d_theta2_dot_dq(6, model->get_state()->get_nq()),
         in1_dnu1_dqdot(6, model->get_state()->get_nq()),
         in2_dnu2_dqdot(6, model->get_state()->get_nq()),
         d_theta_dq(12, model->get_state()->get_nq()),
@@ -250,7 +249,6 @@ struct ResidualDataVelocityAvoidanceTpl
     jacobian2.setZero();
     in1_dnu1_dq.setZero();
     in2_dnu2_dq.setZero();
-    d_theta2_dot_dq.setZero();
     in1_dnu1_dqdot.setZero();
     in2_dnu2_dqdot.setZero();
     d_theta_dq.setZero();
@@ -260,12 +258,6 @@ struct ResidualDataVelocityAvoidanceTpl
     oMg_id_2.setIdentity();
     f1Mp1.setIdentity();
     f2Mp2.setIdentity();
-
-    // Set values to the parts of the matrix that never change
-    Lyy.setZero();
-    Lyy.template block<3, 3>(0, 3) = -Matrix3s::Identity();
-    Lyy.template block<3, 3>(3, 3) = -Matrix3s::Identity();
-    Lyy.template block<3, 3>(3, 0) = -Matrix3s::Identity();
 
     Lyc.setZero();
     Lyr.setZero();
@@ -318,13 +310,11 @@ struct ResidualDataVelocityAvoidanceTpl
   Matrix6xLike jacobian2;
   Matrix6xLike in1_dnu1_dq;
   Matrix6xLike in2_dnu2_dq;
-  Matrix6xLike d_theta2_dot_dq;
   Matrix6xLike in1_dnu1_dqdot;
   Matrix6xLike in2_dnu2_dqdot;
   Matrix12xLike d_theta_dq;
   Matrix12xLike d_theta_dot_dq;
 
-  Matrix8s Lyy;
   Matrix86s Lyc;
   Matrix86s Lyr;
 };

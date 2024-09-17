@@ -10,6 +10,13 @@
 #define COLMPC_RESIDUAL_VELOCITY_AVOIDANCE_HXX_
 #ifdef PINOCCHIO_WITH_HPP_FCL
 
+#define throw_on_nonpositive(val, name)                                  \
+  if (val <= 0.0) {                                                      \
+    throw_pretty("Invalid value '" << val << "' for parameter '" << name \
+                                   << "'."                               \
+                                   << " Has to be positive!");           \
+  }
+
 #include "colmpc/residual-velocity-avoidance.hpp"
 
 namespace colmpc {
@@ -33,20 +40,9 @@ ResidualModelVelocityAvoidanceTpl<Scalar>::ResidualModelVelocityAvoidanceTpl(
                  << "the pair index is wrong "
                  << "(it does not exist in the geometry model!)");
   }
-
-  if (di_ <= 0.0) {
-    throw_pretty("Invalid value '"
-                 << di_ << "' for parameter 'di'. Has to be positive!");
-  }
-  if (ds_ <= 0.0) {
-    throw_pretty("Invalid value '"
-                 << ds_ << "' for parameter 'ds'. Has to be positive!");
-  }
-  if (ksi_ <= 0.0) {
-    throw_pretty("Invalid value '"
-                 << ksi_ << "' for parameter 'ksi'. Has to be positive!");
-  }
-
+  throw_on_nonpositive(di_, "di");
+  throw_on_nonpositive(ds_, "ds");
+  throw_on_nonpositive(ksi_, "ksi");
   set_pair_id(pair_id);
 }
 
@@ -63,7 +59,6 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
   // clear the hppfcl results
   d->res.clear();
 
-  pinocchio::forwardKinematics(pin_model_, *d->pinocchio, d->q, d->v);
   const auto &cp = geom_model_->collisionPairs[pair_id_];
   const auto &geom_1 = geom_model_->geometryObjects[cp.first];
   const auto &geom_2 = geom_model_->geometryObjects[cp.second];
@@ -82,10 +77,6 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
   } else {
     d->oMg_id_2 = geom_2.placement;
   }
-  std::cout << "geom_1.placement.tr" << geom_1.placement.translation()
-            << std::endl;
-  std::cout << "geom_2.placement.tr" << geom_2.placement.translation()
-            << std::endl;
 
   // compute distance between geometries
   d->distance = hpp::fcl::distance(
@@ -111,11 +102,6 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
   const Vector3s &w1 = d->m1.angular();
   const Vector3s &w2 = d->m2.angular();
 
-  std::cout << "&v1" << v1 << std::endl;
-  std::cout << "&v2" << v2 << std::endl;
-  std::cout << "&w1" << w1 << std::endl;
-  std::cout << "&w2" << w2 << std::endl;
-  std::cout << "toto" << std::endl << std::flush;
   // Precompute differences as they are often used;
   d->x_diff = x1 - x2;
   d->x1_c1_diff = x1 - c1;
@@ -389,10 +375,7 @@ Scalar ResidualModelVelocityAvoidanceTpl<Scalar>::get_di() const {
 
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::set_di(const Scalar di) {
-  if (di <= 0.0) {
-    throw_pretty("Invalid value '" << di << "' for parameter 'di'."
-                                   << " Has to be positive!");
-  }
+  throw_on_nonpositive(di_, "di");
   di_ = di;
 }
 
@@ -407,6 +390,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::set_ds(const Scalar ds) {
     throw_pretty("Invalid value '" << ds << "' for parameter 'ds'."
                                    << " Has to be positive!");
   }
+  throw_on_nonpositive(ds_, "ds_");
   ds_ = ds;
 }
 
@@ -417,10 +401,7 @@ Scalar ResidualModelVelocityAvoidanceTpl<Scalar>::get_ksi() const {
 
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::set_ksi(const Scalar ksi) {
-  if (ksi <= 0.0) {
-    throw_pretty("Invalid value '" << ksi << "' for parameter 'ksi'."
-                                   << " Has to be positive!");
-  }
+  throw_on_nonpositive(ksi_, "ksi");
   ksi_ = ksi;
 }
 
@@ -443,7 +424,7 @@ ResidualModelVelocityAvoidanceTpl<Scalar>::cast_geom_to_d(
        << "'!";
     throw std::runtime_error(ss.str());
   }
-  return D.array().sqrt().inverse().matrix().asDiagonal();
+  return D.array().square().inverse().matrix().asDiagonal();
 };
 
 }  // namespace colmpc
