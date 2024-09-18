@@ -52,10 +52,12 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef typename MathBase::Vector3s Vector3s;
   typedef Eigen::DiagonalMatrix<Scalar, 3> DiagonalMatrix3s;
   typedef Eigen::Matrix<Scalar, 12, 1> Vector12s;
+  typedef Eigen::Matrix<Scalar, 3, 2> Matrix32s;
   typedef Eigen::Matrix<Scalar, 6, 6> Matrix6s;
   typedef Eigen::Matrix<Scalar, 8, 8> Matrix8s;
   typedef Eigen::Matrix<Scalar, 8, 6> Matrix86s;
   typedef Eigen::Matrix<Scalar, 8, 12> Matrix812s;
+  typedef Eigen::Matrix<Scalar, 12, 8> Matrix128s;
   typedef Eigen::Matrix<Scalar, 3, 6> Matrix36s;
   typedef Eigen::Matrix<Scalar, 6, 2> Matrix62s;
   typedef Eigen::Matrix<Scalar, 3, 12> Matrix312s;

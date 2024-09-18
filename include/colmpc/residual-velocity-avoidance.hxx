@@ -226,13 +226,23 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
        M_inv_b_N.transpose(), -N)
           .finished();
 
-  const Matrix812s Lyth =
-      (Matrix812s() << d->Lyc.template leftCols<3>(),
-       d->Lyr.template leftCols<3>(), d->Lyc.template rightCols<3>(),
-       d->Lyr.template rightCols<3>())
-          .finished();
+  // const Matrix812s Lyth =
+  //     (Matrix812s() << d->Lyc.template leftCols<3>(),
+  //      d->Lyr.template leftCols<3>(), d->Lyc.template rightCols<3>(),
+  //      d->Lyr.template rightCols<3>())
+  //         .finished();
 
-  const Matrix812s yth = -Lyy_inv * Lyth;
+  const Matrix3s X = pinocchio::skew(d->x_diff);
+  const Matrix3s &XC1 = x1_c1_diff_skew;
+  const Matrix3s &XC2 = x2_c2_diff_skew;
+
+  Matrix128s Lthy;
+  Lthy << Matrix3s::Identity(3, 3), -Matrix3s::Identity(3, 3),
+      Matrix32s::Zero(3, 2), -Matrix3s::Identity(3, 3),
+      Matrix3s::Identity(3, 3), Matrix32s::Zero(3, 2), -X + XC1, -XC1,
+      Matrix32s::Zero(3, 2), -XC2, X + XC2, Matrix32s::Zero(3, 2);
+
+  const Matrix812s yth = -Lyy_inv * Lthy.transpose();
 
   const Matrix312s &dx1 = yth.template topRows<3>();
   const Matrix312s &dx2 = yth.template middleRows<3>(3);

@@ -25,9 +25,9 @@ def compute_dist(rmodel, gmodel, q, vq, idg1, idg2):
     shape2 = gmodel.geometryObjects[idg2]
 
     req = hppfcl.DistanceRequest()
-    req.gjk_max_iterations = 20000
-    req.abs_err = 0
-    req.gjk_tolerance = 1e-9
+    # req.gjk_max_iterations = 20000
+    # req.abs_err = 0
+    # req.gjk_tolerance = 1e-9
     res = hppfcl.DistanceResult()
 
     distance = hppfcl.distance(
@@ -72,9 +72,9 @@ def compute_d_dist_dq(rmodel, gmodel, q: np.ndarray, vq, idg1, idg2):
         pin.LOCAL_WORLD_ALIGNED,
     )
     req = hppfcl.DistanceRequest()
-    req.gjk_max_iterations = 20000
-    req.abs_err = 0
-    req.gjk_tolerance = 1e-9
+    # req.gjk_max_iterations = 20000
+    # req.abs_err = 0
+    # req.gjk_tolerance = 1e-9
     res = hppfcl.DistanceResult()
     # Computing the distance
     distance = hppfcl.distance(
@@ -140,9 +140,9 @@ def compute_Ldot(rmodel, gmodel, q, vq, idg1, idg2):
     v2, w2 = nu2.linear, nu2.angular
 
     req = hppfcl.DistanceRequest()
-    req.gjk_max_iterations = 20000
-    req.abs_err = 0
-    req.gjk_tolerance = 1e-9
+    # req.gjk_max_iterations = 20000
+    # req.abs_err = 0
+    # req.gjk_tolerance = 1e-9
     res = hppfcl.DistanceResult()
     _ = hppfcl.distance(
         elips1,
@@ -191,9 +191,9 @@ def compute_ddot(rmodel, gmodel, q, vq, idg1, idg2):
     v2, w2 = nu2.linear, nu2.angular
 
     req = hppfcl.DistanceRequest()
-    req.gjk_max_iterations = 20000
-    req.abs_err = 0
-    req.gjk_tolerance = 1e-9
+    # req.gjk_max_iterations = 20000
+    # req.abs_err = 0
+    # req.gjk_tolerance = 1e-9
     res = hppfcl.DistanceResult()
     distance = hppfcl.distance(
         elips1,
@@ -252,9 +252,9 @@ def compute_d_d_dot_dq_dq_dot(rmodel, gmodel, q, vq, idg1, idg2):
     v2, w2 = nu2.linear, nu2.angular
 
     req = hppfcl.DistanceRequest()
-    req.gjk_max_iterations = 20000
-    req.abs_err = 0
-    req.gjk_tolerance = 1e-9
+    # req.gjk_max_iterations = 20000
+    # req.abs_err = 0
+    # req.gjk_tolerance = 1e-9
     res = hppfcl.DistanceResult()
     distance = hppfcl.distance(
         elips1,
@@ -317,8 +317,19 @@ def compute_d_d_dot_dq_dq_dot(rmodel, gmodel, q, vq, idg1, idg2):
         [r_[np.zeros(3), (sol_x2 - c2) @ A2 @ skew(sol_x2 - c2)]],
     ]
     Lyth = c_[Lyc[:, :3], Lyr[:, :3], Lyc[:, 3:], Lyr[:, 3:]]
+    I = np.eye(3)
+    Z = np.zeros((3,2))
+    X = skew(sol_x1 - sol_x2)
+    XC_1 = skew(sol_x1 - c1)
+    XC_2 = skew(sol_x2 - c2)
+    Lthy = r_[c_[I, -I, Z],
+              c_[-I, I, Z],
+              c_[-X + XC_1, -XC_1, Z],
+              c_[-XC_2, X + XC_2, Z]]
+    # print()
+    # print(Lthy)
 
-    yth = -np.linalg.inv(Lyy) @ Lyth
+    yth = -np.linalg.inv(Lyy) @ Lthy.T
 
     dx1 = yth[:3]
     dx2 = yth[3:6]
