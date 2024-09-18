@@ -47,14 +47,17 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef typename MathBase::VectorXs VectorXs;
   typedef typename MathBase::MatrixXs MatrixXs;
   typedef typename MathBase::Matrix3s Matrix3s;
+  typedef typename MathBase::Matrix2s Matrix2s;
   typedef typename MathBase::Matrix6xs Matrix6xs;
   typedef typename MathBase::Vector3s Vector3s;
   typedef Eigen::DiagonalMatrix<Scalar, 3> DiagonalMatrix3s;
   typedef Eigen::Matrix<Scalar, 12, 1> Vector12s;
+  typedef Eigen::Matrix<Scalar, 6, 6> Matrix6s;
   typedef Eigen::Matrix<Scalar, 8, 8> Matrix8s;
   typedef Eigen::Matrix<Scalar, 8, 6> Matrix86s;
   typedef Eigen::Matrix<Scalar, 8, 12> Matrix812s;
   typedef Eigen::Matrix<Scalar, 3, 6> Matrix36s;
+  typedef Eigen::Matrix<Scalar, 6, 2> Matrix62s;
   typedef Eigen::Matrix<Scalar, 3, 12> Matrix312s;
   typedef Eigen::Matrix<Scalar, 12, 12> Matrix12s;
   typedef Eigen::Matrix<Scalar, 6, Eigen::Dynamic> Matrix6xLike;
@@ -155,12 +158,22 @@ struct ResidualModelVelocityAvoidanceTpl
   using Base::v_dependent_;
 
  private:
+  /**
+   * @brief Evaluate type of geometry object and create corresponding D matrix
+   * @param[in] geom Collision geometry object to obtain D matrix
+   */
+  inline DiagonalMatrix3s cast_geom_to_d(
+      const std::shared_ptr<hpp::fcl::CollisionGeometry> &geom);
+
   typename StateMultibody::PinocchioModel
       pin_model_;  //!< Pinocchio model used for internal computations
   boost::shared_ptr<GeometryModel>
       geom_model_;  //!< Pinocchio geometry model containing collision pair
   pinocchio::PairIndex
       pair_id_;  //!< Index of the collision pair in geometry model
+
+  DiagonalMatrix3s D1_inv_pow_;
+  DiagonalMatrix3s D2_inv_pow_;
 
   Scalar di_;   //!< Distance at which the robot starts to slow down
   Scalar ds_;   //!< Security distance
@@ -208,7 +221,6 @@ struct ResidualDataVelocityAvoidanceTpl
         jacobian2(6, model->get_state()->get_nq()),
         in1_dnu1_dq(6, model->get_state()->get_nq()),
         in2_dnu2_dq(6, model->get_state()->get_nq()),
-        d_theta2_dot_dq(6, model->get_state()->get_nq()),
         in1_dnu1_dqdot(6, model->get_state()->get_nq()),
         in2_dnu2_dqdot(6, model->get_state()->get_nq()),
         d_theta_dq(12, model->get_state()->get_nq()),
@@ -237,7 +249,6 @@ struct ResidualDataVelocityAvoidanceTpl
     jacobian2.setZero();
     in1_dnu1_dq.setZero();
     in2_dnu2_dq.setZero();
-    d_theta2_dot_dq.setZero();
     in1_dnu1_dqdot.setZero();
     in2_dnu2_dqdot.setZero();
     d_theta_dq.setZero();
@@ -248,18 +259,8 @@ struct ResidualDataVelocityAvoidanceTpl
     f1Mp1.setIdentity();
     f2Mp2.setIdentity();
 
-    // Set values to the parts of the matrix that never change
-    Lyy.setZero();
-    Lyy.template block<3, 3>(0, 3) = -Matrix3s::Identity();
-    Lyy.template block<3, 3>(3, 3) = -Matrix3s::Identity();
-    Lyy.template block<3, 3>(3, 0) = -Matrix3s::Identity();
-
     Lyc.setZero();
     Lyr.setZero();
-
-    req.gjk_max_iterations = 20000;
-    req.abs_err = 0;
-    req.gjk_tolerance = 1e-9;
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
@@ -282,6 +283,7 @@ struct ResidualDataVelocityAvoidanceTpl
 
   Scalar Ldot;
   Scalar distance;
+  Scalar distance_inv;
 
   Vector3s x_diff;
   Vector3s x1_c1_diff;
@@ -304,13 +306,11 @@ struct ResidualDataVelocityAvoidanceTpl
   Matrix6xLike jacobian2;
   Matrix6xLike in1_dnu1_dq;
   Matrix6xLike in2_dnu2_dq;
-  Matrix6xLike d_theta2_dot_dq;
   Matrix6xLike in1_dnu1_dqdot;
   Matrix6xLike in2_dnu2_dqdot;
   Matrix12xLike d_theta_dq;
   Matrix12xLike d_theta_dot_dq;
 
-  Matrix8s Lyy;
   Matrix86s Lyc;
   Matrix86s Lyr;
 };
