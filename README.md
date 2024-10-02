@@ -33,7 +33,7 @@ HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : 
 - If you have a problem with ```FakeCollisionGeometry```, it is likely that the linking of Pinocchio with HPPFCL wasn't done properly. Verify that you have the right commits & the right compilation flags.
 - The main branch of HPPFCL doesn't compute well the closest points and thus, this repo needs to be built upon the devel branch. If it built but doesn't avoid collision, make sure that you didn't built the main branch.
 
-### For the MPC part:
+### For the OCP part:
 
 Create a meshcat-server by writting in a terminal ```meshcat-server```. Then, to see the example with hard constraints simply run in the main directory ```python examples/main_ocp.py -s i```, where i is the index of the scenario, going from 1 to 3.
 
