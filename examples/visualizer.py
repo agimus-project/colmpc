@@ -1,13 +1,12 @@
 # BSD 3-Clause License
-# 
+#
 # Copyright (C) 2024, LAAS-CNRS.
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
 
+import meshcat
 import numpy as np
 from pinocchio import visualize
-import meshcat
-
 
 RED = np.array([249, 136, 126, 125]) / 255
 RED_FULL = np.array([249, 136, 126, 255]) / 255
@@ -23,6 +22,7 @@ YELLOW_FULL = np.array([1, 1, 0, 1.0])
 
 BLACK = np.array([0, 0, 0, 0.5])
 BLACK_FULL = np.array([0, 0, 0, 1.0])
+
 
 def create_viewer(rmodel, cmodel, vmodel):
     viz = visualize.MeshcatVisualizer(
@@ -64,6 +64,7 @@ def add_sphere_to_viewer(viz, sphere_name, radius, position, color=int):
         meshcat.transformations.translation_matrix(position)
     )
 
+
 def add_cube_to_viewer(viz, cube_name, dim, position, color):
     """
     Adds a sphere to the Meshcat visualizer.
@@ -83,7 +84,7 @@ def add_cube_to_viewer(viz, cube_name, dim, position, color):
         # Sphere does not exist
         pass
     sphere_geom = meshcat.geometry.Box(dim)
-    sphere_material =  meshcat.geometry.MeshBasicMaterial(color=color)
+    sphere_material = meshcat.geometry.MeshBasicMaterial(color=color)
 
     viz.viewer[cube_name].set_object(sphere_geom, sphere_material)
     viz.viewer[cube_name].set_transform(

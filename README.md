@@ -5,9 +5,9 @@ It is composed of two different constraints:
 - The first one is **ResidualDistanceCollision**, defined in depths in this [paper](https://gepettoweb.laas.fr/articles/haffemayer2024.html).
 Simply, it is the distance between the closest points of the two objects in the collision pair given in input of the residual.
 - The second one is **ResidualModelVelocityAvoidance**, defined in depths in this [paper](https://gepettoweb.laas.fr/articles/haffemayer2025.html).
-Not only this residual takes the distance between the closest points of the two objects but their approach speed toward each other as well. 
+Not only this residual takes the distance between the closest points of the two objects but their approach speed toward each other as well.
 
-An in-depth comparison is [here](https://gepettoweb.laas.fr/articles/haffemayer2025.html) and a practical comparison is provided here along 3 different scenarios. 
+An in-depth comparison is [here](https://gepettoweb.laas.fr/articles/haffemayer2025.html) and a practical comparison is provided here along 3 different scenarios.
 
 ## Dependencies
 

@@ -1,36 +1,44 @@
 # BSD 3-Clause License
-# 
+#
 # Copyright (C) 2024, LAAS-CNRS.
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
 
-import os
 import argparse
+import os
 
+import create_ocp
 import numpy as np
 import pinocchio as pin
-
-from wrapper_panda import PandaWrapper
-from visualizer import create_viewer, add_sphere_to_viewer, add_cube_to_viewer
 from param_parsers import ParamParser
-import create_ocp
+from visualizer import add_cube_to_viewer, add_sphere_to_viewer, create_viewer
+from wrapper_panda import PandaWrapper
+
 
 ### Argument parser
 def scene_type(value):
     ivalue = int(value)
     if ivalue < 1 or ivalue > 3:
-        raise argparse.ArgumentTypeError(f"Scene must be an integer between 1 and 3. You provided {ivalue}.")
+        raise argparse.ArgumentTypeError(
+            f"Scene must be an integer between 1 and 3. You provided {ivalue}."
+        )
     return ivalue
+
 
 # Create the parser
 parser = argparse.ArgumentParser(description="Process scene argument.")
 
 # Add argument for scene
-parser.add_argument('--scene', '-s', type=scene_type, required=True, help="Scene number (must be 1, 2, or 3).")
+parser.add_argument(
+    "--scene",
+    "-s",
+    type=scene_type,
+    required=True,
+    help="Scene number (must be 1, 2, or 3).",
+)
 
 # Parse the arguments
 args = parser.parse_args()
-
 
 
 # Creating the robot
@@ -45,15 +53,13 @@ cmodel = pp.add_collisions(rmodel, cmodel)
 cdata = cmodel.createData()
 rdata = rmodel.createData()
 
-vis = create_viewer(
-    rmodel, cmodel, cmodel
-)
+vis = create_viewer(rmodel, cmodel, cmodel)
 
 # Generating the meshcat visualizer
-vis = create_viewer(
-    rmodel, cmodel, cmodel
+vis = create_viewer(rmodel, cmodel, cmodel)
+add_sphere_to_viewer(
+    vis, "goal", 5e-2, pp.get_target_pose().translation, color=0x006400
 )
-add_sphere_to_viewer(vis, "goal", 5e-2,  pp.get_target_pose().translation, color=0x006400)
 
 # OCP with distance constraints
 OCP_dist = create_ocp.create_ocp_distance(rmodel, cmodel, pp)
@@ -70,26 +76,26 @@ ocp_vel.solve(XS_init, US_init, 100)
 
 print("OCP with velocity constraints solved")
 for i, xs in enumerate(ocp_vel.xs):
-        q = np.array(xs[:7].tolist())
-        pin.framesForwardKinematics(rmodel, rdata, q)
-        add_cube_to_viewer(
-            vis,
-            "vcolmpc" + str(i),
-            [2e-2, 2e-2, 2e-2],
-            rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation,
-            color=100000000,
-        )
+    q = np.array(xs[:7].tolist())
+    pin.framesForwardKinematics(rmodel, rdata, q)
+    add_cube_to_viewer(
+        vis,
+        "vcolmpc" + str(i),
+        [2e-2, 2e-2, 2e-2],
+        rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation,
+        color=100000000,
+    )
 
 for i, xs in enumerate(OCP_dist.xs):
-        q = np.array(xs[:7].tolist())
-        pin.framesForwardKinematics(rmodel, rdata, q)
-        add_sphere_to_viewer(
-            vis,
-            "colmpc" + str(i),
-            2e-2,
-            rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation,
-            color=100000,
-        )
+    q = np.array(xs[:7].tolist())
+    pin.framesForwardKinematics(rmodel, rdata, q)
+    add_sphere_to_viewer(
+        vis,
+        "colmpc" + str(i),
+        2e-2,
+        rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation,
+        color=100000,
+    )
 while True:
     print("OCP with distance constraints")
     for q in OCP_dist.xs:
