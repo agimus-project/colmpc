@@ -1,3 +1,9 @@
+# BSD 3-Clause License
+# 
+# Copyright (C) 2024, LAAS-CNRS.
+# Copyright note valid unless otherwise stated in individual files.
+# All rights reserved.
+
 import yaml
 import numpy as np
 import pinocchio as pin
@@ -13,7 +19,6 @@ rmodel, cmodel, vmodel = robot_wrapper()
 pp = ParamParser("scenes.yaml", 3)
 
 cmodel = pp.add_collisions(rmodel, cmodel)
-print(cmodel)
 vis = create_viewer(
     rmodel, cmodel, cmodel
 )

@@ -1,3 +1,9 @@
+# BSD 3-Clause License
+# 
+# Copyright (C) 2024, LAAS-CNRS.
+# Copyright note valid unless otherwise stated in individual files.
+# All rights reserved.
+
 import numpy as np
 from pinocchio import visualize
 import meshcat
