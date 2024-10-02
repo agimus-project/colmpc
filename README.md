@@ -29,12 +29,9 @@ HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : 
 > [!NOTE]
 > Don't forget to switch to the right commits!
 
-## Usage
-Before trying the examples, test your hppfcl installation. To do this and make sure the hppfcl librairy works well on your computer, run in the test folder :
-``` python -m unittest```.
-
 ### Possible issue
-If you have a problem with ```FakeCollisionGeometry```, it is likely that the linking of Pinocchio with HPPFCL wasn't done properly. Verify that you have the right commits & the right compilation flags.
+- If you have a problem with ```FakeCollisionGeometry```, it is likely that the linking of Pinocchio with HPPFCL wasn't done properly. Verify that you have the right commits & the right compilation flags.
+- The main branch of HPPFCL doesn't compute well the closest points and thus, this repo needs to be built upon the devel branch. If it built but doesn't avoid collision, make sure that you didn't built the main branch.
 
 ### For the MPC part:
 
