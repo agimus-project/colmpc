@@ -1,14 +1,13 @@
 # COLMPC: Collision Avoidance for MPC
 
-This repo is mainly an addon residual for Crocoddyl for collision avoidance for trajectory optimisation and model predictive control (MPC).
+This repo is addon residuals for Crocoddyl for collision avoidance for trajectory optimisation and model predictive control (MPC).
+It is composed of two different constraints:
+- The first one is **ResidualDistanceCollision**, defined in depths in this [paper](https://gepettoweb.laas.fr/articles/haffemayer2024.html).
+Simply, it is the distance between the closest points of the two objects in the collision pair given in input of the residual.
+- The second one is **ResidualModelVelocityAvoidance**, defined in depths in this [paper](https://gepettoweb.laas.fr/articles/haffemayer2025.html).
+Not only this residual takes the distance between the closest points of the two objects but their approach speed toward each other as well. 
 
-Here's a video of the addon residual in a real time torque controlled 7-DoF manipulator robot:
-
-<div style="text-align: center;">
-  <a href="https://www.youtube.com/watch?v=81bagcv4PUc ">
-    <img src="https://img.youtube.com/vi/81bagcv4PUc/0.jpg" alt="Watch the video">
-  </a>
-</div>
+An in-depth comparison is [here](https://gepettoweb.laas.fr/articles/haffemayer2025.html) and a practical comparison is provided here along 3 different scenarios. 
 
 ## Dependencies
 
@@ -19,7 +18,6 @@ Here's a video of the addon residual in a real time torque controlled 7-DoF mani
 - [Crocoddyl](https://github.com/loco-3d/crocoddyl) (tag: v2.1.0) framework for the solver.
 
 ### For visualization:
-- [Pybullet](https://pybullet.org/wordpress/).
 - [Meshcat](https://github.com/meshcat-dev/meshcat-python).
 
 ### For the examples:
@@ -40,7 +38,7 @@ If you have a problem with ```FakeCollisionGeometry```, it is likely that the li
 
 ### For the MPC part:
 
-Create a meshcat-server by writting in a terminal ```meshcat-server```. Then, to see the example with hard constraints simply run in the main directory ```python examples/mpc_panda_reaching.py```. To compare it with the standard MPC without hard constraint but collision avoidance written as soft constraint, run  ```python examples/mpc_panda_reaching_soft_constraint.py```.
+Create a meshcat-server by writting in a terminal ```meshcat-server```. Then, to see the example with hard constraints simply run in the main directory ```python examples/main_ocp.py -s i```, where i is the index of the scenario, going from 1 to 3.
 
 
 As the code is still in developpement, the code is constantly moving and sometimes, examples do not work. Hence, do not hesitate to contact me at [ahaffemaye@laas.fr](mailto:ahaffemaye@laas.fr).
@@ -54,7 +52,16 @@ To cite **COLMPC** in your academic research, please use the following bibtex en
     booktitle={Ubiquitous Robots (UR)}
 	year = {2024},
 }
-```
 
-# Credits
-The examples are based on [the examples](https://github.com/machines-in-motion/minimal_examples_crocoddyl/tree/master) of Sebastien Kleff.
+@unpublished{haffemayer:hal-04707324,
+  TITLE = {{Collision Avoidance in Model Predictive Control using Velocity Damper}},
+  AUTHOR = {Haffemayer, Arthur and Jordana, Armand and de Matte{\"i}s, Ludovic and Wojciechowski, Krzysztof and Lamiraux, Florent and Mansard, Nicolas},
+  URL = {https://laas.hal.science/hal-04707324},
+  NOTE = {working paper or preprint},
+  YEAR = {2024},
+  MONTH = Sep,
+  PDF = {https://laas.hal.science/hal-04707324v1/file/ICRA_2025__1_-11.pdf},
+  HAL_ID = {hal-04707324},
+  HAL_VERSION = {v1},
+}
+```
