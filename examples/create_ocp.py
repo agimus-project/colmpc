@@ -1,14 +1,15 @@
 # BSD 3-Clause License
-# 
+#
 # Copyright (C) 2024, LAAS-CNRS.
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
 
-import pinocchio as pin
 import crocoddyl
-import colmpc as col
-import numpy as np
 import mim_solvers
+import numpy as np
+
+import colmpc as col
+
 
 def create_ocp_velocity(rmodel, gmodel, param_parser):
     # Stat and actuation model
@@ -36,10 +37,7 @@ def create_ocp_velocity(rmodel, gmodel, param_parser):
         param_parser.get_target_pose(),
     )
 
-
-    goalTrackingCost = crocoddyl.CostModelResidual(
-        state, framePlacementResidual
-    )
+    goalTrackingCost = crocoddyl.CostModelResidual(state, framePlacementResidual)
 
     # Obstacle cost with hard constraint
     runningConstraintModelManager = crocoddyl.ConstraintModelManager(
@@ -52,7 +50,12 @@ def create_ocp_velocity(rmodel, gmodel, param_parser):
 
     for col_idx, col_pair in enumerate(gmodel.collisionPairs):
         obstacleVelocityResidual = col.ResidualModelVelocityAvoidance(
-        state , gmodel , col_idx, param_parser.get_di(), param_parser.get_ds(),param_parser.get_ksi() 
+            state,
+            gmodel,
+            col_idx,
+            param_parser.get_di(),
+            param_parser.get_ds(),
+            param_parser.get_ksi(),
         )
         # Creating the inequality constraint
         constraint = crocoddyl.ConstraintModelResidual(
@@ -63,13 +66,10 @@ def create_ocp_velocity(rmodel, gmodel, param_parser):
         )
 
         # Adding the constraint to the constraint manager
-        runningConstraintModelManager.addConstraint(
-            "col_" + str(col_idx), constraint
-        )
+        runningConstraintModelManager.addConstraint("col_" + str(col_idx), constraint)
         terminalConstraintModelManager.addConstraint(
             "col_term_" + str(col_idx), constraint
         )
-
 
     # Adding costs to the models
     runningCostModel.addCost("stateReg", xRegCost, param_parser.get_W_xREG())
@@ -99,16 +99,10 @@ def create_ocp_velocity(rmodel, gmodel, param_parser):
     runningModel = crocoddyl.IntegratedActionModelEuler(
         running_DAM, param_parser.get_dt()
     )
-    terminalModel = crocoddyl.IntegratedActionModelEuler(
-        terminal_DAM, 0.0
-    )
+    terminalModel = crocoddyl.IntegratedActionModelEuler(terminal_DAM, 0.0)
 
-    runningModel.differential.armature = np.array(
-        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0]
-    )
-    terminalModel.differential.armature = np.array(
-        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0]
-    )
+    runningModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
+    terminalModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
 
     problem = crocoddyl.ShootingProblem(
         param_parser.get_X0(), [runningModel] * param_parser.get_T(), terminalModel
@@ -127,11 +121,12 @@ def create_ocp_velocity(rmodel, gmodel, param_parser):
     ocp.eps_rel = 0
 
     ocp.with_callbacks = True
-    
+
     return ocp
 
+
 def create_ocp_distance(rmodel, gmodel, param_parser):
-     # Stat and actuation model
+    # Stat and actuation model
     state = crocoddyl.StateMultibody(rmodel)
     actuation = crocoddyl.ActuationModelFull(state)
 
@@ -156,10 +151,7 @@ def create_ocp_distance(rmodel, gmodel, param_parser):
         param_parser.get_target_pose(),
     )
 
-
-    goalTrackingCost = crocoddyl.CostModelResidual(
-        state, framePlacementResidual
-    )
+    goalTrackingCost = crocoddyl.CostModelResidual(state, framePlacementResidual)
 
     # Obstacle cost with hard constraint
     runningConstraintModelManager = crocoddyl.ConstraintModelManager(
@@ -172,7 +164,7 @@ def create_ocp_distance(rmodel, gmodel, param_parser):
 
     for col_idx, col_pair in enumerate(gmodel.collisionPairs):
         obstacleDistanceResidual = col.ResidualDistanceCollision(
-        state ,7, gmodel, col_idx
+            state, 7, gmodel, col_idx
         )
         # Creating the inequality constraint
         constraint = crocoddyl.ConstraintModelResidual(
@@ -183,15 +175,12 @@ def create_ocp_distance(rmodel, gmodel, param_parser):
         )
 
         # Adding the constraint to the constraint manager
-        runningConstraintModelManager.addConstraint(
-            "col_" + str(col_idx), constraint
-        )
+        runningConstraintModelManager.addConstraint("col_" + str(col_idx), constraint)
         terminalConstraintModelManager.addConstraint(
             "col_term_" + str(col_idx), constraint
         )
 
-
-       # Adding costs to the models
+    # Adding costs to the models
     runningCostModel.addCost("stateReg", xRegCost, param_parser.get_W_xREG())
     runningCostModel.addCost("ctrlRegGrav", uRegCost, param_parser.get_W_uREG())
     runningCostModel.addCost(
@@ -219,16 +208,10 @@ def create_ocp_distance(rmodel, gmodel, param_parser):
     runningModel = crocoddyl.IntegratedActionModelEuler(
         running_DAM, param_parser.get_dt()
     )
-    terminalModel = crocoddyl.IntegratedActionModelEuler(
-        terminal_DAM, 0.0
-    )
+    terminalModel = crocoddyl.IntegratedActionModelEuler(terminal_DAM, 0.0)
 
-    runningModel.differential.armature = np.array(
-        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0]
-    )
-    terminalModel.differential.armature = np.array(
-        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0]
-    )
+    runningModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
+    terminalModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
 
     problem = crocoddyl.ShootingProblem(
         param_parser.get_X0(), [runningModel] * param_parser.get_T(), terminalModel
@@ -247,13 +230,12 @@ def create_ocp_distance(rmodel, gmodel, param_parser):
     ocp.eps_rel = 0
 
     ocp.with_callbacks = True
-    
+
     return ocp
 
 
-
 def create_ocp_nocol(rmodel, param_parser):
-     # Stat and actuation model
+    # Stat and actuation model
     state = crocoddyl.StateMultibody(rmodel)
     actuation = crocoddyl.ActuationModelFull(state)
 
@@ -278,12 +260,9 @@ def create_ocp_nocol(rmodel, param_parser):
         param_parser.get_target_pose(),
     )
 
+    goalTrackingCost = crocoddyl.CostModelResidual(state, framePlacementResidual)
 
-    goalTrackingCost = crocoddyl.CostModelResidual(
-        state, framePlacementResidual
-    )
-
-       # Adding costs to the models
+    # Adding costs to the models
     runningCostModel.addCost("stateReg", xRegCost, param_parser.get_W_xREG())
     runningCostModel.addCost("ctrlRegGrav", uRegCost, param_parser.get_W_uREG())
     runningCostModel.addCost(
@@ -309,16 +288,10 @@ def create_ocp_nocol(rmodel, param_parser):
     runningModel = crocoddyl.IntegratedActionModelEuler(
         running_DAM, param_parser.get_dt()
     )
-    terminalModel = crocoddyl.IntegratedActionModelEuler(
-        terminal_DAM, 0.0
-    )
+    terminalModel = crocoddyl.IntegratedActionModelEuler(terminal_DAM, 0.0)
 
-    runningModel.differential.armature = np.array(
-        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0]
-    )
-    terminalModel.differential.armature = np.array(
-        [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0]
-    )
+    runningModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
+    terminalModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
 
     problem = crocoddyl.ShootingProblem(
         param_parser.get_X0(), [runningModel] * param_parser.get_T(), terminalModel

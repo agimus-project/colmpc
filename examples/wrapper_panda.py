@@ -1,13 +1,13 @@
 # BSD 3-Clause License
-# 
+#
 # Copyright (C) 2024, LAAS-CNRS.
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
-from os.path import dirname, join, abspath
+from os.path import abspath, dirname, join
 
+import hppfcl
 import numpy as np
 import pinocchio as pin
-import hppfcl
 
 # This class is for unwrapping an URDF and converting it to a model. It is also possible to add objects in the model,
 # such as a ball at a specific position.
@@ -29,7 +29,7 @@ class PandaWrapper:
         """
 
         # Importing the model
-        pinocchio_model_dir = dirname((((str(abspath(__file__))))))
+        pinocchio_model_dir = dirname(str(abspath(__file__)))
         model_path = join(pinocchio_model_dir, "models")
         self._mesh_dir = join(model_path, "meshes")
         urdf_filename = "franka2.urdf"

@@ -6,7 +6,7 @@ scene1:
   dt: 0.05
 
   # Initial configuration
-  INITIAL_CONFIG: 
+  INITIAL_CONFIG:
     - -0.06709294
     - 1.35980773
     - -0.81605989
@@ -16,7 +16,7 @@ scene1:
     - -0.00456262
 
   # Initial velocity
-  INITIAL_VELOCITY: 
+  INITIAL_VELOCITY:
     - 0
     - 0
     - 0
@@ -90,7 +90,7 @@ scene2:
 
   # Control parameters
   ksi: 0.01
-  di: 0.01 
+  di: 0.01
   ds: 0.0001
 
   # Weights
@@ -123,7 +123,7 @@ scene2:
         type: "ellipsoid"
         translation: [0.2, 0.2, 0.9]
         orientation: [ 0.5, 0.5, -0.5, 0.5]
-        dim: [0.12, 0.06, 0.2]                
+        dim: [0.12, 0.06, 0.2]
 
   ROBOT_ELLIPSOIDS:
     el1:
@@ -190,6 +190,6 @@ scene3:
         translation: [0.1, 0.1, 1.2]
         orientation: [0.7071,0.7071, 0, 0]
         dim: [0.25, 0.1, 1.0]
-  
+
   collision_pairs:
   - [obstacle1, panda2_rightfinger_0]
