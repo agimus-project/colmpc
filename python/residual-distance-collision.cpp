@@ -17,7 +17,8 @@ void exposeResidualDistanceCollision() {
                const pinocchio::PairIndex>(
           bp::args("self", "state", "nu", "geom_model", "pair_id"),
           "Initialize the residual model.\n\n"
-          ":param state: state of the multibody system\n"
+          ":param state: State of the multibody system\n"
+          ":param nu: Dimension of the control vector\n"
           ":param geom_model: Pinocchio geometry model containing the "
           "collision pair\n"
           ":param pair_id: Index of the collision pair in the geometry "
@@ -60,8 +61,7 @@ void exposeResidualDistanceCollision() {
       boost::shared_ptr<ResidualDataDistanceCollision>>();
 
   bp::class_<ResidualDataDistanceCollision, bp::bases<ResidualDataAbstract>>(
-      "ResidualDataDistanceCollisionTpl",
-      "Data for vel collision residual.\n\n",
+      "ResidualDataDistanceCollision", "Data for vel collision residual.\n\n",
       bp::init<ResidualDistanceCollision*, DataCollectorAbstract*>(
           bp::args("self", "model", "data"),
           "Create vel collision residual data.\n\n"

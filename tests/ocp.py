@@ -1,5 +1,4 @@
 ## Class heavily inspired by the work of Sebastien Kleff : https://github.com/machines-in-motion/minimal_examples_crocoddyl
-from typing import Any
 
 import crocoddyl
 import mim_solvers
@@ -70,7 +69,7 @@ class OCPPandaReachingColWithMultipleCol:
         # Making sure that the frame exists
         assert self._endeff_frame <= len(self._rmodel.frames)
 
-    def __call__(self) -> Any:
+    def __call__(self) -> mim_solvers.SolverCSQP:
         "Setting up croccodyl OCP"
 
         # Stat and actuation model

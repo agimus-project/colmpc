@@ -1,5 +1,5 @@
-#ifndef __colmpc_python__
-#define __colmpc_python__
+#ifndef COLMPC_PYTHON_HPP_
+#define COLMPC_PYTHON_HPP_
 
 #include "colmpc/fwd.hpp"
 // include fwd first
@@ -9,8 +9,9 @@ namespace colmpc {
 namespace python {
 
 void exposeResidualDistanceCollision();
+void exposeResidualVelocityAvoidance();
 
 }  // namespace python
 }  // namespace colmpc
 
-#endif  // #ifndef __colmpc_python__
+#endif  // COLMPC_PYTHON_HPP_
