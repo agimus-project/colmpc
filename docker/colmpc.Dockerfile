@@ -10,7 +10,7 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     && pip install \
         meshcat \
         numdifftools
-        
+
 RUN git clone https://github.com/agimus-project/colmpc.git \
     && cd colmpc \
     && git checkout $COLMPC_COMMIT_HASH \

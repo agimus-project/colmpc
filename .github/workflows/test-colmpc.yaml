@@ -14,4 +14,4 @@ jobs:
       - name: Test the code in Docker
         # TODO fix test invoking
         # TODO make sure action fails with code in docker failing
-        run: docker container run colmpc:latest "python -m unittest colmpc/tests" 
+        run: docker container run colmpc:latest "python -m unittest colmpc/tests"
