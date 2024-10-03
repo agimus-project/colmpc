@@ -96,12 +96,13 @@ for i, xs in enumerate(OCP_dist.xs):
         rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation,
         color=100000,
     )
+print("Press enter to display the solution")
 while True:
-    print("OCP with distance constraints")
+    print("Trajectory of the OCP with distance constraints")
     for q in OCP_dist.xs:
         vis.display(q[:7])
         input()
-    print("OCP with velocity constraints")
+    print("Trajectory of the OCP with velocity constraints")
     for q in ocp_vel.xs:
         vis.display(q[:7])
         input()
