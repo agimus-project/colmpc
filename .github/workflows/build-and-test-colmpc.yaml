@@ -1,0 +1,50 @@
+---
+# TODO add docker tags based on git tags
+name: Build, Image
+on:
+  workflow_run:
+    workflows: ["Build Base Image"]
+    types:
+      - completed
+  push:
+    branches:
+      - "main"
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker with colmpc and test the implementation
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/colmpc.Dockerfile
+          tags: colmpc:latest
+          build-args: COLMPC_COMMIT_HASH=$GITHUB_SHA, MAKE_JOBS=4
+
+      - name: Login to GitHub Container Registry
+        # Push the latest image to registry only if running on main
+        if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Docker image
+        if: github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: colmpc:latest

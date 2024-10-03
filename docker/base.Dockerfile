@@ -21,5 +21,6 @@ RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     python3-scipy
 
 WORKDIR /src
-ADD src.sh .
-RUN ./src.sh /usr/local
+ADD docker/base.sh .
+RUN ./base.sh /usr/local \
+    && rm -rf *
