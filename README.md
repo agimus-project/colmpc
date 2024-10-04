@@ -35,7 +35,7 @@ HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : 
 
 ### For the OCP part:
 
-Create a meshcat-server by writting in a terminal ```meshcat-server```. Then, to see the example with hard constraints simply run in the main directory ```python examples/main_ocp.py -s i```, where i is the index of the scenario, going from 1 to 3.
+To see the different scenarios with collision avoidance simply run in the main directory ```python examples/main_ocp.py -s i```, where i is the index of the scenario, going from 1 to 3.
 
 
 As the code is still in developpement, the code is constantly moving and sometimes, examples do not work. Hence, do not hesitate to contact me at [ahaffemaye@laas.fr](mailto:ahaffemaye@laas.fr).
