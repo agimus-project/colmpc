@@ -22,132 +22,6 @@
         <box size="1.703 0.803 0.76"/>
       </geometry>
     </collision>
-    <!--visual>
-          <origin xyz="-0.61 0.2215 0.77"/>
-          <geometry>
-	    <box size="0.363 0.252 0.02"/>
-          </geometry>
-        </visual>
-        <collision>
-          <origin xyz="-0.61 0.2215 0.77"/>
-          <geometry>
-	    <box size="0.363 0.252 0.02"/>
-          </geometry>
-        </collision-->
-    <visual>
-      <origin xyz="0.6385 -0.1655 0.77"/>
-      <geometry>
-        <box size="0.3 0.3 0.02"/>
-      </geometry>
-    </visual>
-    <collision>
-      <origin xyz="0.6385 -0.1655 0.77"/>
-      <geometry>
-        <box size="0.3 0.3 0.02"/>
-      </geometry>
-    </collision>
-  </link>
-  <link name="wall_link_1">
-    <inertial>
-      <mass value="200"/>
-      <origin xyz="0 0 1."/>
-      <inertia ixx="50" ixy="0" ixz="0" iyy="50" iyz="0" izz="50"/>
-    </inertial>
-    <visual>
-      <origin xyz="0 0 1.0"/>
-      <geometry>
-        <box size="3.0 0.1 2.0"/>
-      </geometry>
-    </visual>
-    <collision>
-      <origin xyz="0 0 1.0"/>
-      <geometry>
-        <box size="3.0 0.1 2.0"/>
-      </geometry>
-    </collision>
-  </link>
-  <link name="wall_link_2">
-    <inertial>
-      <mass value="200"/>
-      <origin xyz="0 0 1."/>
-      <inertia ixx="50" ixy="0" ixz="0" iyy="50" iyz="0" izz="50"/>
-    </inertial>
-    <visual>
-      <origin xyz="0 0 1.0"/>
-      <geometry>
-        <box size="0.1 2.0 2.0"/>
-      </geometry>
-      <material name="lightGrey">
-        <color rgba="0.9 0.9 0.9 0.5"/>
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0 0 1.0"/>
-      <geometry>
-        <box size="0.1 2.0 2.0"/>
-      </geometry>
-    </collision>
-  </link>
-  <link name="wall_link_3">
-    <inertial>
-      <mass value="200"/>
-      <origin xyz="0 0 1."/>
-      <inertia ixx="50" ixy="0" ixz="0" iyy="50" iyz="0" izz="50"/>
-    </inertial>
-    <visual>
-      <origin xyz="0 0 1.0"/>
-      <geometry>
-        <box size="0.7 0.12 2.0"/>
-      </geometry>
-    </visual>
-    <collision>
-      <origin xyz="0 0 1.0"/>
-      <geometry>
-        <box size="0.7 0.12 2.0"/>
-      </geometry>
-    </collision>
-  </link>
-  <link name="pedestal">
-    <inertial>
-      <mass value="1."/>
-      <origin xyz="1.05 0.45 0.4625"/>
-      <inertia ixx=".01" ixy="0" ixz="0" iyy=".01" iyz="0" izz=".1"/>
-    </inertial>
-    <visual>
-      <origin xyz="0 0 0.4625"/>
-      <geometry>
-        <box size="0.25 0.25 0.925"/>
-      </geometry>
-    </visual>
-    <collision>
-      <origin xyz="0 0 0.4625"/>
-      <geometry>
-        <box size="0.25 0.25 0.925"/>
-      </geometry>
-    </collision>
-  </link>
-  <!-- Wrap panda1 robot into a box shaped obstacle -->
-  <link name="panda1_box">
-    <inertial>
-      <mass value="100"/>
-      <origin xyz="0 0 0"/>
-      <inertia ixx="25" ixy="0" ixz="0" iyy="25" iyz="0" izz="25"/>
-    </inertial>
-    <collision>
-      <origin xyz="0 0 0"/>
-      <geometry>
-        <box size="0.44 0.803 0.80"/>
-      </geometry>
-    </collision>
-    <visual>
-      <origin xyz="0 0 0"/>
-      <geometry>
-        <box size="0.44 0.803 0.80"/>
-      </geometry>
-      <material name="lightGrey">
-        <color rgba="0.9 0.9 0.9 0.5"/>
-      </material>
-    </visual>
   </link>
   <!-- Gazebo requires a joint to a link called "world" for statically mounted robots -->
   <link name="world">
@@ -157,7 +31,6 @@
        <inertia ixx="0.00" ixy="0.0" ixz="0.00015" iyy="0.0"  iyz="0.0" izz="0.0"/>
     </inertial>
   </link>
-
   <joint name="world_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <parent link="world"/>
@@ -167,31 +40,6 @@
     <origin rpy="0 0 3.141592653589793" xyz="0.563 -0.1655 .78"/>
     <parent link="support_link"/>
     <child link="panda2_link0"/>
-  </joint>
-  <joint name="wall_joint_1" type="fixed">
-    <origin xyz="0 1.07 0"/>
-    <parent link="world"/>
-    <child link="wall_link_1"/>
-  </joint>
-  <joint name="wall_joint_2" type="fixed">
-    <origin xyz="1.78 0 0"/>
-    <parent link="world"/>
-    <child link="wall_link_2"/>
-  </joint>
-  <joint name="wall_joint_3" type="fixed">
-    <origin xyz="1.40 0.96 0"/>
-    <parent link="world"/>
-    <child link="wall_link_3"/>
-  </joint>
-  <joint name="pedestal_joint" type="fixed">
-    <origin xyz="1.05 0.45 0"/>
-    <parent link="world"/>
-    <child link="pedestal"/>
-  </joint>
-  <joint name="panda1_box_joint" type="fixed">
-    <origin xyz="-0.6315 0 1.17"/>
-    <parent link="world"/>
-    <child link="panda1_box"/>
   </joint>
   <!-- sub-link defining detailed meshes for collision with environment -->
   <link name="panda2_link0">
