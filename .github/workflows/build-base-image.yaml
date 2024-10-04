@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - docker/**
+      - "docker/**"
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
 
