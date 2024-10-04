@@ -11,7 +11,7 @@ import yaml
 
 
 class ParamParser:
-    def __init__(self, path: str, scene: int):
+    def __init__(self, path: str, scene: int) -> None:
         self.path = path
         self.params = None
         self.scene = scene
@@ -24,7 +24,7 @@ class ParamParser:
         self.data = self.params["scene" + str(self.scene)]
 
     @staticmethod
-    def _parse_obstacle_shape(shape: str, size: list):
+    def _parse_obstacle_shape(shape: str, size: list) -> hppfcl.CollisionGeometry:
         if shape == "box":
             return hppfcl.Box(*size)
         elif shape == "sphere":
@@ -36,7 +36,9 @@ class ParamParser:
         else:
             raise ValueError(f"Unknown shape {shape}")
 
-    def add_ellipsoid_on_robot(self, rmodel: pin.Model, cmodel: pin.GeometryModel):
+    def add_ellipsoid_on_robot(
+        self, rmodel: pin.Model, cmodel: pin.GeometryModel
+    ) -> pin.GeometryModel:
         """Add ellipsoid on the robot model
 
         Args:
@@ -44,7 +46,7 @@ class ParamParser:
             cmodel (pin.GeometryModel): Collision model
 
         Returns:
-            cmodel: Collision model with added ellipsoids
+            cmodel (pin.GeometryModel): Collision model with added ellipsoids
         """
         if "ROBOT_ELLIPSOIDS" in self.data:
             for ellipsoid in self.data["ROBOT_ELLIPSOIDS"]:
@@ -84,7 +86,9 @@ class ParamParser:
                 cmodel.addGeometryObject(rob_geom)
         return cmodel
 
-    def add_collisions(self, rmodel: pin.Model, cmodel: pin.GeometryModel):
+    def add_collisions(
+        self, rmodel: pin.Model, cmodel: pin.GeometryModel
+    ) -> pin.GeometryModel:
         """Add collisions to the robot model
 
         Args:
@@ -92,7 +96,7 @@ class ParamParser:
             cmodel (pin.GeometryModel): Collision model
 
         Returns:
-            cmodel: Collision model with added collisions
+            cmodel (pin.GeometryModel): Collision model with added collisions
         """
         cmodel = self.add_ellipsoid_on_robot(rmodel, cmodel)
         for obs in self.data["OBSTACLES"]:

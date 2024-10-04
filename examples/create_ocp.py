@@ -11,7 +11,9 @@ import numpy as np
 import colmpc as col
 
 
-def create_ocp_velocity(rmodel, gmodel, param_parser):
+def create_ocp_velocity(
+    rmodel: pin.Model, gmodel: pin.GeometryModel, param_parser: ParamParser
+) -> crocoddyl.SolverAbstract:
     # Stat and actuation model
     state = crocoddyl.StateMultibody(rmodel)
     actuation = crocoddyl.ActuationModelFull(state)
@@ -125,7 +127,9 @@ def create_ocp_velocity(rmodel, gmodel, param_parser):
     return ocp
 
 
-def create_ocp_distance(rmodel, gmodel, param_parser):
+def create_ocp_distance(
+    rmodel: pin.Model, gmodel: pin.GeometryModel, param_parser: ParamParser
+) -> crocoddyl.SolverAbstract:
     # Stat and actuation model
     state = crocoddyl.StateMultibody(rmodel)
     actuation = crocoddyl.ActuationModelFull(state)
@@ -234,7 +238,9 @@ def create_ocp_distance(rmodel, gmodel, param_parser):
     return ocp
 
 
-def create_ocp_nocol(rmodel, param_parser):
+def create_ocp_nocol(
+    rmodel: pin.Model, param_parser: ParamParser
+) -> crocoddyl.SolverAbstract:
     # Stat and actuation model
     state = crocoddyl.StateMultibody(rmodel)
     actuation = crocoddyl.ActuationModelFull(state)

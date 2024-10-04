@@ -24,13 +24,15 @@ BLACK = np.array([0, 0, 0, 0.5])
 BLACK_FULL = np.array([0, 0, 0, 1.0])
 
 
-def create_viewer(rmodel, cmodel, vmodel):
+def create_viewer(
+    rmodel: pin.Model, cmodel: pin.GeometryModel, vmodel: pin.GeometryModel
+) -> visualize.MeshcatVisualizer:
     viz = visualize.MeshcatVisualizer(
         model=rmodel,
         collision_model=cmodel,
         visual_model=vmodel,
     )
-    viz.initViewer(viewer=meshcat.Visualizer(zmq_url="tcp://127.0.0.1:6000"))
+    viz.initViewer(viewer=meshcat.Visualizer(zmq_url="tcp://127.0.0.1:6002"))
     viz.clean()
     viz.loadViewerModel("pinocchio")
 
@@ -38,7 +40,13 @@ def create_viewer(rmodel, cmodel, vmodel):
     return viz
 
 
-def add_sphere_to_viewer(viz, sphere_name, radius, position, color=int):
+def add_sphere_to_viewer(
+    viz: visualize.MeshcatVisualizer,
+    sphere_name: str,
+    radius: float,
+    position: Union[list, npt.NDArray[np.float64]],
+    color: int,
+) -> None:
     """
     Adds a sphere to the Meshcat visualizer.
 
@@ -65,7 +73,13 @@ def add_sphere_to_viewer(viz, sphere_name, radius, position, color=int):
     )
 
 
-def add_cube_to_viewer(viz, cube_name, dim, position, color):
+def add_cube_to_viewer(
+    viz: visualize.MeshcatVisualizer,
+    cube_name: str,
+    dim: Union[list, npt.NDArray[np.float64]],
+    position: Union[list, npt.NDArray[np.float64]],
+    color: int,
+) -> None:
     """
     Adds a sphere to the Meshcat visualizer.
 

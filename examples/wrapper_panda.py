@@ -18,9 +18,9 @@ RED = np.array([249, 136, 126, 125]) / 255
 class PandaWrapper:
     def __init__(
         self,
-        auto_col=False,
-        capsule=False,
-    ):
+        auto_col: bool = False,
+        capsule: bool = False,
+    ) -> None:
         """Create a wrapper for the robot panda.
 
         Args:
@@ -46,7 +46,7 @@ class PandaWrapper:
         # Transforming the robot from cylinders/spheres to capsules
         self._capsule = capsule
 
-    def __call__(self):
+    def __call__(self) -> Tuple[pin.Model, pin.GeometryModel, pin.GeometryModel]:
         """Create a robot.
 
         Returns:
@@ -107,7 +107,7 @@ class PandaWrapper:
             self._vmodel_reduced,
         )
 
-    def transform_model_into_capsules(self):
+    def transform_model_into_capsules(self) -> None:
         """Modifying the collision model to transform the spheres/cylinders into capsules which makes it easier to have a fully constrained robot."""
         collision_model_reduced_copy = self._cmodel_reduced.copy()
         list_names_capsules = []
