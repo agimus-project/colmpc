@@ -31,6 +31,16 @@ BLACK_FULL = np.array([0.0, 0.0, 0.0, 1.0])
 def create_viewer(
     rmodel: pin.Model, cmodel: pin.GeometryModel, vmodel: pin.GeometryModel
 ) -> visualize.MeshcatVisualizer:
+    """Create a Meshcat visualizer.
+
+    Args:
+        rmodel (pin.Model): Robot model.
+        cmodel (pin.GeometryModel): Collision model.
+        vmodel (pin.GeometryModel): Visual model.
+
+    Returns:
+        visualize.MeshcatVisualizer: The Meshcat visualizer.
+    """
     viz = visualize.MeshcatVisualizer(
         model=rmodel,
         collision_model=cmodel,
