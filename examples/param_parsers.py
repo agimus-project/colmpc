@@ -116,7 +116,7 @@ class ParamParser:
             obs_geom.meshColor = np.concatenate(
                 (np.random.randint(0, 1, 3), np.ones(1))
             )
-            _ = cmodel.addGeometryObject(obs_geom)
+            cmodel.addGeometryObject(obs_geom)
 
         for col in self.data["collision_pairs"]:
             if cmodel.existGeometryName(col[0]) and cmodel.existGeometryName(col[1]):

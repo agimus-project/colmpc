@@ -59,7 +59,7 @@ def add_sphere_to_viewer(
     """
     try:
         # Check if the sphere already exists
-        _ = viz.viewer[sphere_name]
+        viz.viewer[sphere_name]
         viz.viewer[sphere_name].delete()
     except KeyError:
         # Sphere does not exist
@@ -92,7 +92,7 @@ def add_cube_to_viewer(
     """
     try:
         # Check if the sphere already exists
-        _ = viz.viewer[cube_name]
+        viz.viewer[cube_name]
         viz.viewer[cube_name].delete()
     except KeyError:
         # Sphere does not exist

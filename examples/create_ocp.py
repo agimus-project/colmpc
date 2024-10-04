@@ -50,7 +50,7 @@ def create_ocp_velocity(
     )
     # Creating the residual
 
-    for col_idx, col_pair in enumerate(gmodel.collisionPairs):
+    for col_idx, _ in enumerate(gmodel.collisionPairs):
         obstacleVelocityResidual = col.ResidualModelVelocityAvoidance(
             state,
             gmodel,
@@ -164,7 +164,7 @@ def create_ocp_distance(
     )
     # Creating the residual
 
-    for col_idx, col_pair in enumerate(gmodel.collisionPairs):
+    for col_idx, _ in enumerate(gmodel.collisionPairs):
         obstacleDistanceResidual = col.ResidualDistanceCollision(
             state, 7, gmodel, col_idx
         )
