@@ -42,7 +42,7 @@ jobs:
 
       - name: Login to GitHub Container Registry
         # Push the latest image to registry only if running on main
-        if: ${{ github.ref == 'refs/heads/main') || (startsWith(github.event.ref, 'refs/tags/v')) }}
+        if: ${{ (github.ref == 'refs/heads/main') || startsWith(github.event.ref, 'refs/tags/v') }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -51,7 +51,7 @@ jobs:
 
       - name: Push Docker image
         uses: docker/build-push-action@v6
-        if: ${{ github.ref == 'refs/heads/main') || (startsWith(github.event.ref, 'refs/tags/v')) }}
+        if: ${{ (github.ref == 'refs/heads/main') || startsWith(github.event.ref, 'refs/tags/v') }}
         with:
           tags: ${{ env.DOCKER_TAGS }}
           push: true
