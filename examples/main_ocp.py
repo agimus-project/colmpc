@@ -80,7 +80,7 @@ for i, xs in enumerate(ocp_vel.xs):
     pin.framesForwardKinematics(rmodel, rdata, q)
     add_cube_to_viewer(
         vis,
-        f"vcolmpc{i}",,
+        f"vcolmpc{i}",
         [2e-2, 2e-2, 2e-2],
         rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation,
         color=100000000,
