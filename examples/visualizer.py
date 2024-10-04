@@ -4,13 +4,13 @@
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
 
+from typing import Union
+
 import meshcat
 import numpy as np
+import numpy.typing as npt
 import pinocchio as pin
 from pinocchio import visualize
-
-import numpy.typing as npt
-from typing import Union
 
 RED = np.array([249, 136, 126, 125]) / 255.0
 RED_FULL = np.array([249, 136, 126, 255]) / 255.0

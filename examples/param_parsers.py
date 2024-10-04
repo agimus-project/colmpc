@@ -6,10 +6,10 @@
 
 import hppfcl
 import numpy as np
+import numpy.typing as npt
 import pinocchio as pin
 import yaml
 
-import numpy.typing as npt
 
 class ParamParser:
     def __init__(self, path: str, scene: int) -> None:
