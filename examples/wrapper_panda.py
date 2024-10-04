@@ -4,7 +4,7 @@
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
 from os.path import abspath, dirname, join
-
+from typing import Tuple
 import hppfcl
 import numpy as np
 import pinocchio as pin

@@ -6,7 +6,11 @@
 
 import meshcat
 import numpy as np
+import pinocchio as pin
 from pinocchio import visualize
+
+import numpy.typing as npt
+from typing import Union
 
 RED = np.array([249, 136, 126, 125]) / 255.0
 RED_FULL = np.array([249, 136, 126, 255]) / 255.0
@@ -32,7 +36,7 @@ def create_viewer(
         collision_model=cmodel,
         visual_model=vmodel,
     )
-    viz.initViewer(viewer=meshcat.Visualizer(zmq_url="tcp://127.0.0.1:6002"))
+    viz.initViewer(viewer=meshcat.Visualizer(zmq_url="tcp://127.0.0.1:6000"))
     viz.clean()
     viz.loadViewerModel("pinocchio")
 

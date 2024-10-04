@@ -7,9 +7,10 @@
 import crocoddyl
 import mim_solvers
 import numpy as np
-
+import pinocchio as pin
 import colmpc as col
 
+from param_parsers import ParamParser
 
 def create_ocp_velocity(
     rmodel: pin.Model, gmodel: pin.GeometryModel, param_parser: ParamParser
