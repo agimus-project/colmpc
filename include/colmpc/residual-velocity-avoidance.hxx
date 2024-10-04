@@ -1,10 +1,8 @@
-///////////////////////////////////////////////////////////////////////////////
 // BSD 3-Clause License
-//
-// Copyright (c) 2024, CNRS
+// 
+// Copyright (C) 2024, LAAS-CNRS.
 // Copyright note valid unless otherwise stated in individual files.
 // All rights reserved.
-///////////////////////////////////////////////////////////////////////////////
 
 #ifndef COLMPC_RESIDUAL_VELOCITY_AVOIDANCE_HXX_
 #define COLMPC_RESIDUAL_VELOCITY_AVOIDANCE_HXX_
