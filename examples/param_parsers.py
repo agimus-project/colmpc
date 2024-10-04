@@ -128,7 +128,7 @@ class ParamParser:
                 )
         return cmodel
 
-    def get_target_pose(self):
+    def get_target_pose(self) -> pin.SE3:
         return pin.SE3(
             pin.Quaternion(
                 *tuple(self.data["TARGET_POSE"]["orientation"])
@@ -136,43 +136,43 @@ class ParamParser:
             np.array(self.data["TARGET_POSE"]["translation"]),
         )
 
-    def get_initial_config(self):
+    def get_initial_config(self) -> npt.NDArray[np.float64]:
         return np.array(self.data["INITIAL_CONFIG"])
 
-    def get_X0(self):
+    def get_X0(self) -> npt.NDArray[np.float64]:
         return np.concatenate(
             (self.get_initial_config(), np.array(self.data["INITIAL_VELOCITY"]))
         )
 
-    def get_safety_threshold(self):
-        return self.data["SAFETY_THRESHOLD"]
+    def get_safety_threshold(self) -> float:
+        return float(self.data["SAFETY_THRESHOLD"])
 
-    def get_T(self):
-        return self.data["T"]
+    def get_T(self) -> int:
+        return int(self.data["T"])
 
-    def get_dt(self):
-        return self.data["dt"]
+    def get_dt(self) -> float:
+        return float(self.data["dt"])
 
-    def get_di(self):
-        return self.data["di"]
+    def get_di(self) -> float:
+        return float(self.data["di"])
 
-    def get_ds(self):
-        return self.data["ds"]
+    def get_ds(self) -> float:
+        return float(self.data["ds"])
 
-    def get_ksi(self):
-        return self.data["ksi"]
+    def get_ksi(self) -> float:
+        return float(self.data["ksi"])
 
-    def get_W_xREG(self):
-        return self.data["WEIGHT_xREG"]
+    def get_W_xREG(self) -> float:
+        return float(self.data["WEIGHT_xREG"])
 
-    def get_W_uREG(self):
-        return self.data["WEIGHT_uREG"]
+    def get_W_uREG(self) -> float:
+        return float(self.data["WEIGHT_uREG"])
 
-    def get_W_gripper_pose(self):
-        return self.data["WEIGHT_GRIPPER_POSE"]
+    def get_W_gripper_pose(self) -> float:
+        return float(self.data["WEIGHT_GRIPPER_POSE"])
 
-    def get_W_gripper_pose_term(self):
-        return self.data["WEIGHT_GRIPPER_POSE_TERM"]
+    def get_W_gripper_pose_term(self) -> float:
+        return float(self.data["WEIGHT_GRIPPER_POSE_TERM"])
 
 
 if __name__ == "__main__":
