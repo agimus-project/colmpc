@@ -33,7 +33,8 @@ HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : 
 ### Using Docker
 
 The docker image is prebuilt. Simply write:
-```docker build -t colmpc:base-latest -f docker/base.Dockerfile .
+``` bash
+docker build -t colmpc:base-latest -f docker/base.Dockerfile .
 docker build -t colmpc:latest -f docker/colmpc.Dockerfile --build-arg COLMPC_COMMIT_HASH=v0.0.1 BASE_IMAGE=colmpc:base-latest .
 ```
 
