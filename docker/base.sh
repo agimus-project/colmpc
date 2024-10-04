@@ -8,12 +8,11 @@ export CMAKE_PREFIX_PATH
 declare -a SOURCES=(
     'jrl-umi3218/jrl-cmakemodules/master'
     'stack-of-tasks/eigenpy/v3.9.0'
-    'humanoid-path-planner/hpp-fcl/7e3f33b7614bba363ca6f27c2730539dfa20c3ea'
+    'humanoid-path-planner/hpp-fcl/devel'
     'stack-of-tasks/pinocchio/v3.2.0'
     'gepetto/example-robot-data/v4.1.0'
     'loco-3d/crocoddyl/v2.1.0'
-    'cmake-wheel/mim_solvers/v0.0.5'
-    'agimus-project/colmpc/main'
+    'machines-in-motion/mim_solvers/devel'
 )
 
 for source in "${SOURCES[@]}"
@@ -31,6 +30,7 @@ do
         -DCMAKE_INSTALL_PREFIX="$CMAKE_PREFIX_PATH" "${ARG[@]}" \
         -DCMAKE_INSTALL_LIBDIR=lib \
         -DHPP_FCL_HAS_QHULL=ON \
+        -DBUILD_PYTHON_INTERFACE=ON \
         -Wno-dev
     cmake --build "$PRJ/build" -j "$MAKE_JOBS"
     cmake --build "$PRJ/build" -t install
