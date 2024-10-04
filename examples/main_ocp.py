@@ -80,7 +80,7 @@ for i, xs in enumerate(ocp_vel.xs):
     pin.framesForwardKinematics(rmodel, rdata, q)
     add_cube_to_viewer(
         vis,
-        "vcolmpc" + str(i),
+        f"vcolmpc{i}",,
         [2e-2, 2e-2, 2e-2],
         rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation,
         color=100000000,
@@ -91,12 +91,12 @@ for i, xs in enumerate(OCP_dist.xs):
     pin.framesForwardKinematics(rmodel, rdata, q)
     add_sphere_to_viewer(
         vis,
-        "colmpc" + str(i),
+        f"colmpc{i}",
         2e-2,
         rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation,
         color=100000,
     )
-print("Press enter to display the solution")
+print("Press 'ENTER' to display the solution")
 while True:
     print("Trajectory of the OCP with distance constraints")
     for q in OCP_dist.xs:

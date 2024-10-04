@@ -21,7 +21,7 @@ class ParamParser:
                 self.params = yaml.safe_load(stream)
             except yaml.YAMLError as exc:
                 print(exc)
-        self.data = self.params["scene" + str(self.scene)]
+        self.data = self.params[f"scene{self.scene}"]
 
     @staticmethod
     def _parse_obstacle_shape(shape: str, size: list) -> hppfcl.CollisionGeometry:

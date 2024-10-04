@@ -68,10 +68,8 @@ def create_ocp_velocity(
         )
 
         # Adding the constraint to the constraint manager
-        runningConstraintModelManager.addConstraint("col_" + str(col_idx), constraint)
-        terminalConstraintModelManager.addConstraint(
-            "col_term_" + str(col_idx), constraint
-        )
+        runningConstraintModelManager.addConstraint(f"col_{col_idx}", constraint)
+        terminalConstraintModelManager.addConstraint(f"col_term_{col_idx}", constraint)
 
     # Adding costs to the models
     runningCostModel.addCost("stateReg", xRegCost, param_parser.get_W_xREG())
@@ -179,10 +177,8 @@ def create_ocp_distance(
         )
 
         # Adding the constraint to the constraint manager
-        runningConstraintModelManager.addConstraint("col_" + str(col_idx), constraint)
-        terminalConstraintModelManager.addConstraint(
-            "col_term_" + str(col_idx), constraint
-        )
+        runningConstraintModelManager.addConstraint(f"col_{col_idx}", constraint)
+        terminalConstraintModelManager.addConstraint(f"col_term_{col_idx}", constraint)
 
     # Adding costs to the models
     runningCostModel.addCost("stateReg", xRegCost, param_parser.get_W_xREG())

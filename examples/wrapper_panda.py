@@ -118,9 +118,9 @@ class PandaWrapper:
                 # Sometimes for one joint there are two cylinders, which need to be defined by two capsules for the same link.
                 # Hence the name convention here.
                 if (geom_object.name[:-4] + "capsule_0") in list_names_capsules:
-                    name = geom_object.name[:-4] + "capsule_" + "1"
+                    name = geom_object.name[:-4] + "capsule_1"
                 else:
-                    name = geom_object.name[:-4] + "capsule_" + "0"
+                    name = geom_object.name[:-4] + "capsule_0"
                 list_names_capsules.append(name)
                 placement = geom_object.placement
                 parentJoint = geom_object.parentJoint
