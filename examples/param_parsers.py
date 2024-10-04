@@ -82,7 +82,7 @@ class ParamParser:
                 rob_geom = pin.GeometryObject(
                     ellipsoid, idj_rob, idf_rob, Mrob, rob_hppfcl
                 )
-                rob_geom.meshColor = np.r_[1, 1, 0, 1]
+                rob_geom.meshColor = np.array([1, 1, 0, 1])
                 cmodel.addGeometryObject(rob_geom)
         return cmodel
 

@@ -101,8 +101,8 @@ def create_ocp_velocity(
     )
     terminalModel = crocoddyl.IntegratedActionModelEuler(terminal_DAM, 0.0)
 
-    runningModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
-    terminalModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
+    runningModel.differential.armature = np.full(7, 0.1)
+    terminalModel.differential.armature = np.full(7, 0.1)
 
     problem = crocoddyl.ShootingProblem(
         param_parser.get_X0(), [runningModel] * param_parser.get_T(), terminalModel
@@ -210,8 +210,8 @@ def create_ocp_distance(
     )
     terminalModel = crocoddyl.IntegratedActionModelEuler(terminal_DAM, 0.0)
 
-    runningModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
-    terminalModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
+    runningModel.differential.armature = np.full(7, 0.1)
+    terminalModel.differential.armature = np.full(7, 0.1)
 
     problem = crocoddyl.ShootingProblem(
         param_parser.get_X0(), [runningModel] * param_parser.get_T(), terminalModel
@@ -292,8 +292,8 @@ def create_ocp_nocol(
     )
     terminalModel = crocoddyl.IntegratedActionModelEuler(terminal_DAM, 0.0)
 
-    runningModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
-    terminalModel.differential.armature = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.0])
+    runningModel.differential.armature = np.full(7, 0.1)
+    terminalModel.differential.armature = np.full(7, 0.1)
 
     problem = crocoddyl.ShootingProblem(
         param_parser.get_X0(), [runningModel] * param_parser.get_T(), terminalModel
