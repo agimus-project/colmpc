@@ -1,17 +1,19 @@
 import crocoddyl
 import hppfcl
+import matplotlib.pyplot as plt
 import mim_solvers
 import numpy as np
 import pinocchio as pin
 from numpy import r_
 from wrapper_panda import PandaWrapper
 
+import colmpc as col
+
 np.set_printoptions(precision=4, linewidth=350, suppress=True, threshold=1e6)
 
 # from VelocityResidual import ResidualModelVelocityAvoidance
 # from colmpc import ResidualModelVelocityAvoidance
 
-import colmpc as col
 
 ### PARAMETERS
 # Number of nodes of the trajectory
@@ -237,7 +239,6 @@ for i, xs in enumerate(ddp.xs):
     )
     d.append(distance)
 
-import matplotlib.pyplot as plt
 
 plt.plot(d)
 plt.plot([0] * len(d))

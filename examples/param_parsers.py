@@ -100,6 +100,7 @@ class ParamParser:
             cmodel (pin.GeometryModel): Collision model with added collisions
         """
         cmodel = self.add_ellipsoid_on_robot(rmodel, cmodel)
+        rng = np.random.default_rng()
         for obs in self.data["OBSTACLES"]:
             obs_hppfcl = self._parse_obstacle_shape(
                 self.data["OBSTACLES"][obs]["type"], self.data["OBSTACLES"][obs]["dim"]
@@ -114,9 +115,7 @@ class ParamParser:
             obs_geom = pin.GeometryObject(
                 obs, 0, obs_id_frame, rmodel.frames[obs_id_frame].placement, obs_hppfcl
             )
-            obs_geom.meshColor = np.concatenate(
-                (np.random.randint(0, 1, 3), np.ones(1))
-            )
+            obs_geom.meshColor = np.concatenate((rng.integers(0, 1, 3), np.ones(1)))
             cmodel.addGeometryObject(obs_geom)
 
         for col in self.data["collision_pairs"]:
