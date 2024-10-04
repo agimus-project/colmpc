@@ -1,5 +1,5 @@
 ARG COLMPC_COMMIT_HASH=main
-ARG BASE_IMAGE=colmpc:base-latest
+ARG BASE_IMAGE=ghcr.io/agimus-project/colmpc:latest
 ARG MAKE_JOBS=4
 
 FROM $BASE_IMAGE
