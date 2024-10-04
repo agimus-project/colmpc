@@ -25,9 +25,18 @@ An in-depth comparison is [here](https://gepettoweb.laas.fr/articles/haffemayer2
 - [MiM Solvers](https://github.com/machines-in-motion/mim_solvers) (tag: v0.0.5) solver for the SQP and Constrained-SQP solver, and [Mim Robot](https://github.com/machines-in-motion/mim_robots/tree/main).
 
 ## Installation
+### From source
 HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : WITH_COLLISION_SUPPORT=ON.
 > [!NOTE]
 > Don't forget to switch to the right commits!
+
+### Using Docker
+
+The docker image is prebuilt. Simply write:
+```docker build -t colmpc:base-latest -f docker/base.Dockerfile .
+docker build -t colmpc:latest -f docker/colmpc.Dockerfile --build-arg COLMPC_COMMIT_HASH=v0.0.1 BASE_IMAGE=colmpc:base-latest .
+```
+
 
 ### Possible issue
 - If you have a problem with ```FakeCollisionGeometry```, it is likely that the linking of Pinocchio with HPPFCL wasn't done properly. Verify that you have the right commits & the right compilation flags.
