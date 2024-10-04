@@ -1,7 +1,8 @@
-FROM colmpc:base-latest
-
 ARG COLMPC_COMMIT_HASH=main
+ARG BASE_IMAGE=colmpc:base-latest
 ARG MAKE_JOBS=4
+
+FROM $BASE_IMAGE
 
 RUN --mount=type=cache,sharing=locked,target=/var/cache/apt \
     --mount=type=cache,sharing=locked,target=/var/lib/apt \

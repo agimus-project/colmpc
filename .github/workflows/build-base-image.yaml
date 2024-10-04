@@ -1,5 +1,4 @@
 ---
-# TODO add docker tags based on git tags
 name: Build Base Image
 
 on:
@@ -13,26 +12,30 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-      - name: Set output
-        id: vars
-        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - uses: actions/checkout@v2
+      - name: Set env with tag
+        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        run: |
+          export RELEASE_VERSION=${GITHUB_REF#refs/tags/}
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+          echo "DOCKER_TAGS="colmpc:base-$RELEASE_VERSION, colmpc:base-latest"" >> $GITHUB_ENV
+      - name: Set env with tag
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        run: |
+          echo "RELEASE_VERSION=""" >> $GITHUB_ENV
+          echo "DOCKER_TAGS="colmpc:base-latest"" >> $GITHUB_ENV
 
       - name: Build Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./docker/base.Dockerfile
-          tags: colmpc:base-latest
+          tags: ${{ env.DOCKER_TAGS }}
+          push: false
 
       - name: Login to GitHub Container Registry
         # Push the latest image to registry only if running on main
-        if: github.ref == 'refs/heads/main'
+        if: ${{ github.ref == 'refs/heads/main') || (startsWith(github.event.ref, 'refs/tags/v')) }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -40,8 +43,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push Docker image
-        if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v6
+        if: ${{ github.ref == 'refs/heads/main') || (startsWith(github.event.ref, 'refs/tags/v')) }}
         with:
+          tags: ${{ env.DOCKER_TAGS }}
           push: true
-          tags: colmpc:base-latest
