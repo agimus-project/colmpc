@@ -12,7 +12,7 @@ import pinocchio as pin
 # This class is for unwrapping an URDF and converting it to a model. It is also possible to add objects in the model,
 # such as a ball at a specific position.
 
-RED = np.array([249, 136, 126, 125]) / 255
+RED = np.array([249, 136, 126, 125]) / 255.0
 
 
 class PandaWrapper:
@@ -38,7 +38,7 @@ class PandaWrapper:
         self._srdf_model_path = join(join(model_path, "srdf"), srdf_filename)
 
         # Color of the robot
-        self._color = np.array([249, 136, 126, 255]) / 255
+        self._color = np.array([249, 136, 126, 255]) / 255.0
 
         # Boolean describing whether the auto-collisions are in the collision model or not
         self._auto_col = auto_col
@@ -115,7 +115,8 @@ class PandaWrapper:
         # Going through all the goemetry objects in the collision model
         for geom_object in collision_model_reduced_copy.geometryObjects:
             if isinstance(geom_object.geometry, hppfcl.Cylinder):
-                # Sometimes for one joint there are two cylinders, which need to be defined by two capsules for the same link.
+                # Sometimes for one joint there are two cylinders,
+                # which need to be defined by two capsules for the same link.
                 # Hence the name convention here.
                 if (geom_object.name[:-4] + "capsule_0") in list_names_capsules:
                     name = geom_object.name[:-4] + "capsule_1"
