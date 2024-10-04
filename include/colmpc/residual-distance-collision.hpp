@@ -1,10 +1,8 @@
-///////////////////////////////////////////////////////////////////////////////
 // BSD 3-Clause License
-//
-// Copyright (C) 2021, University of Edinburgh
+// 
+// Copyright (C) 2024, LAAS-CNRS.
 // Copyright note valid unless otherwise stated in individual files.
 // All rights reserved.
-///////////////////////////////////////////////////////////////////////////////
 
 #ifndef COLMPC_RESIDUAL_DISTANCE_COLLISION_HPP_
 #define COLMPC_RESIDUAL_DISTANCE_COLLISION_HPP_
