@@ -53,8 +53,6 @@ cmodel = pp.add_collisions(rmodel, cmodel)
 cdata = cmodel.createData()
 rdata = rmodel.createData()
 
-vis = create_viewer(rmodel, cmodel, cmodel)
-
 # Generating the meshcat visualizer
 vis = create_viewer(rmodel, cmodel, cmodel)
 add_sphere_to_viewer(

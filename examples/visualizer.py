@@ -46,7 +46,7 @@ def create_viewer(
         collision_model=cmodel,
         visual_model=vmodel,
     )
-    viz.initViewer(viewer=meshcat.Visualizer(zmq_url="tcp://127.0.0.1:6000"))
+    viz.initViewer(open=True)
     viz.clean()
     viz.loadViewerModel("pinocchio")
 
