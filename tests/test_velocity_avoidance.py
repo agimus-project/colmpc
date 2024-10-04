@@ -211,16 +211,16 @@ class TestVelocityAvoidance(unittest.TestCase):
                 "between C++ implementation and python implementation!.",
             )
 
-            # # # Compute approximate derivative
-            # Rx_num = calcDiff_numerical(x)
+            # Compute approximate derivative
+            Rx_num = calcDiff_numerical(x)
 
-            # np.testing.assert_allclose(
-            #     self.residual_data.Rx,
-            #     Rx_num,
-            #     rtol=1e-5,
-            #     err_msg="Result missmatch in function ``calcDiff`` "
-            #     "between C++ implementation and finite differences!.",
-            # )
+            np.testing.assert_allclose(
+                self.residual_data.Rx,
+                Rx_num,
+                rtol=1e-5,
+                err_msg="Result missmatch in function ``calcDiff`` "
+                "between C++ implementation and finite differences!.",
+            )
 
 
 if __name__ == "__main__":

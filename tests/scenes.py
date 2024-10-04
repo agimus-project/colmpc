@@ -453,9 +453,8 @@ def add_ellipsoid(
         collision_geometry=elips,
         placement=placement,
     )
-    elips_geom.meshColor = np.concatenate(
-        (np.random.uniform(0, 1, 3), np.ones(1) / 0.8)
-    )
+    rng = np.random.default_rng()
+    elips_geom.meshColor = np.concatenate((rng.uniform(0, 1, 3), np.ones(1) / 0.8))
 
     cmodel.addGeometryObject(elips_geom)
     return cmodel
@@ -493,9 +492,8 @@ def add_capsule(
         collision_geometry=elips,
         placement=placement,
     )
-    elips_geom.meshColor = np.concatenate(
-        (np.random.uniform(0, 1, 3), np.ones(1) / 0.8)
-    )
+    rng = np.random.default_rng()
+    elips_geom.meshColor = np.concatenate((rng.uniform(0, 1, 3), np.ones(1) / 0.8))
 
     cmodel.addGeometryObject(elips_geom)
     return cmodel

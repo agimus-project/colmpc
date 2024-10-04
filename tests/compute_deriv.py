@@ -1,11 +1,10 @@
 import hppfcl
 import numpy as np
 import pinocchio as pin
+from numpy import c_, cross, eye, r_
 from pinocchio import skew
 
 pin.SE3.__repr__ = pin.SE3.__str__
-
-from numpy import c_, cross, eye, r_
 
 
 def compute_dist(rmodel, gmodel, q, vq, idg1, idg2):
