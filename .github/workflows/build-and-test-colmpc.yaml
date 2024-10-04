@@ -37,7 +37,7 @@ jobs:
           context: .
           file: ./docker/colmpc.Dockerfile
           tags: ${{ env.DOCKER_TAGS }}
-          build-args: COLMPC_COMMIT_HASH=$GITHUB_SHA, BASE_IMAGE=$BASE_IMAGE,MAKE_JOBS=4
+          build-args: COLMPC_COMMIT_HASH=$GITHUB_SHA, BASE_IMAGE=$BASE_IMAGE, MAKE_JOBS=4
           push: false
 
       - name: Login to GitHub Container Registry
