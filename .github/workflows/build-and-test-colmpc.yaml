@@ -29,12 +29,14 @@ jobs:
           export REL_VER=${WORKFLOW_HEAD_BRANCH#refs/tags/}
           echo "DOCKER_TAGS="$DOCKER_PREFIX/colmpc:$REL_VER, $DOCKER_PREFIX/colmpc:latest"" >> $GITHUB_ENV
           echo "BASE_IMAGE="$DOCKER_PREFIX/base-$REL_VER"" >> $GITHUB_ENV
+          echo "COLMPC_COMMIT_HASH="$REL_VER"" >> $GITHUB_ENV
 
       - name: Set env with tag
         if: ${{ github.event_name != 'workflow_run' || !startsWith(github.event.workflow_run.head_branch, 'refs/tags/v') }}
         run: |
           echo "DOCKER_TAGS="$DOCKER_PREFIX/colmpc:latest"" >> $GITHUB_ENV
           echo "BASE_IMAGE="$DOCKER_PREFIX/base-latest"" >> $GITHUB_ENV
+          echo "COLMPC_COMMIT_HASH="$GITHUB_SHA"" >> $GITHUB_ENV
 
       - name: Login to GitHub Container Registry
         # Push the latest image to registry only if running on main
@@ -52,7 +54,7 @@ jobs:
           context: .
           file: ./docker/colmpc.Dockerfile
           tags: ${{ env.DOCKER_TAGS }}
-          build-args: COLMPC_COMMIT_HASH=$GITHUB_SHA, BASE_IMAGE=$BASE_IMAGE, MAKE_JOBS=4
+          build-args: COLMPC_COMMIT_HASH=$COLMPC_COMMIT_HASH, BASE_IMAGE=$BASE_IMAGE, MAKE_JOBS=4
           push: false
 
       - name: Build and Push Docker with colmpc and test the implementation
