@@ -34,7 +34,7 @@ HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : 
 
 You can run examples with docker with following command:
 ``` bash
-docker container run -p 7000:7000 ghcr.io/agimus-project/colmpc:v0.2.0 "python colmpc/examples/simple_ocp.py --scene 1"
+docker container run -it --rm -p 7000:7000 ghcr.io/agimus-project/colmpc:v0.2.0 python colmpc/examples/main_ocp.py --scene 1
 ```
 
 
