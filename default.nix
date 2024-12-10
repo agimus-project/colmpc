@@ -4,6 +4,7 @@
   cmake,
   crocoddyl,
   ipopt,
+  llvmPackages,
   pkg-config,
   python3Packages,
   pythonSupport ? false,
@@ -28,6 +29,8 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
+
+  buildInputs = lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   propagatedBuildInputs =
     [ ipopt ]
