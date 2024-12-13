@@ -60,9 +60,9 @@ class TestCollisions(unittest.TestCase):
         # Testing the distance calculus
         distance_hpp = coal.distance(
             shape1.geometry,
-            coal.Transform3f(shape1_placement.rotation, shape1_placement.translation),
+            coal.Transform3s(shape1_placement.rotation, shape1_placement.translation),
             shape2.geometry,
-            coal.Transform3f(shape2_placement.rotation, shape2_placement.translation),
+            coal.Transform3s(shape2_placement.rotation, shape2_placement.translation),
             req,
             res,
         )
@@ -131,9 +131,9 @@ class TestCollisions(unittest.TestCase):
         # Testing the distance calculus
         distance_hpp = coal.distance(
             shape1.geometry,
-            coal.Transform3f(shape1_placement.rotation, shape1_placement.translation),
+            coal.Transform3s(shape1_placement.rotation, shape1_placement.translation),
             shape2.geometry,
-            coal.Transform3f(shape2_placement.rotation, shape2_placement.translation),
+            coal.Transform3s(shape2_placement.rotation, shape2_placement.translation),
             req,
             res,
         )
@@ -211,9 +211,9 @@ class TestCollisions(unittest.TestCase):
         # Testing the distance calculus
         distance_hpp = coal.distance(
             shape1.geometry,
-            coal.Transform3f(shape1_placement.rotation, shape1_placement.translation),
+            coal.Transform3s(shape1_placement.rotation, shape1_placement.translation),
             shape2.geometry,
-            coal.Transform3f(shape2_placement.rotation, shape2_placement.translation),
+            coal.Transform3s(shape2_placement.rotation, shape2_placement.translation),
             req,
             res,
         )
@@ -291,9 +291,9 @@ class TestCollisions(unittest.TestCase):
         # Testing the distance calculus
         distance_hpp = coal.distance(
             shape1.geometry,
-            coal.Transform3f(shape1_placement.rotation, shape1_placement.translation),
+            coal.Transform3s(shape1_placement.rotation, shape1_placement.translation),
             shape2.geometry,
-            coal.Transform3f(shape2_placement.rotation, shape2_placement.translation),
+            coal.Transform3s(shape2_placement.rotation, shape2_placement.translation),
             req,
             res,
         )
