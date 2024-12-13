@@ -1,4 +1,4 @@
-import hppfcl
+import coal
 import numpy as np
 import pinocchio as pin
 
@@ -445,7 +445,7 @@ def add_ellipsoid(
         pin.GeometryModel: The updated geometry model with the added ellipsoid.
     """
 
-    elips = hppfcl.Ellipsoid(dim[0], dim[1], dim[2])
+    elips = coal.Ellipsoid(dim[0], dim[1], dim[2])
     elips_geom = pin.GeometryObject(
         name,
         parent_joint=parentJoint,
@@ -484,7 +484,7 @@ def add_capsule(
         pin.GeometryModel: The updated geometry model with the added ellipsoid.
     """
 
-    elips = hppfcl.Capsule(dim[0], dim[1])
+    elips = coal.Capsule(dim[0], dim[1])
     elips_geom = pin.GeometryObject(
         name,
         parent_joint=parentJoint,

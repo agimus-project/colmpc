@@ -4,7 +4,7 @@
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
 
-import hppfcl
+import coal
 import numpy as np
 import numpy.typing as npt
 import pinocchio as pin
@@ -25,15 +25,15 @@ class ParamParser:
         self.data = self.params[f"scene{self.scene}"]
 
     @staticmethod
-    def _parse_obstacle_shape(shape: str, size: list) -> hppfcl.CollisionGeometry:
+    def _parse_obstacle_shape(shape: str, size: list) -> coal.CollisionGeometry:
         if shape == "box":
-            return hppfcl.Box(*size)
+            return coal.Box(*size)
         elif shape == "sphere":
-            return hppfcl.Sphere(size[0])
+            return coal.Sphere(size[0])
         elif shape == "cylinder":
-            return hppfcl.Cylinder(size[0], size[1])
+            return coal.Cylinder(size[0], size[1])
         elif shape == "ellipsoid":
-            return hppfcl.Ellipsoid(*size)
+            return coal.Ellipsoid(*size)
         else:
             raise ValueError(f"Unknown shape {shape}")
 
@@ -51,7 +51,7 @@ class ParamParser:
         """
         if "ROBOT_ELLIPSOIDS" in self.data:
             for ellipsoid in self.data["ROBOT_ELLIPSOIDS"]:
-                rob_hppfcl = hppfcl.Ellipsoid(
+                rob_coal = coal.Ellipsoid(
                     *self.data["ROBOT_ELLIPSOIDS"][ellipsoid]["dim"]
                 )
                 idf_rob = rmodel.getFrameId(
@@ -81,7 +81,7 @@ class ParamParser:
                 else:
                     Mrob = rmodel.frames[idf_rob].placement
                 rob_geom = pin.GeometryObject(
-                    ellipsoid, idj_rob, idf_rob, Mrob, rob_hppfcl
+                    ellipsoid, idj_rob, idf_rob, Mrob, rob_coal
                 )
                 rob_geom.meshColor = np.array([1, 1, 0, 1])
                 cmodel.addGeometryObject(rob_geom)
@@ -102,7 +102,7 @@ class ParamParser:
         cmodel = self.add_ellipsoid_on_robot(rmodel, cmodel)
         rng = np.random.default_rng()
         for obs in self.data["OBSTACLES"]:
-            obs_hppfcl = self._parse_obstacle_shape(
+            obs_coal = self._parse_obstacle_shape(
                 self.data["OBSTACLES"][obs]["type"], self.data["OBSTACLES"][obs]["dim"]
             )
             Mobs = pin.SE3(
@@ -113,7 +113,7 @@ class ParamParser:
             )
             obs_id_frame = rmodel.addFrame(pin.Frame(obs, 0, 0, Mobs, pin.OP_FRAME))
             obs_geom = pin.GeometryObject(
-                obs, 0, obs_id_frame, rmodel.frames[obs_id_frame].placement, obs_hppfcl
+                obs, 0, obs_id_frame, rmodel.frames[obs_id_frame].placement, obs_coal
             )
             obs_geom.meshColor = np.concatenate((rng.integers(0, 1, 3), np.ones(1)))
             cmodel.addGeometryObject(obs_geom)

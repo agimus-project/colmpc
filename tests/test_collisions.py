@@ -1,12 +1,13 @@
 import unittest
 
-import hppfcl
+import coal
 import numpy as np
 import pinocchio as pin
 
 
 class TestCollisions(unittest.TestCase):
-    """This class is made to test the collisions between primitives pairs such as sphere-sphere. The collisions shapes are from hppfcl."""
+    """This class is made to test the collisions between primitives pairs such as
+    sphere-sphere. The collisions shapes are from coal."""
 
     def test_sphere_sphere_not_in_collision(self):
         """Testing the sphere-sphere pair, going from the distance between each shape to making sure the closest points are well computed."""
@@ -17,8 +18,8 @@ class TestCollisions(unittest.TestCase):
         rmodel = pin.Model()
         cmodel = pin.GeometryModel()
         geometries = [
-            hppfcl.Sphere(r1),
-            hppfcl.Sphere(r2),
+            coal.Sphere(r1),
+            coal.Sphere(r2),
         ]
         # With pinocchio3, a new way of constructing a geometry object is available and the old one will be deprecated.
         for i, geom in enumerate(geometries):
@@ -38,7 +39,7 @@ class TestCollisions(unittest.TestCase):
 
         # Coloring the sphere
         shape1 = cmodel.geometryObjects[shape1_id]
-        self.assertIsInstance(shape1.geometry, hppfcl.Sphere)
+        self.assertIsInstance(shape1.geometry, coal.Sphere)
 
         # Getting its pose in the world reference
         shape1_placement = cdata.oMg[shape1_id]
@@ -48,20 +49,20 @@ class TestCollisions(unittest.TestCase):
 
         # Coloring the sphere
         shape2 = cmodel.geometryObjects[shape2_id]
-        self.assertIsInstance(shape2.geometry, hppfcl.Sphere)
+        self.assertIsInstance(shape2.geometry, coal.Sphere)
 
         # Getting its pose in the world reference
         shape2_placement = cdata.oMg[shape2_id]
 
-        req = hppfcl.DistanceRequest()
-        res = hppfcl.DistanceResult()
+        req = coal.DistanceRequest()
+        res = coal.DistanceResult()
 
         # Testing the distance calculus
-        distance_hpp = hppfcl.distance(
+        distance_hpp = coal.distance(
             shape1.geometry,
-            hppfcl.Transform3f(shape1_placement.rotation, shape1_placement.translation),
+            coal.Transform3f(shape1_placement.rotation, shape1_placement.translation),
             shape2.geometry,
-            hppfcl.Transform3f(shape2_placement.rotation, shape2_placement.translation),
+            coal.Transform3f(shape2_placement.rotation, shape2_placement.translation),
             req,
             res,
         )
@@ -86,8 +87,8 @@ class TestCollisions(unittest.TestCase):
         rmodel = pin.Model()
         cmodel = pin.GeometryModel()
         geometries = [
-            hppfcl.Sphere(r1),
-            hppfcl.Sphere(r2),
+            coal.Sphere(r1),
+            coal.Sphere(r2),
         ]
 
         # With pinocchio3, a new way of constructing a geometry object is available and the old one will be deprecated.
@@ -109,7 +110,7 @@ class TestCollisions(unittest.TestCase):
 
         # Coloring the sphere
         shape1 = cmodel.geometryObjects[shape1_id]
-        self.assertIsInstance(shape1.geometry, hppfcl.Sphere)
+        self.assertIsInstance(shape1.geometry, coal.Sphere)
 
         # Getting its pose in the world reference
         shape1_placement = cdata.oMg[shape1_id]
@@ -119,20 +120,20 @@ class TestCollisions(unittest.TestCase):
 
         # Coloring the sphere
         shape2 = cmodel.geometryObjects[shape2_id]
-        self.assertIsInstance(shape2.geometry, hppfcl.Sphere)
+        self.assertIsInstance(shape2.geometry, coal.Sphere)
 
         # Getting its pose in the world reference
         shape2_placement = cdata.oMg[shape2_id]
 
-        req = hppfcl.DistanceRequest()
-        res = hppfcl.DistanceResult()
+        req = coal.DistanceRequest()
+        res = coal.DistanceResult()
 
         # Testing the distance calculus
-        distance_hpp = hppfcl.distance(
+        distance_hpp = coal.distance(
             shape1.geometry,
-            hppfcl.Transform3f(shape1_placement.rotation, shape1_placement.translation),
+            coal.Transform3f(shape1_placement.rotation, shape1_placement.translation),
             shape2.geometry,
-            hppfcl.Transform3f(shape2_placement.rotation, shape2_placement.translation),
+            coal.Transform3f(shape2_placement.rotation, shape2_placement.translation),
             req,
             res,
         )
@@ -161,8 +162,8 @@ class TestCollisions(unittest.TestCase):
         rmodel = pin.Model()
         cmodel = pin.GeometryModel()
         geometries = [
-            hppfcl.Sphere(r1),
-            hppfcl.Capsule(r2, l2),
+            coal.Sphere(r1),
+            coal.Capsule(r2, l2),
         ]
         placement0 = pin.SE3(pin.utils.rotate("y", np.pi), np.array([0, 0, 2]))
         try:
@@ -189,7 +190,7 @@ class TestCollisions(unittest.TestCase):
 
         # Coloring the sphere
         shape1 = cmodel.geometryObjects[shape1_id]
-        self.assertIsInstance(shape1.geometry, hppfcl.Sphere)
+        self.assertIsInstance(shape1.geometry, coal.Sphere)
 
         # Getting its pose in the world reference
         shape1_placement = cdata.oMg[shape1_id]
@@ -199,20 +200,20 @@ class TestCollisions(unittest.TestCase):
 
         # Coloring the sphere
         shape2 = cmodel.geometryObjects[shape2_id]
-        self.assertIsInstance(shape2.geometry, hppfcl.Capsule)
+        self.assertIsInstance(shape2.geometry, coal.Capsule)
 
         # Getting its pose in the world reference
         shape2_placement = cdata.oMg[shape2_id]
 
-        req = hppfcl.DistanceRequest()
-        res = hppfcl.DistanceResult()
+        req = coal.DistanceRequest()
+        res = coal.DistanceResult()
 
         # Testing the distance calculus
-        distance_hpp = hppfcl.distance(
+        distance_hpp = coal.distance(
             shape1.geometry,
-            hppfcl.Transform3f(shape1_placement.rotation, shape1_placement.translation),
+            coal.Transform3f(shape1_placement.rotation, shape1_placement.translation),
             shape2.geometry,
-            hppfcl.Transform3f(shape2_placement.rotation, shape2_placement.translation),
+            coal.Transform3f(shape2_placement.rotation, shape2_placement.translation),
             req,
             res,
         )
@@ -241,8 +242,8 @@ class TestCollisions(unittest.TestCase):
         rmodel = pin.Model()
         cmodel = pin.GeometryModel()
         geometries = [
-            hppfcl.Sphere(r1),
-            hppfcl.Capsule(r2, l2),
+            coal.Sphere(r1),
+            coal.Capsule(r2, l2),
         ]
         placement0 = pin.SE3(pin.utils.rotate("y", np.pi), np.array([1, 0, 0]))
         try:
@@ -269,7 +270,7 @@ class TestCollisions(unittest.TestCase):
 
         # Coloring the sphere
         shape1 = cmodel.geometryObjects[shape1_id]
-        self.assertIsInstance(shape1.geometry, hppfcl.Sphere)
+        self.assertIsInstance(shape1.geometry, coal.Sphere)
 
         # Getting its pose in the world reference
         shape1_placement = cdata.oMg[shape1_id]
@@ -279,20 +280,20 @@ class TestCollisions(unittest.TestCase):
 
         # Coloring the sphere
         shape2 = cmodel.geometryObjects[shape2_id]
-        self.assertIsInstance(shape2.geometry, hppfcl.Capsule)
+        self.assertIsInstance(shape2.geometry, coal.Capsule)
 
         # Getting its pose in the world reference
         shape2_placement = cdata.oMg[shape2_id]
 
-        req = hppfcl.DistanceRequest()
-        res = hppfcl.DistanceResult()
+        req = coal.DistanceRequest()
+        res = coal.DistanceResult()
 
         # Testing the distance calculus
-        distance_hpp = hppfcl.distance(
+        distance_hpp = coal.distance(
             shape1.geometry,
-            hppfcl.Transform3f(shape1_placement.rotation, shape1_placement.translation),
+            coal.Transform3f(shape1_placement.rotation, shape1_placement.translation),
             shape2.geometry,
-            hppfcl.Transform3f(shape2_placement.rotation, shape2_placement.translation),
+            coal.Transform3f(shape2_placement.rotation, shape2_placement.translation),
             req,
             res,
         )

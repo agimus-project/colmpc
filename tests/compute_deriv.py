@@ -1,4 +1,4 @@
-import hppfcl
+import coal
 import numpy as np
 import pinocchio as pin
 from numpy import c_, cross, eye, r_
@@ -23,13 +23,13 @@ def compute_dist(rmodel, gmodel, q, vq, idg1, idg2):
     shape1 = gmodel.geometryObjects[idg1]
     shape2 = gmodel.geometryObjects[idg2]
 
-    req = hppfcl.DistanceRequest()
+    req = coal.DistanceRequest()
     req.gjk_max_iterations = 20000
     req.abs_err = 0
     req.gjk_tolerance = 1e-9
-    res = hppfcl.DistanceResult()
+    res = coal.DistanceResult()
 
-    distance = hppfcl.distance(
+    distance = coal.distance(
         shape1.geometry,
         shape1_placement,
         shape2.geometry,
@@ -70,13 +70,13 @@ def compute_d_dist_dq(rmodel, gmodel, q: np.ndarray, vq, idg1, idg2):
         shape2.parentFrame,
         pin.LOCAL_WORLD_ALIGNED,
     )
-    req = hppfcl.DistanceRequest()
+    req = coal.DistanceRequest()
     req.gjk_max_iterations = 20000
     req.abs_err = 0
     req.gjk_tolerance = 1e-9
-    res = hppfcl.DistanceResult()
+    res = coal.DistanceResult()
     # Computing the distance
-    distance = hppfcl.distance(
+    distance = coal.distance(
         shape1.geometry,
         shape1_placement,
         shape2.geometry,
@@ -138,12 +138,12 @@ def compute_Ldot(rmodel, gmodel, q, vq, idg1, idg2):
     nu2 = pin.getFrameVelocity(rmodel, rdata, idf2, pin.LOCAL_WORLD_ALIGNED).copy()
     v2, w2 = nu2.linear, nu2.angular
 
-    req = hppfcl.DistanceRequest()
+    req = coal.DistanceRequest()
     req.gjk_max_iterations = 20000
     req.abs_err = 0
     req.gjk_tolerance = 1e-9
-    res = hppfcl.DistanceResult()
-    _ = hppfcl.distance(
+    res = coal.DistanceResult()
+    _ = coal.distance(
         elips1,
         gdata.oMg[idg1],
         elips2,
@@ -189,12 +189,12 @@ def compute_ddot(rmodel, gmodel, q, vq, idg1, idg2):
     nu2 = pin.getFrameVelocity(rmodel, rdata, idf2, pin.LOCAL_WORLD_ALIGNED).copy()
     v2, w2 = nu2.linear, nu2.angular
 
-    req = hppfcl.DistanceRequest()
+    req = coal.DistanceRequest()
     req.gjk_max_iterations = 20000
     req.abs_err = 0
     req.gjk_tolerance = 1e-9
-    res = hppfcl.DistanceResult()
-    distance = hppfcl.distance(
+    res = coal.DistanceResult()
+    distance = coal.distance(
         elips1,
         gdata.oMg[idg1],
         elips2,
@@ -250,12 +250,12 @@ def compute_d_d_dot_dq_dq_dot(rmodel, gmodel, q, vq, idg1, idg2):
     nu2 = pin.getFrameVelocity(rmodel, rdata, idf2, pin.LOCAL_WORLD_ALIGNED).copy()
     v2, w2 = nu2.linear, nu2.angular
 
-    req = hppfcl.DistanceRequest()
+    req = coal.DistanceRequest()
     req.gjk_max_iterations = 20000
     req.abs_err = 0
     req.gjk_tolerance = 1e-9
-    res = hppfcl.DistanceResult()
-    distance = hppfcl.distance(
+    res = coal.DistanceResult()
+    distance = coal.distance(
         elips1,
         gdata.oMg[idg1],
         elips2,

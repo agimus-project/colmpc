@@ -5,7 +5,7 @@
 # All rights reserved.
 from os.path import abspath, dirname, join
 
-import hppfcl
+import coal
 import numpy as np
 import pinocchio as pin
 
@@ -114,7 +114,7 @@ class PandaWrapper:
 
         # Going through all the goemetry objects in the collision model
         for geom_object in collision_model_reduced_copy.geometryObjects:
-            if isinstance(geom_object.geometry, hppfcl.Cylinder):
+            if isinstance(geom_object.geometry, coal.Cylinder):
                 # Sometimes for one joint there are two cylinders,
                 # which need to be defined by two capsules for the same link.
                 # Hence the name convention here.
@@ -131,14 +131,14 @@ class PandaWrapper:
                     name,
                     parentFrame,
                     parentJoint,
-                    hppfcl.Capsule(geometry.radius, geometry.halfLength),
+                    coal.Capsule(geometry.radius, geometry.halfLength),
                     placement,
                 )
                 geom.meshColor = RED
                 self._cmodel_reduced.addGeometryObject(geom)
                 self._cmodel_reduced.removeGeometryObject(geom_object.name)
             elif (
-                isinstance(geom_object.geometry, hppfcl.Sphere)
+                isinstance(geom_object.geometry, coal.Sphere)
                 and "link" in geom_object.name
             ):
                 self._cmodel_reduced.removeGeometryObject(geom_object.name)

@@ -10,8 +10,8 @@
 #include "colmpc/fwd.hpp"
 // include fwd first
 
-#include <hpp/fcl/collision_data.h>
-#include <hpp/fcl/distance.h>
+#include <coal/collision_data.h>
+#include <coal/distance.h>
 
 #include <Eigen/Core>
 #include <crocoddyl/core/residual-base.hpp>
@@ -161,7 +161,7 @@ struct ResidualModelVelocityAvoidanceTpl
    * @param[in] geom Collision geometry object to obtain D matrix
    */
   inline DiagonalMatrix3s cast_geom_to_d(
-      const std::shared_ptr<hpp::fcl::CollisionGeometry> &geom);
+      const std::shared_ptr<coal::CollisionGeometry> &geom);
 
   typename StateMultibody::PinocchioModel
       pin_model_;  //!< Pinocchio model used for internal computations
@@ -268,10 +268,10 @@ struct ResidualDataVelocityAvoidanceTpl
   using Base::Rx;
   using Base::shared;
 
-  hpp::fcl::DistanceRequest
-      req;  //!< Distance Request from hppfcl,
+  coal::DistanceRequest
+      req;  //!< Distance Request from coal,
             //!< used to compute the distance between shapes
-  hpp::fcl::DistanceResult res;  //!< Distance Result from hppfcl
+  coal::DistanceResult res;  //!< Distance Result from coal
 
   pinocchio::SE3 oMg_id_1;
   pinocchio::SE3 oMg_id_2;

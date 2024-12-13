@@ -35,7 +35,7 @@ class TestBenchmark(unittest.TestCase):
         return collision_pairs
 
     def test_distances_and_solution(self):
-        """Test that the distances are well computed within HPP-FCL and test the solutions found by the solver."""
+        """Test that the distances are well computed within coal and test the solutions found by the solver."""
 
         tests = ["box", "wall", "ball"]
 

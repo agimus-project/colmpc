@@ -4,10 +4,10 @@ repositories:
     url: https://github.com/loco-3d/crocoddyl
     version: v2.1.0
 
-  vcs_repos/hpp_fcl:
+  vcs_repos/coal:
     type: git
-    url: https://github.com/humanoid-path-planner/hpp-fcl
-    version: 7e3f33b7614bba363ca6f27c2730539dfa20c3ea
+    url: https://github.com/coal-library/coal
+    version: v3.0.0
 
   vcs_repos/pinocchio:
     type: git

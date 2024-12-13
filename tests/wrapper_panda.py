@@ -24,7 +24,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from os.path import abspath, dirname, join
 
-import hppfcl
+import coal
 import numpy as np
 import pinocchio as pin
 
@@ -123,18 +123,18 @@ class PandaWrapper:
             for i, geometry_object in enumerate(
                 collision_model_reduced_copy.geometryObjects
             ):
-                if isinstance(geometry_object.geometry, hppfcl.Sphere):
+                if isinstance(geometry_object.geometry, coal.Sphere):
                     self._collision_model_reduced.removeGeometryObject(
                         geometry_object.name
                     )
                 # Only selecting the cylinders
-                if isinstance(geometry_object.geometry, hppfcl.Cylinder):
+                if isinstance(geometry_object.geometry, coal.Cylinder):
                     if (geometry_object.name[:-4] + "capsule") in list_names_capsules:
                         capsule = pin.GeometryObject(
                             geometry_object.name[:-4] + "capsule" + "1",
                             geometry_object.parentJoint,
                             geometry_object.parentFrame,
-                            hppfcl.Capsule(
+                            coal.Capsule(
                                 geometry_object.geometry.radius,
                                 geometry_object.geometry.halfLength,
                             ),
@@ -153,7 +153,7 @@ class PandaWrapper:
                             geometry_object.name[:-4] + "capsule",
                             geometry_object.parentJoint,
                             geometry_object.parentFrame,
-                            hppfcl.Capsule(
+                            coal.Capsule(
                                 geometry_object.geometry.radius,
                                 geometry_object.geometry.halfLength,
                             ),
@@ -178,7 +178,7 @@ class PandaWrapper:
                 ):
                     geometry_object.disableCollision = True
                 # Getting rid of the cylinders in cmodel
-                if isinstance(geometry_object.geometry, hppfcl.Cylinder):
+                if isinstance(geometry_object.geometry, coal.Cylinder):
                     self._collision_model_reduced.removeGeometryObject(
                         geometry_object.name
                     )
@@ -238,10 +238,10 @@ def compute_distance_between_shapes(
     cdata = cmodel.createData()
     pin.forwardKinematics(rmodel, rdata, q)
     pin.updateGeometryPlacements(rmodel, rdata, cmodel, cdata, q)
-    req = hppfcl.DistanceRequest()
-    res = hppfcl.DistanceResult()
+    req = coal.DistanceRequest()
+    res = coal.DistanceResult()
 
-    distance = hppfcl.distance(
+    distance = coal.distance(
         cmodel.geometryObjects[shape1_id].geometry,
         cdata.oMg[shape1_id],
         cmodel.geometryObjects[shape2_id].geometry,

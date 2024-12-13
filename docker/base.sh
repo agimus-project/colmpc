@@ -8,7 +8,7 @@ export CMAKE_PREFIX_PATH
 declare -a SOURCES=(
     'jrl-umi3218/jrl-cmakemodules/master'
     'stack-of-tasks/eigenpy/v3.9.0'
-    'humanoid-path-planner/hpp-fcl/devel'
+    'coal-library/coal/v3.0.0'
     'stack-of-tasks/pinocchio/v3.2.0'
     'gepetto/example-robot-data/v4.1.0'
     'loco-3d/crocoddyl/v2.1.0'
@@ -29,7 +29,7 @@ do
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX="$CMAKE_PREFIX_PATH" "${ARG[@]}" \
         -DCMAKE_INSTALL_LIBDIR=lib \
-        -DHPP_FCL_HAS_QHULL=ON \
+        -DCOAL_HAS_QHULL=ON \
         -DBUILD_PYTHON_INTERFACE=ON \
         -Wno-dev
     cmake --build "$PRJ/build" -j "$MAKE_JOBS"
