@@ -14,7 +14,7 @@ An in-depth comparison is [here](https://gepettoweb.laas.fr/articles/haffemayer2
 ### For OCP & MPC scripts:
 
 - [Coal](https://github.com/coal-library/coal)  (tag: v3.0.0) for collision computations.
-- [Pinocchio](https://github.com/stack-of-tasks/pinocchio) (tag: v3.2.0) fast rigid body dynamics.
+- [Pinocchio](https://github.com/stack-of-tasks/pinocchio) (tag: v3.3.0) fast rigid body dynamics.
 - [Crocoddyl](https://github.com/loco-3d/crocoddyl) (tag: v2.1.0) framework for the solver.
 
 ### For visualization:

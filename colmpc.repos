@@ -12,7 +12,7 @@ repositories:
   vcs_repos/pinocchio:
     type: git
     url: https://github.com/stack-of-tasks/pinocchio
-    version: v3.2.0
+    version: v3.3.0
 
   vcs_repos/mim_solvers:
     type: git
