@@ -268,10 +268,9 @@ struct ResidualDataVelocityAvoidanceTpl
   using Base::Rx;
   using Base::shared;
 
-  coal::DistanceRequest
-      req;  //!< Distance Request from coal,
-            //!< used to compute the distance between shapes
-  coal::DistanceResult res;  //!< Distance Result from coal
+  coal::DistanceRequest req;  //!< Distance Request from coal,
+                              //!< used to compute the distance between shapes
+  coal::DistanceResult res;   //!< Distance Result from coal
 
   pinocchio::SE3 oMg_id_1;
   pinocchio::SE3 oMg_id_2;

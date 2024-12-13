@@ -61,9 +61,9 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
     d->oMg_id_2 = geom_2.placement;
   }
 
-  d->r[0] = coal::distance(
-      geom_1.geometry.get(), toFclTransform3f(d->oMg_id_1),
-      geom_2.geometry.get(), toFclTransform3f(d->oMg_id_2), d->req, d->res);
+  d->r[0] = coal::distance(geom_1.geometry.get(), toFclTransform3f(d->oMg_id_1),
+                           geom_2.geometry.get(), toFclTransform3f(d->oMg_id_2),
+                           d->req, d->res);
 }
 
 template <typename Scalar>
