@@ -1,5 +1,6 @@
 import json
 import unittest
+from pathlib import Path
 
 import numpy as np
 import pinocchio as pin
@@ -13,7 +14,7 @@ class TestBenchmark(unittest.TestCase):
     def load_test_data(test):
         """Load JSON data for the given test."""
         try:
-            with open(f"tests_benchmark/{test}.json") as file:
+            with (Path("tests_benchmark") / f"{test}.json").open() as file:
                 return json.load(file)
         except FileNotFoundError:
             print(f"Test file {test}.json not found.")

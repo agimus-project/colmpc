@@ -4,6 +4,8 @@
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
 
+from pathlib import Path
+
 import coal
 import numpy as np
 import numpy.typing as npt
@@ -12,12 +14,12 @@ import yaml
 
 
 class ParamParser:
-    def __init__(self, path: str, scene: int) -> None:
-        self.path = path
+    def __init__(self, path: str | Path, scene: int) -> None:
+        self.path = Path(path)
         self.params = None
         self.scene = scene
 
-        with open(self.path) as stream:
+        with self.path.open() as stream:
             try:
                 self.params = yaml.safe_load(stream)
             except yaml.YAMLError as exc:

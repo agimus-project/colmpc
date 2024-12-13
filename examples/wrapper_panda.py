@@ -3,7 +3,7 @@
 # Copyright (C) 2024, LAAS-CNRS.
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
-from os.path import abspath, dirname, join
+from pathlib import Path
 
 import coal
 import numpy as np
@@ -31,13 +31,13 @@ class PandaWrapper:
         """
 
         # Importing the model
-        pinocchio_model_dir = dirname(str(abspath(__file__)))
-        model_path = join(pinocchio_model_dir, "models")
-        self._mesh_dir = join(model_path, "meshes")
+        pinocchio_model_dir = Path(__file__).parent()
+        model_path = pinocchio_model_dir / "models"
+        self._mesh_dir = model_path / "meshes"
         urdf_filename = "franka2.urdf"
         srdf_filename = "demo.srdf"
-        self._urdf_model_path = join(join(model_path, "urdf"), urdf_filename)
-        self._srdf_model_path = join(join(model_path, "srdf"), srdf_filename)
+        self._urdf_model_path = model_path / "urdf" / urdf_filename
+        self._srdf_model_path = model_path / "srdf" / srdf_filename
 
         # Color of the robot
         self._color = np.array([249, 136, 126, 255]) / 255.0

@@ -22,7 +22,7 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-from os.path import abspath, dirname, join
+from pathlib import Path
 
 import coal
 import numpy as np
@@ -46,11 +46,11 @@ class PandaWrapper:
         """
 
         # Importing the model
-        pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
-        model_path = join(pinocchio_model_dir, "panda")
+        pinocchio_model_dir = Path(__file__).parent / "models"
+        model_path = pinocchio_model_dir / "panda"
         mesh_dir = pinocchio_model_dir
-        urdf_model_path = join(model_path, "franka.urdf")
-        srdf_model_path = join(model_path, "demo.srdf")
+        urdf_model_path = model_path / "franka.urdf"
+        srdf_model_path = model_path / "demo.srdf"
         self._urdf_model_path = urdf_model_path
         self._mesh_dir = mesh_dir
         self._srdf_model_path = srdf_model_path
