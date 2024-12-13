@@ -28,7 +28,8 @@ import coal
 import numpy as np
 import pinocchio as pin
 
-# This class is for unwrapping an URDF and converting it to a model. It is also possible to add objects in the model,
+# This class is for unwrapping an URDF and converting it to a model. It is also possible
+# to add objects in the model,
 # such as a ball at a specific position.
 
 
@@ -39,7 +40,10 @@ class PandaWrapper:
         capsule=False,
         obstacles=None,
     ):
-        """Initialize the wrapper with a scaling number of the target and the name of the robot wanted to get unwrapped."""
+        """
+        Initialize the wrapper with a scaling number of the target and the name of the
+        robot wanted to get unwrapped.
+        """
 
         # Importing the model
         pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
@@ -54,7 +58,8 @@ class PandaWrapper:
         # Color of the robot
         self._color = np.array([249, 136, 126, 255]) / 255
 
-        # Boolean describing whether the auto-collisions are in the collision model or not
+        # Boolean describing whether the auto-collisions are in the collision model or
+        # not
         self._auto_col = auto_col
 
         # Transforming the robot from cylinders/spheres to capsules
@@ -168,7 +173,8 @@ class PandaWrapper:
                             geometry_object.name[:-4] + "capsule"
                         )
 
-            # Removing the geometry objects that aren't Capsule / Box and disabling the collisions for the finger and the camera
+            # Removing the geometry objects that aren't Capsule / Box and disabling the
+            # collisions for the finger and the camera
             for geometry_object in self._collision_model_reduced.geometryObjects:
                 # Disabling the collisions for the fingers
                 if (

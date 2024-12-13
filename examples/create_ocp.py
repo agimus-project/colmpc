@@ -87,7 +87,8 @@ def create_ocp_velocity(
         "gripperPose", goalTrackingCost, param_parser.get_W_gripper_pose_term()
     )
 
-    # Create Differential Action Model (DAM), i.e. continuous dynamics and cost functions
+    # Create Differential Action Model (DAM),
+    # i.e. continuous dynamics and cost functions
     running_DAM = crocoddyl.DifferentialActionModelFreeFwdDynamics(
         state,
         actuation,
@@ -218,7 +219,8 @@ def create_ocp_distance(
         "gripperPose", goalTrackingCost, param_parser.get_W_gripper_pose_term()
     )
 
-    # Create Differential Action Model (DAM), i.e. continuous dynamics and cost functions
+    # Create Differential Action Model (DAM),
+    # i.e. continuous dynamics and cost functions
     running_DAM = crocoddyl.DifferentialActionModelFreeFwdDynamics(
         state,
         actuation,
@@ -305,7 +307,8 @@ def create_ocp_nocol(
         "gripperPose", goalTrackingCost, param_parser.get_W_gripper_pose_term()
     )
 
-    # Create Differential Action Model (DAM), i.e. continuous dynamics and cost functions
+    # Create Differential Action Model (DAM),
+    # i.e. continuous dynamics and cost functions
     running_DAM = crocoddyl.DifferentialActionModelFreeFwdDynamics(
         state,
         actuation,

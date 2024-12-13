@@ -10,7 +10,10 @@ class TestCollisions(unittest.TestCase):
     sphere-sphere. The collisions shapes are from coal."""
 
     def test_sphere_sphere_not_in_collision(self):
-        """Testing the sphere-sphere pair, going from the distance between each shape to making sure the closest points are well computed."""
+        """
+        Testing the sphere-sphere pair, going from the distance between each shape to
+        making sure the closest points are well computed.
+        """
 
         r1 = 0.4
         r2 = 0.5
@@ -21,7 +24,8 @@ class TestCollisions(unittest.TestCase):
             coal.Sphere(r1),
             coal.Sphere(r2),
         ]
-        # With pinocchio3, a new way of constructing a geometry object is available and the old one will be deprecated.
+        # With pinocchio3, a new way of constructing a geometry object is available and
+        # the old one will be deprecated.
         for i, geom in enumerate(geometries):
             placement = pin.SE3(np.eye(3), np.array([i, 0, 0]))
             try:
@@ -79,7 +83,10 @@ class TestCollisions(unittest.TestCase):
         self.assertAlmostEqual(np.linalg.norm(cp1 - cp2), distance_ana)
 
     def test_sphere_sphere_in_collision(self):
-        """Testing the sphere-sphere pair, going from the distance between each shape to making sure the closest points are well computed."""
+        """
+        Testing the sphere-sphere pair, going from the distance between each shape to
+        making sure the closest points are well computed.
+        """
 
         r1 = 0.7
         r2 = 0.5
@@ -91,7 +98,8 @@ class TestCollisions(unittest.TestCase):
             coal.Sphere(r2),
         ]
 
-        # With pinocchio3, a new way of constructing a geometry object is available and the old one will be deprecated.
+        # With pinocchio3, a new way of constructing a geometry object is available and
+        # the old one will be deprecated.
         for i, geom in enumerate(geometries):
             placement = pin.SE3(np.eye(3), np.array([i, 0, 0]))
             try:
@@ -153,7 +161,10 @@ class TestCollisions(unittest.TestCase):
         self.assertAlmostEqual(distance_cp, distance_ana)
 
     def test_sphere_capsule_not_in_collision(self):
-        """Testing the sphere-sphere pair, going from the distance between each shape to making sure the closest points are well computed."""
+        """
+        Testing the sphere-sphere pair, going from the distance between each shape to
+        making sure the closest points are well computed.
+        """
 
         r1 = 0.7
         r2 = 0.5
@@ -233,7 +244,10 @@ class TestCollisions(unittest.TestCase):
         self.assertAlmostEqual(distance_cp, distance_ana, places=3)
 
     def test_sphere_capsule_in_collision(self):
-        """Testing the sphere-sphere pair, going from the distance between each shape to making sure the closest points are well computed."""
+        """
+        Testing the sphere-sphere pair, going from the distance between each shape to
+        making sure the closest points are well computed.
+        """
 
         r1 = 0.7
         r2 = 0.5
@@ -318,11 +332,14 @@ class TestCollisions(unittest.TestCase):
         """Computes the signed distance between a sphere & a capsule.
 
         Args:
-            sphere (pin.GeometryObject): Geometry object of pinocchio, stored in the geometry model.
-            capsule (pin.GeometryObject): Geometry object of pinocchio, stored in the geometry model.
+            sphere (pin.GeometryObject): Geometry object of pinocchio, stored in the
+                geometry model.
+            capsule (pin.GeometryObject): Geometry object of pinocchio, stored in the
+                geometry model.
 
         Returns:
-            disntance (float): Signed distance between the closest points of a capsule-sphere pair.
+            disntance (float): Signed distance between the closest points of a
+                capsule-sphere pair.
         """
         r1 = sphere.geometry.radius
         r2 = capsule.geometry.radius
@@ -357,10 +374,13 @@ class TestCollisions(unittest.TestCase):
         return distance
 
     def get_A_B_from_center_capsule(self, capsule, capsule_placement):
-        """Computes the points A & B of a capsule. The point A & B are the limits of the segment defining the capsule.
+        """
+        Computes the points A & B of a capsule. The point A & B are the limits of the
+        segment defining the capsule.
 
         Args:
-            capsule (pin.GeometryObject): Geometry object of pinocchio, stored in the geometry model.
+            capsule (pin.GeometryObject): Geometry object of pinocchio, stored in the
+                geometry model.
         """
 
         A = pin.SE3.Identity()

@@ -1,5 +1,5 @@
-import crocoddyl
 import coal
+import crocoddyl
 import matplotlib.pyplot as plt
 import mim_solvers
 import numpy as np
@@ -215,7 +215,8 @@ ddp.solve(XS_init, US_init, 100)
 # for i,xs in enumerate(ddp.xs):
 # q = np.array(xs[:7].tolist())
 # pin.framesForwardKinematics(rmodel, rdata, q)
-# add_cube_to_viewer(viz, "vcolmpc" + str(i), [2e-2,2e-2, 2e-2], rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation, color=100000000)
+# add_cube_to_viewer(viz, "vcolmpc" + str(i), [2e-2,2e-2, 2e-2],
+# rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation, color=100000000)
 # viz.display(np.array(xs[:7].tolist()))
 # input()
 d = []

@@ -9,8 +9,8 @@ import coal
 import numpy as np
 import pinocchio as pin
 
-# This class is for unwrapping an URDF and converting it to a model. It is also possible to add objects in the model,
-# such as a ball at a specific position.
+# This class is for unwrapping an URDF and converting it to a model. It is also possible
+# to add objects in the model, such as a ball at a specific position.
 
 RED = np.array([249, 136, 126, 125]) / 255.0
 
@@ -24,8 +24,10 @@ class PandaWrapper:
         """Create a wrapper for the robot panda.
 
         Args:
-            auto_col (bool, optional): Include the auto collision in the collision model. Defaults to False.
-            capsule (bool, optional): Transform the spheres and cylinder of the robot into capsules. Defaults to False.
+            auto_col (bool, optional): Include the auto collision in the collision
+                model. Defaults to False.
+            capsule (bool, optional): Transform the spheres and cylinder of the robot
+                into capsules. Defaults to False.
         """
 
         # Importing the model
@@ -40,7 +42,8 @@ class PandaWrapper:
         # Color of the robot
         self._color = np.array([249, 136, 126, 255]) / 255.0
 
-        # Boolean describing whether the auto-collisions are in the collision model or not
+        # Boolean describing whether the auto-collisions are in the collision model or
+        # not
         self._auto_col = auto_col
 
         # Transforming the robot from cylinders/spheres to capsules
@@ -108,7 +111,10 @@ class PandaWrapper:
         )
 
     def transform_model_into_capsules(self) -> None:
-        """Modifying the collision model to transform the spheres/cylinders into capsules which makes it easier to have a fully constrained robot."""
+        """
+        Modifying the collision model to transform the spheres/cylinders into capsules
+        which makes it easier to have a fully constrained robot.
+        """
         collision_model_reduced_copy = self._cmodel_reduced.copy()
         list_names_capsules = []
 
