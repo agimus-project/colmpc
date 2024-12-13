@@ -34,10 +34,15 @@ def numdiff(f, q, h=1e-6):
 
 
 class TestResidualModelVelocityAvoidance(crocoddyl.ResidualModelAbstract):
-    """Class computing the residual of the collision constraint. This residual is simply the signed distance between the two closest points of the 2 shapes."""
+    """
+    Class computing the residual of the collision constraint. This residual is simply
+    the signed distance between the two closest points of the 2 shapes.
+    """
 
     def __init__(self, state, geom_model: pin.Model, pair_id, ksi=1, di=5e-2, ds=1e-4):
-        """Class computing the residual of the collision constraint. This residual is simply the signed distance between the two closest points of the 2 shapes.
+        """
+        Class computing the residual of the collision constraint. This residual is
+        simply the signed distance between the two closest points of the 2 shapes.
 
         Args:
             state (crocoddyl.StateMultibody): _description_
@@ -79,11 +84,15 @@ class TestResidualModelVelocityAvoidance(crocoddyl.ResidualModelAbstract):
         )
 
         # ddistdot_dq_nd = numdiff(
-        #     lambda var: compute_ddot(self._pinocchio, self._geom_model, var[:7], var[7:], self.idg1,  self.idg2), x)
-        # print(f"ddistdot_dq_val_test - ddistdot_dq_val_nd : {ddistdot_dq - ddistdot_dq_nd[:7]}")
+        #     lambda var: compute_ddot(self._pinocchio, self._geom_model, var[:7],
+        #     var[7:], self.idg1,  self.idg2), x)
+        # print(f"ddistdot_dq_val_test - ddistdot_dq_val_nd : {ddistdot_dq -
+        # ddistdot_dq_nd[:7]}")
         # print(f"x: {x}")
 
-        # assert np.allclose(ddistdot_dq_val_nd[:7], ddistdot_dq_val_test, atol=1e-3), f"ddistdot_dq_val_nd: {ddistdot_dq_val_nd[:7]} != {ddistdot_dq_val_test}, {ddistdot_dq_val_nd[:7] - ddistdot_dq_val_test}, x: {x.tolist()}"
+        # assert np.allclose(ddistdot_dq_val_nd[:7], ddistdot_dq_val_test, atol=1e-3),
+        # f"ddistdot_dq_val_nd: {ddistdot_dq_val_nd[:7]} != {ddistdot_dq_val_test},
+        # {ddistdot_dq_val_nd[:7] - ddistdot_dq_val_test}, x: {x.tolist()}"
 
         ddist_dq = np.r_[
             compute_d_dist_dq(
@@ -91,9 +100,12 @@ class TestResidualModelVelocityAvoidance(crocoddyl.ResidualModelAbstract):
             ),
             np.zeros(self._pinocchio.nq),
         ]
-        # ddist_dq_nd = numdiff(lambda var: compute_dist(self._pinocchio, self._geom_model, var[:7], var[7:], self.idg1, self.idg2), x)
+        # ddist_dq_nd = numdiff(lambda var: compute_dist(self._pinocchio,
+        # self._geom_model, var[:7], var[7:], self.idg1, self.idg2), x)
 
-        # assert np.allclose(ddist_dq[:7], ddist_dq_nd[:7], atol=1e-3), f"ddist_dq: {ddist_dq[:7]} != {ddist_dq_nd[:7]}, {ddist_dq[:7] - ddist_dq_nd[:7]}, x: {x.tolist()}"
+        # assert np.allclose(ddist_dq[:7], ddist_dq_nd[:7], atol=1e-3), f"ddist_dq:
+        # {ddist_dq[:7]} != {ddist_dq_nd[:7]}, {ddist_dq[:7] - ddist_dq_nd[:7]}, x:
+        # {x.tolist()}"
 
         return np.r_[ddistdot_dq, ddistdot_dq_dot] - ddist_dq * self.ksi / (
             self.di - self.ds
@@ -167,7 +179,10 @@ class TestVelocityAvoidance(unittest.TestCase):
                 self.residual_data.r[0],
                 test_residual_result,
                 places=5,
-                msg="Result missmatch in function ``calc`` between Python and C++ implementation!.",
+                msg=(
+                    "Result missmatch in function ``calc`` between Python and C++"
+                    "implementation!."
+                ),
             )
 
     def test_calc_diff_finite(self):

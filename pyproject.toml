@@ -1,8 +1,9 @@
 [tool.ruff]
 extend-exclude = ["cmake"]
+target-version = "py310"
 
 [tool.ruff.lint]
-extend-select = ["I", "NPY", "RUF", "UP", "W"]
+select = ["E", "F", "I", "NPY", "PTH", "RUF", "UP", "W"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["colmpc"]

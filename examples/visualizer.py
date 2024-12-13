@@ -4,7 +4,6 @@
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
 
-from typing import Union
 
 import meshcat
 import numpy as np
@@ -58,7 +57,7 @@ def add_sphere_to_viewer(
     viz: visualize.MeshcatVisualizer,
     sphere_name: str,
     radius: float,
-    position: Union[list, npt.NDArray[np.float64]],
+    position: list | npt.NDArray[np.float64],
     color: int,
 ) -> None:
     """
@@ -90,8 +89,8 @@ def add_sphere_to_viewer(
 def add_cube_to_viewer(
     viz: visualize.MeshcatVisualizer,
     cube_name: str,
-    dim: Union[list, npt.NDArray[np.float64]],
-    position: Union[list, npt.NDArray[np.float64]],
+    dim: list | npt.NDArray[np.float64],
+    position: list | npt.NDArray[np.float64],
     color: int,
 ) -> None:
     """

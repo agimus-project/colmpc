@@ -10,12 +10,17 @@ from compute_deriv import (
 
 
 class ResidualModelVelocityAvoidance(crocoddyl.ResidualModelAbstract):
-    """Class computing the residual of the collision constraint. This residual is simply the signed distance between the two closest points of the 2 shapes."""
+    """
+    Class computing the residual of the collision constraint. This residual is simply
+    the signed distance between the two closest points of the 2 shapes.
+    """
 
     def __init__(
         self, state, geom_model: pin.Model, idg1, idg2, ksi=1, di=5e-2, ds=1e-4
     ):
-        """Class computing the residual of the collision constraint. This residual is simply the signed distance between the two closest points of the 2 shapes.
+        """
+        Class computing the residual of the collision constraint. This residual is
+        simply the signed distance between the two closest points of the 2 shapes.
 
         Args:
             state (crocoddyl.StateMultibody): _description_
