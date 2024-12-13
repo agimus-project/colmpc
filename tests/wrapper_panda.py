@@ -46,14 +46,10 @@ class PandaWrapper:
         """
 
         # Importing the model
-        pinocchio_model_dir = Path(__file__).parent / "models"
-        model_path = pinocchio_model_dir / "panda"
-        mesh_dir = pinocchio_model_dir
-        urdf_model_path = model_path / "franka.urdf"
-        srdf_model_path = model_path / "demo.srdf"
-        self._urdf_model_path = urdf_model_path
-        self._mesh_dir = mesh_dir
-        self._srdf_model_path = srdf_model_path
+        model_path = Path(__file__).parent.parent / "examples" / "models"
+        self._urdf_model_path = model_path / "urdf" / "franka2.urdf"
+        self._mesh_dir = model_path
+        self._srdf_model_path = model_path / "srdf" / "demo.srdf"
 
         # Color of the robot
         self._color = np.array([249, 136, 126, 255]) / 255
