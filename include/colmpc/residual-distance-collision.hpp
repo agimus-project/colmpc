@@ -137,10 +137,23 @@ struct ResidualDataDistanceCollisionTpl
   typedef typename MathBase::Vector3s Vector3s;
 
   template <template <typename Scalar> class Model>
+  static coal::ComputeDistance buildComputeDistance(
+      Model<Scalar> *const model) {
+    const pinocchio::GeometryModel &geom_model = model->get_geometry();
+    const pinocchio::PairIndex pair_id = model->get_pair_id();
+
+    const auto &cp = geom_model.collisionPairs[pair_id];
+    const auto &geom_1 = geom_model.geometryObjects[cp.first].geometry;
+    const auto &geom_2 = geom_model.geometryObjects[cp.second].geometry;
+
+    return hpp::fcl::ComputeDistance(geom_1.get(), geom_2.get());
+  }
+
+  template <template <typename Scalar> class Model>
   ResidualDataDistanceCollisionTpl(Model<Scalar> *const model,
                                    DataCollectorAbstract *const data)
       : Base(model, data),
-        geometry(pinocchio::GeometryData(model->get_geometry())),
+        distance(buildComputeDistance(model)),
         req(),
         res(),
         J1(6, model->get_state()->get_nv()),
@@ -163,12 +176,15 @@ struct ResidualDataDistanceCollisionTpl
     f1p1.fill(0);
     f2p2.fill(0);
   }
-  pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
   pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
   using Base::r;
   using Base::Ru;
   using Base::Rx;
   using Base::shared;
+
+  hpp::fcl::ComputeDistance
+      distance;  //!< Compute Distance from hppfcl,
+                 //!< used to compute the distance between shapes
 
   hpp::fcl::DistanceRequest
       req;  //!< Distance Request from hppfcl,

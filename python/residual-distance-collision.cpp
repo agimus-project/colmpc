@@ -74,10 +74,6 @@ void exposeResidualDistanceCollision() {
           ":param model: pair collision residual model\n"
           ":param data: shared data")[bp::with_custodian_and_ward<
           1, 2, bp::with_custodian_and_ward<1, 3>>()])
-      .add_property("geometry",
-                    bp::make_getter(&ResidualDataDistanceCollision::geometry,
-                                    bp::return_internal_reference<>()),
-                    "pinocchio geometry data")
       .add_property("pinocchio",
                     bp::make_getter(&ResidualDataDistanceCollision::pinocchio,
                                     bp::return_internal_reference<>()),
