@@ -1,21 +1,23 @@
-import time
-import datetime
-import crocoddyl
-import pinocchio
-import numpy as np
-from param_parsers import ParamParser
 import threading
+import time
 import tkinter as tk
 from tkinter import ttk
+
+import crocoddyl
+import numpy as np
+import pinocchio
+from param_parsers import ParamParser
 from visualizer import add_sphere_to_viewer
 
+
 class GUI:
-    def __init__(self,
+    def __init__(
+        self,
         rmodel: pinocchio.Model,
         ref_frame_id: int,
         cmodel: pinocchio.GeometryModel,
         moving_geom: int,
-        frame_placement_residual: crocoddyl.ResidualModelFramePlacement
+        frame_placement_residual: crocoddyl.ResidualModelFramePlacement,
     ):
         self.rmodel = rmodel
         self.ref_frame_id = ref_frame_id
@@ -25,20 +27,24 @@ class GUI:
         self.stop_requested = False
 
         self.mutex = threading.Lock()
-        
+
     def update_geom(self):
         with self.mutex:
-            self.cmodel.geometryObjects[self.moving_geom].placement.translation = np.array(
+            self.cmodel.geometryObjects[
+                self.moving_geom
+            ].placement.translation = np.array(
                 [
                     float(self.entry_geom_x.get()),
                     float(self.entry_geom_y.get()),
-                    float(self.entry_geom_z.get())
+                    float(self.entry_geom_z.get()),
                 ]
             )
-            self.cmodel.geometryObjects[self.moving_geom].placement.rotation = pinocchio.rpy.rpyToMatrix(
+            self.cmodel.geometryObjects[
+                self.moving_geom
+            ].placement.rotation = pinocchio.rpy.rpyToMatrix(
                 float(self.entry_geom_roll.get()),
                 float(self.entry_geom_pitch.get()),
-                float(self.entry_geom_yaw.get())
+                float(self.entry_geom_yaw.get()),
             )
 
     def update_reference(self):
@@ -46,20 +52,22 @@ class GUI:
             pinocchio.rpy.rpyToMatrix(
                 float(self.entry_ref_roll.get()),
                 float(self.entry_ref_pitch.get()),
-                float(self.entry_ref_yaw.get())
+                float(self.entry_ref_yaw.get()),
             ),
-            np.array([
-                float(self.entry_ref_x.get()),
-                float(self.entry_ref_y.get()),
-                float(self.entry_ref_z.get())
-            ]),
+            np.array(
+                [
+                    float(self.entry_ref_x.get()),
+                    float(self.entry_ref_y.get()),
+                    float(self.entry_ref_z.get()),
+                ]
+            ),
         )
         with self.mutex:
             self.frame_placement_residual.reference = ref
             self.rmodel.frames[self.ref_frame_id].placement = ref
 
             print(self.frame_placement_residual)
-    
+
     def run(self):
         root = tk.Tk()
         root.title("3D Transformations")
@@ -100,7 +108,9 @@ class GUI:
         self.entry_geom_yaw.insert(0, str(rpy[2]))
         self.entry_geom_yaw.grid(row=5, column=1)
 
-        ttk.Button(frame_geom, text="Update Obstacle", command=self.update_geom).grid(row=6, column=1, padx=10, pady=10)
+        ttk.Button(frame_geom, text="Update Obstacle", command=self.update_geom).grid(
+            row=6, column=1, padx=10, pady=10
+        )
 
         frame_ref = ttk.LabelFrame(root, text="Reference Transformation")
         frame_ref.grid(row=1, column=0, padx=10, pady=10)
@@ -138,9 +148,13 @@ class GUI:
         self.entry_ref_yaw.insert(0, str(rpy[2]))
         self.entry_ref_yaw.grid(row=5, column=1)
 
-        ttk.Button(frame_ref, text="Update Reference", command=self.update_reference).grid(row=6, column=1, padx=10, pady=10)
-        
-        ttk.Button(root, text="Stop", command=self.stop_request).grid(row=2, column=0, padx=10, pady=10)
+        ttk.Button(
+            frame_ref, text="Update Reference", command=self.update_reference
+        ).grid(row=6, column=1, padx=10, pady=10)
+
+        ttk.Button(root, text="Stop", command=self.stop_request).grid(
+            row=2, column=0, padx=10, pady=10
+        )
         root.wm_attributes("-topmost", True)
 
         self.root = root
@@ -162,18 +176,19 @@ class GUI:
     def is_running(self):
         return self.gui_thread.is_alive()
 
-def simulation_loop(
-        ocp: crocoddyl.SolverAbstract,
-        rmodel: pinocchio.Model,
-        ref_frame_id: int,
-        cmodel: pinocchio.GeometryModel,
-        moving_geom: int,
-        frame_placement_residual: crocoddyl.ResidualModelFramePlacement,
-        pp: ParamParser,
-        vis: pinocchio.visualize.BaseVisualizer):
 
+def simulation_loop(
+    ocp: crocoddyl.SolverAbstract,
+    rmodel: pinocchio.Model,
+    ref_frame_id: int,
+    cmodel: pinocchio.GeometryModel,
+    moving_geom: int,
+    frame_placement_residual: crocoddyl.ResidualModelFramePlacement,
+    pp: ParamParser,
+    vis: pinocchio.visualize.BaseVisualizer,
+):
     rdata = pinocchio.Data(rmodel)
-    vis_id = frame_placement_residual.id # rmodel.getFrameId("panda2_rightfinger")
+    vis_id = frame_placement_residual.id  # rmodel.getFrameId("panda2_rightfinger")
 
     gui = GUI(rmodel, ref_frame_id, cmodel, moving_geom, frame_placement_residual)
     gui.start()
@@ -194,7 +209,7 @@ def simulation_loop(
         i = 0
         input()
         while not gui.stop_requested:
-            i = i+1
+            i = i + 1
             t0 = time.time()
             with gui.mutex:
                 ok = ocp.solve(xs, us, 100)
@@ -211,7 +226,7 @@ def simulation_loop(
             # print("diff: ", np.array2string(xs[1][:7] - xs[0][:7], precision=2, separator=", ", suppress_small=True))
             # for q0, q1 in zip(xs[:-1], xs[1:]):
             #     print("diff: ", np.array2string(q1[:7] - q0[:7], precision=2, separator=", ", suppress_small=True))
-            
+
             # Shift the trajectory
             xs[:-1] = xs[1:]
             us[:-1] = us[1:]

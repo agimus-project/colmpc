@@ -150,7 +150,7 @@ class ParamParser:
 
     def get_safety_threshold(self) -> float:
         return float(self.data["SAFETY_THRESHOLD"])
-    
+
     def get_distance_threshold(self) -> float:
         return float(self.data["DISTANCE_THRESHOLD"])
 
@@ -180,7 +180,7 @@ class ParamParser:
 
     def get_W_gripper_pose_term(self) -> float:
         return float(self.data["WEIGHT_GRIPPER_POSE_TERM"])
-    
+
     def get_W_obstacle(self) -> float:
         return float(self.data["WEIGHT_OBSTACLE"])
 

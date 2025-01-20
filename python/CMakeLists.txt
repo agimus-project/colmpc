@@ -1,6 +1,5 @@
 set(${PY_NAME}_SOURCES main.cpp residual-distance-collision.cpp
-                       residual-velocity-avoidance.cpp
-                       quadratic-exp.cpp)
+                       residual-velocity-avoidance.cpp quadratic-exp.cpp)
 
 add_library(${PY_NAME} SHARED ${${PY_NAME}_SOURCES})
 target_link_libraries(${PY_NAME} PUBLIC ${PROJECT_NAME} eigenpy::eigenpy)

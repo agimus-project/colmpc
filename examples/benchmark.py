@@ -9,12 +9,10 @@ import os
 import time
 
 import create_ocp
-import numpy as np
+import crocoddyl
 import pinocchio as pin
 from param_parsers import ParamParser
-from visualizer import add_cube_to_viewer, add_sphere_to_viewer, create_viewer
 from wrapper_panda import PandaWrapper
-import crocoddyl
 
 
 ### Argument parser
@@ -72,20 +70,16 @@ rdata = rmodel.createData()
 
 # Generating the meshcat visualizer
 goal_frame_id = rmodel.addFrame(
-    pin.Frame(
-        "goal",
-        0,
-        0,
-        pp.get_target_pose(),
-        pin.FrameType.OP_FRAME
-    )
+    pin.Frame("goal", 0, 0, pp.get_target_pose(), pin.FrameType.OP_FRAME)
 )
 
 if args.velocity:
     ocp, objects = create_ocp.create_ocp_velocity(rmodel, cmodel, pp)
 else:
     # OCP with distance constraints
-    ocp, objects = create_ocp.create_ocp_distance(rmodel, cmodel, args.distance_in_cost, pp)
+    ocp, objects = create_ocp.create_ocp_distance(
+        rmodel, cmodel, args.distance_in_cost, pp
+    )
 
 frame_placement_residual = objects["framePlacementResidual"]
 ref = frame_placement_residual.reference

@@ -10,7 +10,6 @@
 #define COLMPC_ACTIVATIONS_QUADRATIC_EXP_HPP_
 
 #include "colmpc/fwd.hpp"
-
 #include "crocoddyl/core/activation-base.hpp"
 #include "crocoddyl/core/fwd.hpp"
 #include "crocoddyl/core/utils/exception.hpp"
@@ -33,8 +32,7 @@ using namespace crocoddyl;
  * \sa `calc()`, `calcDiff()`, `createData()`
  */
 template <typename _Scalar>
-class ActivationModelQuadExpTpl
-    : public ActivationModelAbstractTpl<_Scalar> {
+class ActivationModelQuadExpTpl : public ActivationModelAbstractTpl<_Scalar> {
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
@@ -56,11 +54,11 @@ class ActivationModelQuadExpTpl
    */
 
   explicit ActivationModelQuadExpTpl(const std::size_t &nr,
-                                         const Scalar &alpha = Scalar(1.))
+                                     const Scalar &alpha = Scalar(1.))
       : Base(nr), alpha_(alpha) {
     if (alpha <= Scalar(0.)) {
-      throw_pretty("Invalid argument: "
-                   << "alpha should be a strictly positive value");
+      throw_pretty(
+          "Invalid argument: " << "alpha should be a strictly positive value");
     }
   };
   virtual ~ActivationModelQuadExpTpl() {};
@@ -74,9 +72,9 @@ class ActivationModelQuadExpTpl
   virtual void calc(const boost::shared_ptr<ActivationDataAbstract> &data,
                     const Eigen::Ref<const VectorXs> &r) {
     if (static_cast<std::size_t>(r.size()) != nr_) {
-      throw_pretty("Invalid argument: "
-                   << "r has wrong dimension (it should be " +
-                          std::to_string(nr_) + ")");
+      throw_pretty(
+          "Invalid argument: " << "r has wrong dimension (it should be " +
+                                      std::to_string(nr_) + ")");
     }
     boost::shared_ptr<Data> d = boost::static_pointer_cast<Data>(data);
 
@@ -92,13 +90,13 @@ class ActivationModelQuadExpTpl
   virtual void calcDiff(const boost::shared_ptr<ActivationDataAbstract> &data,
                         const Eigen::Ref<const VectorXs> &r) {
     if (static_cast<std::size_t>(r.size()) != nr_) {
-      throw_pretty("Invalid argument: "
-                   << "r has wrong dimension (it should be " +
-                          std::to_string(nr_) + ")");
+      throw_pretty(
+          "Invalid argument: " << "r has wrong dimension (it should be " +
+                                      std::to_string(nr_) + ")");
     }
     boost::shared_ptr<Data> d = boost::static_pointer_cast<Data>(data);
 
-    d->a1 = - Scalar(2.0) / alpha_ * d->a_value;
+    d->a1 = -Scalar(2.0) / alpha_ * d->a_value;
     data->Ar = d->a1 * r;
     data->Arr.diagonal() = -Scalar(2.0) * d->a1 * r.array().square() / alpha_;
     data->Arr.diagonal().array() += d->a1;
@@ -141,8 +139,7 @@ class ActivationModelQuadExpTpl
  * @param[in] a1  computed in calcDiff to avoid recomputation
  */
 template <typename _Scalar>
-struct ActivationDataQuadExpTpl
-    : public ActivationDataAbstractTpl<_Scalar> {
+struct ActivationDataQuadExpTpl : public ActivationDataAbstractTpl<_Scalar> {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
   typedef _Scalar Scalar;

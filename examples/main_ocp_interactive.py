@@ -8,10 +8,9 @@ import argparse
 import os
 
 import create_ocp
-import numpy as np
 import pinocchio as pin
 from param_parsers import ParamParser
-from visualizer import add_cube_to_viewer, add_sphere_to_viewer, create_viewer
+from visualizer import create_viewer
 from wrapper_panda import PandaWrapper
 
 
@@ -69,33 +68,31 @@ rdata = rmodel.createData()
 
 # Generating the meshcat visualizer
 goal_frame_id = rmodel.addFrame(
-    pin.Frame(
-        "goal",
-        0,
-        0,
-        pp.get_target_pose(),
-        pin.FrameType.OP_FRAME
-    )
+    pin.Frame("goal", 0, 0, pp.get_target_pose(), pin.FrameType.OP_FRAME)
 )
 vis = create_viewer(rmodel, cmodel, cmodel)
 vis.displayFrames(True, [rmodel.getFrameId("panda2_hand_tcp"), goal_frame_id])
 # add_sphere_to_viewer(
-    # vis, "goal", 5e-2, pp.get_target_pose().translation, color=0x006400
+# vis, "goal", 5e-2, pp.get_target_pose().translation, color=0x006400
 # )
 
 if args.velocity:
     ocp, objects = create_ocp.create_ocp_velocity(rmodel, cmodel, pp)
 else:
     # OCP with distance constraints
-    ocp, objects = create_ocp.create_ocp_distance(rmodel, cmodel, args.distance_in_cost, pp)
+    ocp, objects = create_ocp.create_ocp_distance(
+        rmodel, cmodel, args.distance_in_cost, pp
+    )
 
 import simulation
+
 simulation.simulation_loop(
     ocp,
     rmodel,
     goal_frame_id,
-    cmodel, 
+    cmodel,
     cmodel.ngeoms - 1,
     objects["framePlacementResidual"],
     pp,
-    vis)
+    vis,
+)

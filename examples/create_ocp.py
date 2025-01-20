@@ -131,7 +131,10 @@ def create_ocp_velocity(
 
 
 def create_ocp_distance(
-    rmodel: pin.Model, gmodel: pin.GeometryModel, use_distance_in_cost: bool, param_parser: ParamParser
+    rmodel: pin.Model,
+    gmodel: pin.GeometryModel,
+    use_distance_in_cost: bool,
+    param_parser: ParamParser,
 ) -> crocoddyl.SolverAbstract:
     objects = {}
 
@@ -191,10 +194,18 @@ def create_ocp_distance(
         if use_distance_in_cost:
             # Add the distance residual to the cost
             assert obstacleDistanceResidual.nr == 1
-            activation = col.ActivationModelQuadExp(1, param_parser.get_distance_threshold()**2)
-            cost = crocoddyl.CostModelResidual(state, activation, obstacleDistanceResidual)
-            runningCostModel.addCost(f"col_{col_idx}", cost, param_parser.get_W_obstacle())
-            terminalCostModel.addCost(f"col_term_{col_idx}", cost, param_parser.get_W_obstacle())
+            activation = col.ActivationModelQuadExp(
+                1, param_parser.get_distance_threshold() ** 2
+            )
+            cost = crocoddyl.CostModelResidual(
+                state, activation, obstacleDistanceResidual
+            )
+            runningCostModel.addCost(
+                f"col_{col_idx}", cost, param_parser.get_W_obstacle()
+            )
+            terminalCostModel.addCost(
+                f"col_term_{col_idx}", cost, param_parser.get_W_obstacle()
+            )
 
     # Adding costs to the models
     runningCostModel.addCost("stateReg", xRegCost, param_parser.get_W_xREG())
@@ -331,5 +342,5 @@ def create_ocp_nocol(
     ocp.eps_rel = 0
 
     ocp.with_callbacks = True
-    
+
     return ocp, objects
