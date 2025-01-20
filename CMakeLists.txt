@@ -75,7 +75,9 @@ set(${PROJECT_NAME}_HEADERS
     include/${PROJECT_NAME}/residual-distance-collision.hpp
     include/${PROJECT_NAME}/residual-distance-collision.hxx
     include/${PROJECT_NAME}/residual-velocity-avoidance.hpp
-    include/${PROJECT_NAME}/residual-velocity-avoidance.hxx)
+    include/${PROJECT_NAME}/residual-velocity-avoidance.hxx
+    include/${PROJECT_NAME}/quadratic-exp.hpp
+)
 
 add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_HEADERS})
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)

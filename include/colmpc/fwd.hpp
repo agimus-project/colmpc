@@ -26,6 +26,15 @@ template <typename Scalar>
 class ResidualDataVelocityAvoidanceTpl;
 typedef ResidualDataVelocityAvoidanceTpl<double> ResidualDataVelocityAvoidance;
 
+
+template <typename Scalar>
+class ActivationModelQuadExpTpl;
+typedef ActivationModelQuadExpTpl<double>
+    ActivationModelQuadExp;
+template <typename Scalar>
+class ActivationDataQuadExpTpl;
+typedef ActivationDataQuadExpTpl<double> ActivationDataQuadExp;
+
 }  // namespace colmpc
 
 #endif  // COLMPC_FWDL_HPP_
