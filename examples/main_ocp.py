@@ -37,6 +37,14 @@ parser.add_argument(
     help="Scene number (must be 1, 2, or 3).",
 )
 
+# Add argument to add distance residual in cost
+parser.add_argument(
+    "--distance-in-cost",
+    "-d",
+    action="store_true",
+    help="Add the distance residual to the cost.",
+)
+
 # Parse the arguments
 args = parser.parse_args()
 
@@ -60,7 +68,7 @@ add_sphere_to_viewer(
 )
 
 # OCP with distance constraints
-OCP_dist = create_ocp.create_ocp_distance(rmodel, cmodel, pp)
+OCP_dist, _ = create_ocp.create_ocp_distance(rmodel, cmodel, args.distance_in_cost, pp)
 XS_init = [pp.get_X0()] * (pp.get_T() + 1)
 US_init = OCP_dist.problem.quasiStatic(XS_init[:-1])
 
@@ -68,7 +76,7 @@ OCP_dist.solve(XS_init, US_init, 100)
 print("OCP with distance constraints solved")
 
 # OCP with velocity constraints
-ocp_vel = create_ocp.create_ocp_velocity(rmodel, cmodel, pp)
+ocp_vel, _ = create_ocp.create_ocp_velocity(rmodel, cmodel, pp)
 ocp_vel.solve(XS_init, US_init, 100)
 
 
@@ -97,10 +105,10 @@ for i, xs in enumerate(OCP_dist.xs):
 print("Press 'ENTER' to display the solution")
 while True:
     print("Trajectory of the OCP with distance constraints")
-    for q in OCP_dist.xs:
+    for k, q in enumerate(OCP_dist.xs):
         vis.display(q[:7])
-        input()
+        input(k)
     print("Trajectory of the OCP with velocity constraints")
-    for q in ocp_vel.xs:
+    for k, q in enumerate(ocp_vel.xs):
         vis.display(q[:7])
-        input()
+        input(k)
