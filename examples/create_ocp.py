@@ -16,6 +16,8 @@ import colmpc as col
 def create_ocp_velocity(
     rmodel: pin.Model, gmodel: pin.GeometryModel, param_parser: ParamParser
 ) -> crocoddyl.SolverAbstract:
+    objects = {}
+
     # Stat and actuation model
     state = crocoddyl.StateMultibody(rmodel)
     actuation = crocoddyl.ActuationModelFull(state)
@@ -40,6 +42,7 @@ def create_ocp_velocity(
         rmodel.getFrameId("panda2_hand_tcp"),
         param_parser.get_target_pose(),
     )
+    objects["framePlacementResidual"] = framePlacementResidual
 
     goalTrackingCost = crocoddyl.CostModelResidual(state, framePlacementResidual)
 
@@ -124,12 +127,17 @@ def create_ocp_velocity(
 
     ocp.with_callbacks = True
 
-    return ocp
+    return ocp, objects
 
 
 def create_ocp_distance(
-    rmodel: pin.Model, gmodel: pin.GeometryModel, param_parser: ParamParser
+    rmodel: pin.Model,
+    gmodel: pin.GeometryModel,
+    use_distance_in_cost: bool,
+    param_parser: ParamParser,
 ) -> crocoddyl.SolverAbstract:
+    objects = {}
+
     # Stat and actuation model
     state = crocoddyl.StateMultibody(rmodel)
     actuation = crocoddyl.ActuationModelFull(state)
@@ -154,6 +162,7 @@ def create_ocp_distance(
         rmodel.getFrameId("panda2_hand_tcp"),
         param_parser.get_target_pose(),
     )
+    objects["framePlacementResidual"] = framePlacementResidual
 
     goalTrackingCost = crocoddyl.CostModelResidual(state, framePlacementResidual)
 
@@ -181,6 +190,22 @@ def create_ocp_distance(
         # Adding the constraint to the constraint manager
         runningConstraintModelManager.addConstraint(f"col_{col_idx}", constraint)
         terminalConstraintModelManager.addConstraint(f"col_term_{col_idx}", constraint)
+
+        if use_distance_in_cost:
+            # Add the distance residual to the cost
+            assert obstacleDistanceResidual.nr == 1
+            activation = col.ActivationModelQuadExp(
+                1, param_parser.get_distance_threshold() ** 2
+            )
+            cost = crocoddyl.CostModelResidual(
+                state, activation, obstacleDistanceResidual
+            )
+            runningCostModel.addCost(
+                f"col_{col_idx}", cost, param_parser.get_W_obstacle()
+            )
+            terminalCostModel.addCost(
+                f"col_term_{col_idx}", cost, param_parser.get_W_obstacle()
+            )
 
     # Adding costs to the models
     runningCostModel.addCost("stateReg", xRegCost, param_parser.get_W_xREG())
@@ -233,12 +258,14 @@ def create_ocp_distance(
 
     ocp.with_callbacks = True
 
-    return ocp
+    return ocp, objects
 
 
 def create_ocp_nocol(
     rmodel: pin.Model, param_parser: ParamParser
 ) -> crocoddyl.SolverAbstract:
+    objects = {}
+
     # Stat and actuation model
     state = crocoddyl.StateMultibody(rmodel)
     actuation = crocoddyl.ActuationModelFull(state)
@@ -263,6 +290,7 @@ def create_ocp_nocol(
         rmodel.getFrameId("panda2_hand_tcp"),
         param_parser.get_target_pose(),
     )
+    objects["framePlacementResidual"] = framePlacementResidual
 
     goalTrackingCost = crocoddyl.CostModelResidual(state, framePlacementResidual)
 
@@ -314,3 +342,5 @@ def create_ocp_nocol(
     ocp.eps_rel = 0
 
     ocp.with_callbacks = True
+
+    return ocp, objects

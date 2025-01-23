@@ -40,15 +40,17 @@ scene1:
   WEIGHT_xREG: 0.1
   WEIGHT_GRIPPER_POSE: 1.0
   WEIGHT_GRIPPER_POSE_TERM: 50
+  WEIGHT_OBSTACLE: 1.0
   WEIGHT_LIMIT: 0.1
 
   # Safety threshold
   SAFETY_THRESHOLD: 0.0
+  DISTANCE_THRESHOLD: 0.01
 
   OBSTACLES:
     obstacle1:
         type: "ellipsoid"
-        translation: [0.0, 0.1, 1.2]
+        translation: [ 0.0, 0.1, 1.2]
         orientation: [ 0.0, 0.707, 0.707, 0.0]
         dim: [0.15, 0.1, 0.075]
 
@@ -98,10 +100,12 @@ scene2:
   WEIGHT_xREG: 0.1
   WEIGHT_GRIPPER_POSE: 5.0
   WEIGHT_GRIPPER_POSE_TERM: 100.0
+  WEIGHT_OBSTACLE: 1.0
   WEIGHT_LIMIT: 0.1
 
   # Safety threshold
   SAFETY_THRESHOLD: 0.001
+  DISTANCE_THRESHOLD: 0.01
 
   OBSTACLES:
     obstacle1:
@@ -179,10 +183,12 @@ scene3:
   WEIGHT_xREG: 0.1
   WEIGHT_GRIPPER_POSE: 5.0
   WEIGHT_GRIPPER_POSE_TERM: 100.0
+  WEIGHT_OBSTACLE: 1.0
   WEIGHT_LIMIT: 0.1
 
   # Safety threshold
   SAFETY_THRESHOLD: 0.0
+  DISTANCE_THRESHOLD: 0.01
 
   OBSTACLES:
     obstacle1:
