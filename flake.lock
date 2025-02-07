@@ -1,5 +1,29 @@
 {
   "nodes": {
+    "crocoddyl": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1738932671,
+        "narHash": "sha256-2xceLlDCaUxUWMoCZralxsBwxwBc2jhNK7iqccIz7rU=",
+        "owner": "loco-3d",
+        "repo": "crocoddyl",
+        "rev": "871b0a933f1f74f0abb8bbbce0d367c769eeb435",
+        "type": "github"
+      },
+      "original": {
+        "owner": "loco-3d",
+        "ref": "release/3.0.0",
+        "repo": "crocoddyl",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -48,6 +72,7 @@
     },
     "root": {
       "inputs": {
+        "crocoddyl": "crocoddyl",
         "flake-parts": "flake-parts",
         "nixpkgs": "nixpkgs"
       }
