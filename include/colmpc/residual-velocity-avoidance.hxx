@@ -22,8 +22,8 @@ using namespace crocoddyl;
 
 template <typename Scalar>
 ResidualModelVelocityAvoidanceTpl<Scalar>::ResidualModelVelocityAvoidanceTpl(
-    boost::shared_ptr<StateMultibody> state,
-    boost::shared_ptr<GeometryModel> geom_model,
+    std::shared_ptr<StateMultibody> state,
+    std::shared_ptr<GeometryModel> geom_model,
     const pinocchio::PairIndex pair_id, const Scalar di, const Scalar ds,
     const Scalar ksi)
     : Base(state, 1, true, true, true),
@@ -50,7 +50,7 @@ ResidualModelVelocityAvoidanceTpl<
 
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
-    const boost::shared_ptr<ResidualDataAbstract> &data,
+    const std::shared_ptr<ResidualDataAbstract> &data,
     const Eigen::Ref<const VectorXs> &, const Eigen::Ref<const VectorXs> &) {
   Data *d = static_cast<Data *>(data.get());
 
@@ -118,7 +118,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
 
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
-    const boost::shared_ptr<ResidualDataAbstract> &data,
+    const std::shared_ptr<ResidualDataAbstract> &data,
     const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
   Data *d = static_cast<Data *>(data.get());
 
@@ -318,11 +318,11 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   data->Rx = d->ddistdot_dq_val.transpose();
 }
 template <typename Scalar>
-boost::shared_ptr<ResidualDataAbstractTpl<Scalar> >
+std::shared_ptr<ResidualDataAbstractTpl<Scalar> >
 ResidualModelVelocityAvoidanceTpl<Scalar>::createData(
     DataCollectorAbstract *const data) {
-  return boost::allocate_shared<Data>(Eigen::aligned_allocator<Data>(), this,
-                                      data);
+  return std::allocate_shared<Data>(Eigen::aligned_allocator<Data>(), this,
+                                    data);
 }
 
 template <typename Scalar>

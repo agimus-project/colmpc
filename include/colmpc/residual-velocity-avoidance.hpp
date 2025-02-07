@@ -73,8 +73,8 @@ struct ResidualModelVelocityAvoidanceTpl
    * @param[in] ksi         Convergence speed coefficient
    */
 
-  ResidualModelVelocityAvoidanceTpl(boost::shared_ptr<StateMultibody> state,
-                                    boost::shared_ptr<GeometryModel> geom_model,
+  ResidualModelVelocityAvoidanceTpl(std::shared_ptr<StateMultibody> state,
+                                    std::shared_ptr<GeometryModel> geom_model,
                                     const pinocchio::PairIndex pair_id,
                                     const Scalar di = 1.0e-2,
                                     const Scalar ds = 1.0e-5,
@@ -87,7 +87,7 @@ struct ResidualModelVelocityAvoidanceTpl
    * @param[in] data  Pair collision residual data
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    */
-  virtual void calc(const boost::shared_ptr<ResidualDataAbstract> &data,
+  virtual void calc(const std::shared_ptr<ResidualDataAbstract> &data,
                     const Eigen::Ref<const VectorXs> &x,
                     const Eigen::Ref<const VectorXs> &u);
 
@@ -97,11 +97,11 @@ struct ResidualModelVelocityAvoidanceTpl
    * @param[in] data  Pair collision residual data
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    */
-  virtual void calcDiff(const boost::shared_ptr<ResidualDataAbstract> &data,
+  virtual void calcDiff(const std::shared_ptr<ResidualDataAbstract> &data,
                         const Eigen::Ref<const VectorXs> &x,
                         const Eigen::Ref<const VectorXs> &u);
 
-  virtual boost::shared_ptr<ResidualDataAbstract> createData(
+  virtual std::shared_ptr<ResidualDataAbstract> createData(
       DataCollectorAbstract *const data);
 
   /**
@@ -165,7 +165,7 @@ struct ResidualModelVelocityAvoidanceTpl
 
   typename StateMultibody::PinocchioModel
       pin_model_;  //!< Pinocchio model used for internal computations
-  boost::shared_ptr<GeometryModel>
+  std::shared_ptr<GeometryModel>
       geom_model_;  //!< Pinocchio geometry model containing collision pair
   pinocchio::PairIndex
       pair_id_;  //!< Index of the collision pair in geometry model

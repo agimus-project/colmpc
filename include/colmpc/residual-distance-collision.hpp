@@ -55,9 +55,9 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
    * @param[in] pair_id     Index of the collision pair in the geometry model
    */
 
-  ResidualDistanceCollisionTpl(boost::shared_ptr<StateMultibody> state,
+  ResidualDistanceCollisionTpl(std::shared_ptr<StateMultibody> state,
                                const std::size_t nu,
-                               boost::shared_ptr<GeometryModel> geom_model,
+                               std::shared_ptr<GeometryModel> geom_model,
                                const pinocchio::PairIndex pair_id);
   virtual ~ResidualDistanceCollisionTpl();
 
@@ -68,7 +68,7 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    * @param[in] u     Control input \f$\mathbf{u}\in\mathbb{R}^{nu}\f$
    */
-  virtual void calc(const boost::shared_ptr<ResidualDataAbstract> &data,
+  virtual void calc(const std::shared_ptr<ResidualDataAbstract> &data,
                     const Eigen::Ref<const VectorXs> &x,
                     const Eigen::Ref<const VectorXs> &u);
 
@@ -79,11 +79,11 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    * @param[in] u     Control input \f$\mathbf{u}\in\mathbb{R}^{nu}\f$
    */
-  virtual void calcDiff(const boost::shared_ptr<ResidualDataAbstract> &data,
+  virtual void calcDiff(const std::shared_ptr<ResidualDataAbstract> &data,
                         const Eigen::Ref<const VectorXs> &x,
                         const Eigen::Ref<const VectorXs> &u);
 
-  virtual boost::shared_ptr<ResidualDataAbstract> createData(
+  virtual std::shared_ptr<ResidualDataAbstract> createData(
       DataCollectorAbstract *const data);
 
   /**
@@ -110,7 +110,7 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
  private:
   typename StateMultibody::PinocchioModel
       pin_model_;  //!< Pinocchio model used for internal computations
-  boost::shared_ptr<pinocchio::GeometryModel>
+  std::shared_ptr<pinocchio::GeometryModel>
       geom_model_;  //!< Pinocchio geometry model containing collision pair
   pinocchio::PairIndex
       pair_id_;  //!< Index of the collision pair in geometry model

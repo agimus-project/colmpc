@@ -14,12 +14,12 @@ namespace python {
 namespace bp = boost::python;
 
 void exposeResidualDistanceCollision() {
-  bp::register_ptr_to_python<boost::shared_ptr<ResidualDistanceCollision>>();
+  bp::register_ptr_to_python<std::shared_ptr<ResidualDistanceCollision>>();
 
   bp::class_<ResidualDistanceCollision, bp::bases<ResidualModelAbstract>>(
       "ResidualDistanceCollision",
-      bp::init<boost::shared_ptr<StateMultibody>, const std::size_t,
-               boost::shared_ptr<pinocchio::GeometryModel>,
+      bp::init<std::shared_ptr<StateMultibody>, const std::size_t,
+               std::shared_ptr<pinocchio::GeometryModel>,
                const pinocchio::PairIndex>(
           bp::args("self", "state", "nu", "geom_model", "pair_id"),
           "Initialize the residual model.\n\n"
@@ -63,8 +63,7 @@ void exposeResidualDistanceCollision() {
           bp::make_function(&ResidualDistanceCollision::set_pair_id),
           "reference collision pair id");
 
-  bp::register_ptr_to_python<
-      boost::shared_ptr<ResidualDataDistanceCollision>>();
+  bp::register_ptr_to_python<std::shared_ptr<ResidualDataDistanceCollision>>();
 
   bp::class_<ResidualDataDistanceCollision, bp::bases<ResidualDataAbstract>>(
       "ResidualDataDistanceCollision", "Data for vel collision residual.\n\n",
