@@ -137,7 +137,7 @@ struct ResidualDataDistanceCollisionTpl
   typedef typename MathBase::Vector3s Vector3s;
 
   template <template <typename Scalar> class Model>
-  static coal::ComputeDistance buildComputeDistance(
+  static hpp::fcl::ComputeDistance buildComputeDistance(
       Model<Scalar> *const model) {
     const pinocchio::GeometryModel &geom_model = model->get_geometry();
     const pinocchio::PairIndex pair_id = model->get_pair_id();
