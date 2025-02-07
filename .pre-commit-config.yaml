@@ -1,8 +1,8 @@
 ci:
-  autoupdate_branch: devel
+  autoupdate_branch: main
 repos:
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.6.4
+  rev: v0.9.5
   hooks:
   - id: ruff
     args:
@@ -14,17 +14,17 @@ repos:
   hooks:
   - id: cmake-format
 - repo: https://github.com/pappasam/toml-sort
-  rev: v0.23.1
+  rev: v0.24.2
   hooks:
   - id: toml-sort-fix
 - repo: https://github.com/pre-commit/mirrors-clang-format
-  rev: v18.1.8
+  rev: v19.1.7
   hooks:
   - id: clang-format
     args:
     - --style=Google
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.6.0
+  rev: v5.0.0
   hooks:
   - id: check-added-large-files
   - id: check-ast

@@ -102,7 +102,7 @@ for n in range(10):
     start = time.time()
     ocp.solve(xs, us, 50)
     stop = time.time()
-    print(f"{n:4}  {(stop - start)*1e3:6.2f}  {ocp.iter:3}")
+    print(f"{n:4}  {(stop - start) * 1e3:6.2f}  {ocp.iter:3}")
     xs = ocp.xs
     us = ocp.us
 

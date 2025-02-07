@@ -4,7 +4,6 @@
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
 from os.path import abspath, dirname, join
-from typing import Tuple
 
 import hppfcl
 import numpy as np
@@ -47,7 +46,7 @@ class PandaWrapper:
         # Transforming the robot from cylinders/spheres to capsules
         self._capsule = capsule
 
-    def __call__(self) -> Tuple[pin.Model, pin.GeometryModel, pin.GeometryModel]:
+    def __call__(self) -> tuple[pin.Model, pin.GeometryModel, pin.GeometryModel]:
         """Create a robot.
 
         Returns:
