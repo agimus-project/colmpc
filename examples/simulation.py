@@ -194,7 +194,6 @@ def simulation_loop(
     gui.start()
 
     try:
-        start = time.time()
         dt = pp.get_dt()
 
         xs = [pp.get_X0()] * (pp.get_T() + 1)

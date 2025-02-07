@@ -9,6 +9,7 @@ import os
 
 import create_ocp
 import pinocchio as pin
+import simulation
 from param_parsers import ParamParser
 from visualizer import create_viewer
 from wrapper_panda import PandaWrapper
@@ -83,8 +84,6 @@ else:
     ocp, objects = create_ocp.create_ocp_distance(
         rmodel, cmodel, args.distance_in_cost, pp
     )
-
-import simulation
 
 simulation.simulation_loop(
     ocp,
