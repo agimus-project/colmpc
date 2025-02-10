@@ -14,13 +14,12 @@ namespace python {
 namespace bp = boost::python;
 
 void exposeResidualVelocityAvoidance() {
-  bp::register_ptr_to_python<
-      boost::shared_ptr<ResidualModelVelocityAvoidance>>();
+  bp::register_ptr_to_python<std::shared_ptr<ResidualModelVelocityAvoidance>>();
 
   bp::class_<ResidualModelVelocityAvoidance, bp::bases<ResidualModelAbstract>>(
       "ResidualModelVelocityAvoidance",
-      bp::init<boost::shared_ptr<StateMultibody>,
-               boost::shared_ptr<pinocchio::GeometryModel>,
+      bp::init<std::shared_ptr<StateMultibody>,
+               std::shared_ptr<pinocchio::GeometryModel>,
                const pinocchio::PairIndex,
                bp::optional<const double, const double, const double>>(
           bp::args("self", "state", "geom_model", "pair_id", "di", "ds", "ksi"),
@@ -85,8 +84,7 @@ void exposeResidualVelocityAvoidance() {
           bp::make_function(&ResidualModelVelocityAvoidance::set_ksi),
           "reference convergence speed coefficient");
 
-  bp::register_ptr_to_python<
-      boost::shared_ptr<ResidualDataVelocityAvoidance>>();
+  bp::register_ptr_to_python<std::shared_ptr<ResidualDataVelocityAvoidance>>();
 
   bp::class_<ResidualDataVelocityAvoidance, bp::bases<ResidualDataAbstract>>(
       "ResidualDataVelocityAvoidance", "Data for vel collision residual.\n\n",

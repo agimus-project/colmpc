@@ -16,7 +16,7 @@ namespace python {
 namespace bp = boost::python;
 
 void exposeActivationModelQuadExp() {
-  bp::register_ptr_to_python<boost::shared_ptr<ActivationModelQuadExp> >();
+  bp::register_ptr_to_python<std::shared_ptr<ActivationModelQuadExp> >();
 
   bp::class_<ActivationModelQuadExp,
              bp::bases<crocoddyl::ActivationModelAbstract> >(
