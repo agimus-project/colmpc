@@ -23,15 +23,12 @@
           _module.args.pkgs = import inputs.nixpkgs {
             inherit system;
             overlays = [
-              (_final: prev: {
+              (_final: _prev: {
                 # Get pinocchio with #2566 until pinocchio > 3.3.1
                 # to fix crocoddyl python imports on macos
-                inherit (inputs.crocoddyl.packages.${system}) pinocchio;
-                # Get croddyl with #1339
+                # And croddyl with #1339
                 # to have std::shared_ptr
-                crocoddyl = prev.crocoddyl.overrideAttrs {
-                  inherit (inputs.crocoddyl.packages.${system}.crocoddyl) src;
-                };
+                inherit (inputs.crocoddyl.packages.${system}) crocoddyl pinocchio;
               })
             ];
           };
