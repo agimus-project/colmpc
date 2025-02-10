@@ -23,12 +23,21 @@
           _module.args.pkgs = import inputs.nixpkgs {
             inherit system;
             overlays = [
-              (_final: _prev: {
+              (final: prev: {
                 # Get pinocchio with #2566 until pinocchio > 3.3.1
                 # to fix crocoddyl python imports on macos
                 # And croddyl with #1339
                 # to have std::shared_ptr
                 inherit (inputs.crocoddyl.packages.${system}) crocoddyl pinocchio;
+                # patch mim-solvers for boost -> std shared_ptr
+                mim-solvers = prev.mim-solvers.overrideAttrs (super: {
+                  patches = (super.patches or []) ++ [
+                    (final.fetchpatch {
+                      url = "https://github.com/machines-in-motion/mim_solvers/pull/44.patch";
+                      hash = "sha256-2LmNM6Hg5WwY8KlZzwxGO3VvozSHhnnKrS4vfGXzvtE=";
+                    })
+                  ];
+                });
               })
             ];
           };
