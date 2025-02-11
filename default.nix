@@ -18,6 +18,7 @@ stdenv.mkDerivation {
     root = ./.;
     fileset = lib.fileset.unions [
       ./CMakeLists.txt
+      ./examples
       ./include
       ./package.xml
       ./python
