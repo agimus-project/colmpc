@@ -219,12 +219,46 @@ def simulation_loop(
             q = xs[1][:7]
             if not ok:
                 print("Failed to solve the problem")
-            # print("u: ", np.array2string(np.array(us), precision=2, separator=", ", suppress_small=True))
-            # print("q: ", np.array2string(np.array(xs)[:,:7], precision=2, separator=", ", suppress_small=True))
-            # print("q1: ", np.array2string(xs[1][:7], precision=2, separator=", ", suppress_small=True))
-            # print("diff: ", np.array2string(xs[1][:7] - xs[0][:7], precision=2, separator=", ", suppress_small=True))
+            # print(
+            # "u: ",
+            # np.array2string(
+            # np.array(us), precision=2, separator=", ", suppress_small=True
+            # ),
+            # )
+            # print(
+            # "q: ",
+            # np.array2string(
+            # np.array(xs)[:, :7],
+            # precision=2,
+            # separator=", ",
+            # suppress_small=True,
+            # ),
+            # )
+            # print(
+            # "q1: ",
+            # np.array2string(
+            # xs[1][:7], precision=2, separator=", ", suppress_small=True
+            # ),
+            # )
+            # print(
+            # "diff: ",
+            # np.array2string(
+            # xs[1][:7] - xs[0][:7],
+            # precision=2,
+            # separator=", ",
+            # suppress_small=True,
+            # ),
+            # )
             # for q0, q1 in zip(xs[:-1], xs[1:]):
-            #     print("diff: ", np.array2string(q1[:7] - q0[:7], precision=2, separator=", ", suppress_small=True))
+            # print(
+            # "diff: ",
+            # np.array2string(
+            # q1[:7] - q0[:7],
+            # precision=2,
+            # separator=", ",
+            # suppress_small=True,
+            # ),
+            # )
 
             # Shift the trajectory
             xs[:-1] = xs[1:]

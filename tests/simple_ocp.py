@@ -1,5 +1,5 @@
+import coal
 import crocoddyl
-import hppfcl
 import matplotlib.pyplot as plt
 import mim_solvers
 import numpy as np
@@ -66,7 +66,7 @@ rmodel.addFrame(pin.Frame("obstacle", 0, 0, Mobs, pin.OP_FRAME))
 
 idf1 = rmodel.getFrameId("obstacle")
 idj1 = rmodel.frames[idf1].parentJoint
-elips1 = hppfcl.Ellipsoid(*[d**-0.5 for d in np.diag(D1)])
+elips1 = coal.Ellipsoid(*[d**-0.5 for d in np.diag(D1)])
 elips1_geom = pin.GeometryObject(
     "el1", idj1, idf1, rmodel.frames[idf1].placement, elips1
 )
@@ -75,7 +75,7 @@ idg1 = gmodel.addGeometryObject(elips1_geom)
 
 idf2 = rmodel.getFrameId("panda2_hand_tcp")
 idj2 = rmodel.frames[idf2].parentJoint
-elips2 = hppfcl.Ellipsoid(*[d**-0.5 for d in np.diag(D2)])
+elips2 = coal.Ellipsoid(*[d**-0.5 for d in np.diag(D2)])
 elips2_geom = pin.GeometryObject(
     "el2", idj2, idf2, rmodel.frames[idf2].placement, elips2
 )
@@ -215,7 +215,8 @@ ddp.solve(XS_init, US_init, 100)
 # for i,xs in enumerate(ddp.xs):
 # q = np.array(xs[:7].tolist())
 # pin.framesForwardKinematics(rmodel, rdata, q)
-# add_cube_to_viewer(viz, "vcolmpc" + str(i), [2e-2,2e-2, 2e-2], rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation, color=100000000)
+# add_cube_to_viewer(viz, "vcolmpc" + str(i), [2e-2,2e-2, 2e-2],
+# rdata.oMf[rmodel.getFrameId("panda2_rightfinger")].translation, color=100000000)
 # viz.display(np.array(xs[:7].tolist()))
 # input()
 d = []
@@ -224,12 +225,12 @@ for i, xs in enumerate(ddp.xs):
     pin.framesForwardKinematics(rmodel, rdata, q)
     pin.updateGeometryPlacements(rmodel, rdata, gmodel, gdata, q)
 
-    req = hppfcl.DistanceRequest()
+    req = coal.DistanceRequest()
     req.gjk_max_iterations = 20000
     req.abs_err = 0
     req.gjk_tolerance = 1e-9
-    res = hppfcl.DistanceResult()
-    distance = hppfcl.distance(
+    res = coal.DistanceResult()
+    distance = coal.distance(
         elips1,
         gdata.oMg[idg1],
         elips2,

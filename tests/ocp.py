@@ -10,7 +10,11 @@ from colmpc import ResidualDistanceCollision
 
 
 class OCPPandaReachingColWithMultipleCol:
-    """This class is creating a optimal control problem of a panda robot reaching for a target while taking a collision between a given previously given shape of the robot and an obstacle into consideration"""
+    """
+    This class is creating a optimal control problem of a panda robot reaching for a
+    target while taking a collision between a given previously given shape of the robot
+    and an obstacle into consideration.
+    """
 
     def __init__(
         self,
@@ -26,7 +30,10 @@ class OCPPandaReachingColWithMultipleCol:
         WEIGHT_LIMIT=1e-1,
         SAFETY_THRESHOLD=1e-2,
     ) -> None:
-        """Creating the class for optimal control problem of a panda robot reaching for a target while taking a collision between a given previously given shape of the robot and an obstacle into consideration.
+        """
+        Creating the class for optimal control problem of a panda robot reaching for a
+        target while taking a collision between a given previously given shape of the
+        robot and an obstacle into consideration.
 
         Args:
             rmodel (pin.Model): pinocchio Model of the robot
@@ -37,8 +44,10 @@ class OCPPandaReachingColWithMultipleCol:
             x0 (np.ndarray): Initial state of the problem
             WEIGHT_xREG (float, optional): State regulation weight. Defaults to 1e-1.
             WEIGHT_uREG (float, optional): Command regulation weight. Defaults to 1e-4.
-            WEIGHT_GRIPPER_POSE (float, optional): End effector pose weight. Defaults to 10.
-            SAFETY_THRESHOLD (float, optional): Safety threshold of collision avoidance. Defaults to 1e-2.
+            WEIGHT_GRIPPER_POSE (float, optional): End effector pose weight. Defaults to
+                10.
+            SAFETY_THRESHOLD (float, optional): Safety threshold of collision avoidance.
+                Defaults to 1e-2.
         """
         # Models of the robot
         self._rmodel = rmodel
@@ -142,7 +151,8 @@ class OCPPandaReachingColWithMultipleCol:
             "gripperPose", goalTrackingCost, self._WEIGHT_GRIPPER_POSE
         )
 
-        # Create Differential Action Model (DAM), i.e. continuous dynamics and cost functions
+        # Create Differential Action Model (DAM), i.e. continuous dynamics and cost
+        # functions
         self._running_DAM = crocoddyl.DifferentialActionModelFreeFwdDynamics(
             self._state,
             self._actuation,
@@ -156,7 +166,8 @@ class OCPPandaReachingColWithMultipleCol:
             self._terminalConstraintModelManager,
         )
 
-        # Create Integrated Action Model (IAM), i.e. Euler integration of continuous dynamics and cost
+        # Create Integrated Action Model (IAM), i.e. Euler integration of continuous
+        # dynamics and cost
         self._runningModel = crocoddyl.IntegratedActionModelEuler(
             self._running_DAM, self._dt
         )

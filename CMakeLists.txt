@@ -98,8 +98,11 @@ if(BUILD_PYTHON_INTERFACE)
   add_subdirectory(python)
 endif()
 
-# # Unit tests if(BUILD_TESTING) find_package(Boost REQUIRED COMPONENTS
-# unit_test_framework) add_subdirectory(tests) endif()
+# # Unit tests
+if(BUILD_TESTING)
+  # find_package(Boost REQUIRED COMPONENTS  unit_test_framework)
+  add_subdirectory(tests)
+endif()
 
 # Installation
 install(

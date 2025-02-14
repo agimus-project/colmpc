@@ -22,7 +22,8 @@ RUN git clone https://github.com/agimus-project/colmpc.git \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_INSTALL_PREFIX="/usr/local" \
         -DCMAKE_INSTALL_LIBDIR=lib \
-        -DHPP_FCL_HAS_QHULL=ON \
+        -DCOAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL=ON \
+        -DCOAL_HAS_QHULL=ON \
         -DBUILD_PYTHON_INTERFACE=ON \
         -Wno-dev \
     && cmake --build "build" -j $MAKE_JOBS \

@@ -5,7 +5,7 @@
 # All rights reserved.
 
 import argparse
-import os
+from pathlib import Path
 
 import create_ocp
 import numpy as np
@@ -53,7 +53,7 @@ args = parser.parse_args()
 robot_wrapper = PandaWrapper(capsule=False)
 rmodel, cmodel, vmodel = robot_wrapper()
 
-yaml_path = os.path.join(os.path.dirname(__file__), "scenes.yaml")
+yaml_path = Path(__file__).parent / "scenes.yaml"
 pp = ParamParser(yaml_path, args.scene)
 
 cmodel = pp.add_collisions(rmodel, cmodel)

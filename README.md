@@ -13,8 +13,8 @@ An in-depth comparison is [here](https://gepettoweb.laas.fr/articles/haffemayer2
 
 ### For OCP & MPC scripts:
 
-- [HPPFCL](https://github.com/humanoid-path-planner/hpp-fcl)  (commit: 7e3f33b7614bba363ca6f27c2730539dfa20c3ea) for collision computations.
-- [Pinocchio](https://github.com/stack-of-tasks/pinocchio) (tag: v3.2.0) fast rigid body dynamics.
+- [Coal](https://github.com/coal-library/coal)  (tag: v3.0.0) for collision computations.
+- [Pinocchio](https://github.com/stack-of-tasks/pinocchio) (tag: v3.3.0) fast rigid body dynamics.
 - [Crocoddyl](https://github.com/loco-3d/crocoddyl) (tag: v2.1.0) framework for the solver.
 
 ### For visualization:
@@ -26,7 +26,7 @@ An in-depth comparison is [here](https://gepettoweb.laas.fr/articles/haffemayer2
 
 ## Installation
 ### From source
-HPP-FCL & Pinocchio must be built from sources. Build pinocchio with the flag : WITH_COLLISION_SUPPORT=ON.
+Coal & Pinocchio must be built from sources. Build pinocchio with the flag : WITH_COLLISION_SUPPORT=ON.
 > [!NOTE]
 > Don't forget to switch to the right commits!
 
@@ -39,8 +39,8 @@ docker container run -it --rm -p 7000:7000 ghcr.io/agimus-project/colmpc:v0.2.0 
 
 
 ### Possible issue
-- If you have a problem with ```FakeCollisionGeometry```, it is likely that the linking of Pinocchio with HPPFCL wasn't done properly. Verify that you have the right commits & the right compilation flags.
-- The main branch of HPPFCL doesn't compute well the closest points and thus, this repo needs to be built upon the devel branch. If it built but doesn't avoid collision, make sure that you didn't built the main branch.
+- If you have a problem with ```FakeCollisionGeometry```, it is likely that the linking of Pinocchio with Coal wasn't done properly. Verify that you have the right commits & the right compilation flags.
+- The main branch of Coal doesn't compute well the closest points and thus, this repo needs to be built upon the devel branch. If it built but doesn't avoid collision, make sure that you didn't built the main branch.
 
 ### For the OCP part:
 

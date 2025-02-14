@@ -22,13 +22,14 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-from os.path import abspath, dirname, join
+from pathlib import Path
 
-import hppfcl
+import coal
 import numpy as np
 import pinocchio as pin
 
-# This class is for unwrapping an URDF and converting it to a model. It is also possible to add objects in the model,
+# This class is for unwrapping an URDF and converting it to a model. It is also possible
+# to add objects in the model,
 # such as a ball at a specific position.
 
 
@@ -39,22 +40,22 @@ class PandaWrapper:
         capsule=False,
         obstacles=None,
     ):
-        """Initialize the wrapper with a scaling number of the target and the name of the robot wanted to get unwrapped."""
+        """
+        Initialize the wrapper with a scaling number of the target and the name of the
+        robot wanted to get unwrapped.
+        """
 
         # Importing the model
-        pinocchio_model_dir = join(dirname(dirname(str(abspath(__file__)))), "models")
-        model_path = join(pinocchio_model_dir, "panda")
-        mesh_dir = pinocchio_model_dir
-        urdf_model_path = join(model_path, "franka.urdf")
-        srdf_model_path = join(model_path, "demo.srdf")
-        self._urdf_model_path = urdf_model_path
-        self._mesh_dir = mesh_dir
-        self._srdf_model_path = srdf_model_path
+        model_path = Path(__file__).parent.parent / "examples" / "models"
+        self._urdf_model_path = model_path / "urdf" / "franka2.urdf"
+        self._mesh_dir = model_path
+        self._srdf_model_path = model_path / "srdf" / "demo.srdf"
 
         # Color of the robot
         self._color = np.array([249, 136, 126, 255]) / 255
 
-        # Boolean describing whether the auto-collisions are in the collision model or not
+        # Boolean describing whether the auto-collisions are in the collision model or
+        # not
         self._auto_col = auto_col
 
         # Transforming the robot from cylinders/spheres to capsules
@@ -123,18 +124,18 @@ class PandaWrapper:
             for i, geometry_object in enumerate(
                 collision_model_reduced_copy.geometryObjects
             ):
-                if isinstance(geometry_object.geometry, hppfcl.Sphere):
+                if isinstance(geometry_object.geometry, coal.Sphere):
                     self._collision_model_reduced.removeGeometryObject(
                         geometry_object.name
                     )
                 # Only selecting the cylinders
-                if isinstance(geometry_object.geometry, hppfcl.Cylinder):
+                if isinstance(geometry_object.geometry, coal.Cylinder):
                     if (geometry_object.name[:-4] + "capsule") in list_names_capsules:
                         capsule = pin.GeometryObject(
                             geometry_object.name[:-4] + "capsule" + "1",
                             geometry_object.parentJoint,
                             geometry_object.parentFrame,
-                            hppfcl.Capsule(
+                            coal.Capsule(
                                 geometry_object.geometry.radius,
                                 geometry_object.geometry.halfLength,
                             ),
@@ -153,7 +154,7 @@ class PandaWrapper:
                             geometry_object.name[:-4] + "capsule",
                             geometry_object.parentJoint,
                             geometry_object.parentFrame,
-                            hppfcl.Capsule(
+                            coal.Capsule(
                                 geometry_object.geometry.radius,
                                 geometry_object.geometry.halfLength,
                             ),
@@ -168,7 +169,8 @@ class PandaWrapper:
                             geometry_object.name[:-4] + "capsule"
                         )
 
-            # Removing the geometry objects that aren't Capsule / Box and disabling the collisions for the finger and the camera
+            # Removing the geometry objects that aren't Capsule / Box and disabling the
+            # collisions for the finger and the camera
             for geometry_object in self._collision_model_reduced.geometryObjects:
                 # Disabling the collisions for the fingers
                 if (
@@ -178,7 +180,7 @@ class PandaWrapper:
                 ):
                     geometry_object.disableCollision = True
                 # Getting rid of the cylinders in cmodel
-                if isinstance(geometry_object.geometry, hppfcl.Cylinder):
+                if isinstance(geometry_object.geometry, coal.Cylinder):
                     self._collision_model_reduced.removeGeometryObject(
                         geometry_object.name
                     )
@@ -238,10 +240,10 @@ def compute_distance_between_shapes(
     cdata = cmodel.createData()
     pin.forwardKinematics(rmodel, rdata, q)
     pin.updateGeometryPlacements(rmodel, rdata, cmodel, cdata, q)
-    req = hppfcl.DistanceRequest()
-    res = hppfcl.DistanceResult()
+    req = coal.DistanceRequest()
+    res = coal.DistanceResult()
 
-    distance = hppfcl.distance(
+    distance = coal.distance(
         cmodel.geometryObjects[shape1_id].geometry,
         cdata.oMg[shape1_id],
         cmodel.geometryObjects[shape2_id].geometry,

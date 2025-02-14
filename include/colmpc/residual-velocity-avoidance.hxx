@@ -54,7 +54,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
     const Eigen::Ref<const VectorXs> &, const Eigen::Ref<const VectorXs> &) {
   Data *d = static_cast<Data *>(data.get());
 
-  // clear the hppfcl results
+  // clear the coal results
   d->res.clear();
 
   const auto &cp = geom_model_->collisionPairs[pair_id_];
@@ -77,7 +77,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
   }
 
   // compute distance between geometries
-  d->distance = hpp::fcl::distance(
+  d->distance = coal::distance(
       geom_1.geometry.get(), toFclTransform3f(d->oMg_id_1),
       geom_2.geometry.get(), toFclTransform3f(d->oMg_id_2), d->req, d->res);
 
@@ -406,14 +406,14 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::set_ksi(const Scalar ksi) {
 template <typename Scalar>
 inline typename ResidualModelVelocityAvoidanceTpl<Scalar>::DiagonalMatrix3s
 ResidualModelVelocityAvoidanceTpl<Scalar>::cast_geom_to_d(
-    const std::shared_ptr<hpp::fcl::CollisionGeometry> &geom) {
+    const std::shared_ptr<coal::CollisionGeometry> &geom) {
   Vector3s D;
-  if (std::dynamic_pointer_cast<hpp::fcl::Ellipsoid>(geom) != nullptr) {
+  if (std::dynamic_pointer_cast<coal::Ellipsoid>(geom) != nullptr) {
     // Check for Ellipsoid
-    D = std::static_pointer_cast<hpp::fcl::Ellipsoid>(geom)->radii;
-  } else if (std::dynamic_pointer_cast<hpp::fcl::Sphere>(geom) != nullptr) {
+    D = std::static_pointer_cast<coal::Ellipsoid>(geom)->radii;
+  } else if (std::dynamic_pointer_cast<coal::Sphere>(geom) != nullptr) {
     // Check for Sphere
-    const double r = std::static_pointer_cast<hpp::fcl::Sphere>(geom)->radius;
+    const double r = std::static_pointer_cast<coal::Sphere>(geom)->radius;
     D << r, r, r;
   } else {
     // No supported type was matched

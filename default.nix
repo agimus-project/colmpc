@@ -18,6 +18,7 @@ stdenv.mkDerivation {
     root = ./.;
     fileset = lib.fileset.unions [
       ./CMakeLists.txt
+      ./examples
       ./include
       ./package.xml
       ./python
@@ -36,6 +37,11 @@ stdenv.mkDerivation {
     [ ipopt ]
     ++ lib.optional pythonSupport python3Packages.crocoddyl
     ++ lib.optional (!pythonSupport) crocoddyl;
+
+  checkInputs = lib.optionals pythonSupport [
+    python3Packages.mim-solvers
+    python3Packages.numdifftools
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)

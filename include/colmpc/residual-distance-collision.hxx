@@ -39,7 +39,7 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
     const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
   Data *d = static_cast<Data *>(data.get());
 
-  // clear the hppfcl results
+  // clear the coal results
   d->res.clear();
 
   // computes the distance for the collision pair pair_id_
@@ -61,8 +61,9 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
     d->oMg_id_2 = geom_2.placement;
   }
 
-  d->r[0] = d->distance(toFclTransform3f(d->oMg_id_1),
-                        toFclTransform3f(d->oMg_id_2), d->req, d->res);
+  d->r[0] = coal::distance(geom_1.geometry.get(), toFclTransform3f(d->oMg_id_1),
+                           geom_2.geometry.get(), toFclTransform3f(d->oMg_id_2),
+                           d->req, d->res);
 }
 
 template <typename Scalar>

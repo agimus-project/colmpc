@@ -1,4 +1,4 @@
-import hppfcl
+import coal
 import numpy as np
 import pinocchio as pin
 
@@ -300,7 +300,8 @@ class Scene:
 
     def get_initial_config(self, scene=1):
         """
-        Get the initial configuration of the robot based on the specified `scene` number.
+        Get the initial configuration of the robot based on the specified `scene`
+        number.
         Parameters:
             scene (int, optional): The scene number. Defaults to 1.
         Returns:
@@ -438,14 +439,16 @@ def add_ellipsoid(
         name (str): The name of the ellipsoid.
         parentJoint (int, optional): The index of the parent joint. Defaults to 0.
         parentFrame (int, optional): The index of the parent frame. Defaults to 0.
-        placement (pin.SE3, optional): The placement of the ellipsoid. Defaults to pin.SE3.Random().
-        dim (List[float], optional): The dimensions of the ellipsoid [x, y, z]. Defaults to [0.2, 0.5, 0.1].
+        placement (pin.SE3, optional): The placement of the ellipsoid. Defaults to
+            pin.SE3.Random().
+        dim (List[float], optional): The dimensions of the ellipsoid [x, y, z]. Defaults
+            to [0.2, 0.5, 0.1].
 
     Returns:
         pin.GeometryModel: The updated geometry model with the added ellipsoid.
     """
 
-    elips = hppfcl.Ellipsoid(dim[0], dim[1], dim[2])
+    elips = coal.Ellipsoid(dim[0], dim[1], dim[2])
     elips_geom = pin.GeometryObject(
         name,
         parent_joint=parentJoint,
@@ -477,14 +480,16 @@ def add_capsule(
         name (str): The name of the ellipsoid.
         parentJoint (int, optional): The index of the parent joint. Defaults to 0.
         parentFrame (int, optional): The index of the parent frame. Defaults to 0.
-        placement (pin.SE3, optional): The placement of the ellipsoid. Defaults to pin.SE3.Random().
-        dim (List[float], optional): The dimensions of the ellipsoid [x, y, z]. Defaults to [0.2, 0.5, 0.1].
+        placement (pin.SE3, optional): The placement of the ellipsoid. Defaults to
+            pin.SE3.Random().
+        dim (List[float], optional): The dimensions of the ellipsoid [x, y, z]. Defaults
+            to [0.2, 0.5, 0.1].
 
     Returns:
         pin.GeometryModel: The updated geometry model with the added ellipsoid.
     """
 
-    elips = hppfcl.Capsule(dim[0], dim[1])
+    elips = coal.Capsule(dim[0], dim[1])
     elips_geom = pin.GeometryObject(
         name,
         parent_joint=parentJoint,

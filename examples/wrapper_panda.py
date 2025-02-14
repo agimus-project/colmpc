@@ -3,14 +3,14 @@
 # Copyright (C) 2024, LAAS-CNRS.
 # Copyright note valid unless otherwise stated in individual files.
 # All rights reserved.
-from os.path import abspath, dirname, join
+from pathlib import Path
 
-import hppfcl
+import coal
 import numpy as np
 import pinocchio as pin
 
-# This class is for unwrapping an URDF and converting it to a model. It is also possible to add objects in the model,
-# such as a ball at a specific position.
+# This class is for unwrapping an URDF and converting it to a model. It is also possible
+# to add objects in the model, such as a ball at a specific position.
 
 RED = np.array([249, 136, 126, 125]) / 255.0
 
@@ -24,23 +24,26 @@ class PandaWrapper:
         """Create a wrapper for the robot panda.
 
         Args:
-            auto_col (bool, optional): Include the auto collision in the collision model. Defaults to False.
-            capsule (bool, optional): Transform the spheres and cylinder of the robot into capsules. Defaults to False.
+            auto_col (bool, optional): Include the auto collision in the collision
+                model. Defaults to False.
+            capsule (bool, optional): Transform the spheres and cylinder of the robot
+                into capsules. Defaults to False.
         """
 
         # Importing the model
-        pinocchio_model_dir = dirname(str(abspath(__file__)))
-        model_path = join(pinocchio_model_dir, "models")
-        self._mesh_dir = join(model_path, "meshes")
+        pinocchio_model_dir = Path(__file__).parent()
+        model_path = pinocchio_model_dir / "models"
+        self._mesh_dir = model_path / "meshes"
         urdf_filename = "franka2.urdf"
         srdf_filename = "demo.srdf"
-        self._urdf_model_path = join(join(model_path, "urdf"), urdf_filename)
-        self._srdf_model_path = join(join(model_path, "srdf"), srdf_filename)
+        self._urdf_model_path = model_path / "urdf" / urdf_filename
+        self._srdf_model_path = model_path / "srdf" / srdf_filename
 
         # Color of the robot
         self._color = np.array([249, 136, 126, 255]) / 255.0
 
-        # Boolean describing whether the auto-collisions are in the collision model or not
+        # Boolean describing whether the auto-collisions are in the collision model or
+        # not
         self._auto_col = auto_col
 
         # Transforming the robot from cylinders/spheres to capsules
@@ -108,13 +111,16 @@ class PandaWrapper:
         )
 
     def transform_model_into_capsules(self) -> None:
-        """Modifying the collision model to transform the spheres/cylinders into capsules which makes it easier to have a fully constrained robot."""
+        """
+        Modifying the collision model to transform the spheres/cylinders into capsules
+        which makes it easier to have a fully constrained robot.
+        """
         collision_model_reduced_copy = self._cmodel_reduced.copy()
         list_names_capsules = []
 
         # Going through all the goemetry objects in the collision model
         for geom_object in collision_model_reduced_copy.geometryObjects:
-            if isinstance(geom_object.geometry, hppfcl.Cylinder):
+            if isinstance(geom_object.geometry, coal.Cylinder):
                 # Sometimes for one joint there are two cylinders,
                 # which need to be defined by two capsules for the same link.
                 # Hence the name convention here.
@@ -131,14 +137,14 @@ class PandaWrapper:
                     name,
                     parentFrame,
                     parentJoint,
-                    hppfcl.Capsule(geometry.radius, geometry.halfLength),
+                    coal.Capsule(geometry.radius, geometry.halfLength),
                     placement,
                 )
                 geom.meshColor = RED
                 self._cmodel_reduced.addGeometryObject(geom)
                 self._cmodel_reduced.removeGeometryObject(geom_object.name)
             elif (
-                isinstance(geom_object.geometry, hppfcl.Sphere)
+                isinstance(geom_object.geometry, coal.Sphere)
                 and "link" in geom_object.name
             ):
                 self._cmodel_reduced.removeGeometryObject(geom_object.name)
