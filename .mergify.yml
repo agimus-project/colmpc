@@ -1,7 +1,6 @@
 pull_request_rules:
   - name: merge auto PRs when CI is OK
     conditions:
-      - check-success = "build"
       - check-success = "nix (macos)"
       - check-success = "nix (ubuntu)"
       - check-success = "pre-commit.ci - pr"
