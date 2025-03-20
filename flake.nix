@@ -7,7 +7,7 @@
 
     mim-solvers = {
       # url = "github:machines-in-motion/mim_solvers/devel";
-      url = "github:MaximilienNaveau/mim_solvers/nix"; 
+      url = "github:MaximilienNaveau/mim_solvers/nix";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-parts.follows = "flake-parts";
