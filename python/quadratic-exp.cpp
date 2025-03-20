@@ -17,11 +17,10 @@ namespace bp = boost::python;
 
 template <int N>
 void exposeActivationModelQuadExpTpl(const char* name) {
-  typedef ActivationModelExpTpl<double, N> ActivationType; 
+  typedef ActivationModelExpTpl<double, N> ActivationType;
   bp::register_ptr_to_python<std::shared_ptr<ActivationType> >();
 
-  bp::class_<ActivationType,
-             bp::bases<crocoddyl::ActivationModelAbstract> >(
+  bp::class_<ActivationType, bp::bases<crocoddyl::ActivationModelAbstract> >(
       name,
       "Quadratic activation model.\n\n"
       "A quadratic  action describes a quadratic  function that "
@@ -35,8 +34,7 @@ void exposeActivationModelQuadExpTpl(const char* name) {
            "Compute the exp(-||r||^2 / alpha).\n\n"
            ":param data: activation data\n"
            ":param r: residual vector")
-      .def("calcDiff", &ActivationType::calcDiff,
-           bp::args("self", "data", "r"),
+      .def("calcDiff", &ActivationType::calcDiff, bp::args("self", "data", "r"),
            "Compute the derivatives of a quadratic  function.\n\n"
            "Note that the Hessian is constant, so we don't write again this "
            "value.\n"
@@ -44,14 +42,13 @@ void exposeActivationModelQuadExpTpl(const char* name) {
            ":param r: residual vector \n")
       .def("createData", &ActivationType::createData, bp::args("self"),
            "Create the quadratic  activation data.\n\n")
-      .add_property(
-          "alpha", bp::make_function(&ActivationType::get_alpha),
-          bp::make_function(&ActivationType::set_alpha), "alpha");
+      .add_property("alpha", bp::make_function(&ActivationType::get_alpha),
+                    bp::make_function(&ActivationType::set_alpha), "alpha");
 }
 
 void exposeActivationModelQuadExp() {
-     exposeActivationModelQuadExpTpl<1>("ActivationModelExp");
-     exposeActivationModelQuadExpTpl<2>("ActivationModelQuadExp");
+  exposeActivationModelQuadExpTpl<1>("ActivationModelExp");
+  exposeActivationModelQuadExpTpl<2>("ActivationModelQuadExp");
 }
 
 }  // namespace python

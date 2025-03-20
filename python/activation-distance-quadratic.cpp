@@ -29,7 +29,8 @@ void exposeActivationModelDistanceQuad() {
                             "Initialize the activation model.\n\n"
                             ":param nr: dimension of the cost-residual vector"
                             "param d0: activation distance"))
-      .def("calc", &ActivationModelDistanceQuad::calc, bp::args("self", "data", "r"),
+      .def("calc", &ActivationModelDistanceQuad::calc,
+           bp::args("self", "data", "r"),
            "Compute the exp(-||r||^2 / alpha).\n\n"
            ":param data: activation data\n"
            ":param r: residual vector")
@@ -40,8 +41,8 @@ void exposeActivationModelDistanceQuad() {
            "value.\n"
            ":param data: activation data\n"
            ":param r: residual vector \n")
-      .def("createData", &ActivationModelDistanceQuad::createData, bp::args("self"),
-           "Create the quadratic  activation data.\n\n")
+      .def("createData", &ActivationModelDistanceQuad::createData,
+           bp::args("self"), "Create the quadratic  activation data.\n\n")
       .add_property(
           "d0", bp::make_function(&ActivationModelDistanceQuad::get_d0),
           bp::make_function(&ActivationModelDistanceQuad::set_d0), "d0");

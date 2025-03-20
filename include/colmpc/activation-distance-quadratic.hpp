@@ -34,7 +34,7 @@ using namespace crocoddyl;
 template <typename _Scalar>
 class ActivationModelDistanceQuadTpl
     : public ActivationModelAbstractTpl<_Scalar> {
-public:
+ public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
   typedef _Scalar Scalar;
@@ -58,12 +58,12 @@ public:
                                           const Scalar &d0 = Scalar(1.))
       : Base(nr) {
     if (d0 <= Scalar(0.)) {
-      throw_pretty("Invalid argument: "
-                   << "alpha should be a strictly positive value");
+      throw_pretty(
+          "Invalid argument: " << "alpha should be a strictly positive value");
     }
     set_d0(d0);
   };
-  virtual ~ActivationModelDistanceQuadTpl(){};
+  virtual ~ActivationModelDistanceQuadTpl() {};
 
   /*
    * @brief Compute the quadratic-exp function
@@ -74,9 +74,9 @@ public:
   virtual void calc(const std::shared_ptr<ActivationDataAbstract> &data,
                     const Eigen::Ref<const VectorXs> &r) {
     if (static_cast<std::size_t>(r.size()) != nr_) {
-      throw_pretty("Invalid argument: "
-                   << "r has wrong dimension (it should be " +
-                          std::to_string(nr_) + ")");
+      throw_pretty(
+          "Invalid argument: " << "r has wrong dimension (it should be " +
+                                      std::to_string(nr_) + ")");
     }
     std::shared_ptr<Data> d = std::static_pointer_cast<Data>(data);
 
@@ -94,9 +94,9 @@ public:
   virtual void calcDiff(const std::shared_ptr<ActivationDataAbstract> &data,
                         const Eigen::Ref<const VectorXs> &r) {
     if (static_cast<std::size_t>(r.size()) != nr_) {
-      throw_pretty("Invalid argument: "
-                   << "r has wrong dimension (it should be " +
-                          std::to_string(nr_) + ")");
+      throw_pretty(
+          "Invalid argument: " << "r has wrong dimension (it should be " +
+                                      std::to_string(nr_) + ")");
     }
     std::shared_ptr<Data> d = std::static_pointer_cast<Data>(data);
     typedef Eigen::Array<Scalar, Eigen::Dynamic, 1> Array;
@@ -134,11 +134,11 @@ public:
     os << "ActivationModelDistanceQuad {nr=" << nr_ << ", d0=" << d0_ << "}";
   }
 
-protected:
-  using Base::nr_; //!< Dimension of the residual vector
+ protected:
+  using Base::nr_;  //!< Dimension of the residual vector
 
-private:
-  Scalar d0_, d0inv_; //!< Width of quadratic basin
+ private:
+  Scalar d0_, d0inv_;  //!< Width of quadratic basin
 };
 
 /*
@@ -158,13 +158,14 @@ struct ActivationDataDistanceQuadTpl
 
   template <typename Activation>
   explicit ActivationDataDistanceQuadTpl(Activation *const activation)
-      : Base(activation), dd(activation->get_nr()),
+      : Base(activation),
+        dd(activation->get_nr()),
         one_minus_dd(activation->get_nr()) {}
 
-  Eigen::Array<Scalar, Eigen::Dynamic, 1> dd; // Residual divided by d0
+  Eigen::Array<Scalar, Eigen::Dynamic, 1> dd;  // Residual divided by d0
   Eigen::Array<Scalar, Eigen::Dynamic, 1> one_minus_dd;
 };
 
-} // namespace colmpc
+}  // namespace colmpc
 
-#endif // MPC_ACTIVATIONS_QUADRATIC_EXP_HPP_
+#endif  // MPC_ACTIVATIONS_QUADRATIC_EXP_HPP_
