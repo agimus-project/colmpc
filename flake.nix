@@ -8,6 +8,7 @@
     # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:NixOS/nixpkgs/master";
 
+    # Remove once the next mim-solvers release reach nixpkgs/nixos-unstable
     mim-solvers = {
       # url = "github:machines-in-motion/mim_solvers/devel";
       url = "github:MaximilienNaveau/mim_solvers/nix";
@@ -29,7 +30,6 @@
             inherit system;
             overlays = [
               (final: prev: {
-                # patch mim-solvers for boost -> std shared_ptr
                 mim-solvers = prev.mim-solvers.overrideAttrs (super: {
                   src = inputs.mim-solvers;
                   postPatch = ""; # disable default patch
