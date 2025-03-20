@@ -3,23 +3,25 @@
     "crocoddyl": {
       "inputs": {
         "flake-parts": [
+          "mim-solvers",
           "flake-parts"
         ],
         "nixpkgs": [
+          "mim-solvers",
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1738932671,
-        "narHash": "sha256-2xceLlDCaUxUWMoCZralxsBwxwBc2jhNK7iqccIz7rU=",
+        "lastModified": 1742379804,
+        "narHash": "sha256-oWcclzzuswiR1SaQJd6GnMltJ2vgt7AgJPT0FJzD1Gs=",
         "owner": "loco-3d",
         "repo": "crocoddyl",
-        "rev": "871b0a933f1f74f0abb8bbbce0d367c769eeb435",
+        "rev": "02cd028d75fd3ef4b2d88acf57cb951169d85b9b",
         "type": "github"
       },
       "original": {
         "owner": "loco-3d",
-        "ref": "release/3.0.0",
+        "ref": "master",
         "repo": "crocoddyl",
         "type": "github"
       }
@@ -29,11 +31,11 @@
         "nixpkgs-lib": "nixpkgs-lib"
       },
       "locked": {
-        "lastModified": 1738453229,
-        "narHash": "sha256-7H9XgNiGLKN1G1CgRh0vUL4AheZSYzPm+zmZ7vxbJdo=",
+        "lastModified": 1741352980,
+        "narHash": "sha256-+u2UunDA4Cl5Fci3m7S643HzKmIDAe+fiXrLqYsR2fs=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "32ea77a06711b758da0ad9bd6a844c5740a87abd",
+        "rev": "f4330d22f1c5d2ba72d3d22df5597d123fdb60a9",
         "type": "github"
       },
       "original": {
@@ -42,38 +44,66 @@
         "type": "github"
       }
     },
+    "mim-solvers": {
+      "inputs": {
+        "crocoddyl": "crocoddyl",
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1742466150,
+        "narHash": "sha256-VkSDzYkMPj86qawgXwPd/yNaiwKF6v35c3C92YYBa94=",
+        "owner": "MaximilienNaveau",
+        "repo": "mim_solvers",
+        "rev": "34e8be130015e756fe3da9db1790a641f45f7bf8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "MaximilienNaveau",
+        "ref": "nix",
+        "repo": "mim_solvers",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1737885589,
-        "narHash": "sha256-Zf0hSrtzaM1DEz8//+Xs51k/wdSajticVrATqDrfQjg=",
+        "lastModified": 1742465598,
+        "narHash": "sha256-dgSnZfLrCZzOTs0G/J7BVeB1iGd7iORSYkpANFptS1w=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "852ff1d9e153d8875a83602e03fdef8a63f0ecf8",
+        "rev": "262d03879b9020ea2c3879492e7b5d3ace7addfb",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "ref": "master",
         "repo": "nixpkgs",
         "type": "github"
       }
     },
     "nixpkgs-lib": {
       "locked": {
-        "lastModified": 1738452942,
-        "narHash": "sha256-vJzFZGaCpnmo7I6i416HaBLpC+hvcURh/BQwROcGIp8=",
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/072a6db25e947df2f31aab9eccd0ab75d5b2da11.tar.gz"
+        "lastModified": 1740877520,
+        "narHash": "sha256-oiwv/ZK/2FhGxrCkQkB83i7GnWXPPLzoqFHpDD3uYpk=",
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "rev": "147dee35aab2193b174e4c0868bd80ead5ce755c",
+        "type": "github"
       },
       "original": {
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/072a6db25e947df2f31aab9eccd0ab75d5b2da11.tar.gz"
+        "owner": "nix-community",
+        "repo": "nixpkgs.lib",
+        "type": "github"
       }
     },
     "root": {
       "inputs": {
-        "crocoddyl": "crocoddyl",
         "flake-parts": "flake-parts",
+        "mim-solvers": "mim-solvers",
         "nixpkgs": "nixpkgs"
       }
     }
