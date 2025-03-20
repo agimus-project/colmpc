@@ -31,7 +31,7 @@ class PandaWrapper:
         """
 
         # Importing the model
-        pinocchio_model_dir = Path(__file__).parent()
+        pinocchio_model_dir = Path(__file__).parent
         model_path = pinocchio_model_dir / "models"
         self._mesh_dir = model_path / "meshes"
         urdf_filename = "franka2.urdf"
