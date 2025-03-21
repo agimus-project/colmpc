@@ -3,10 +3,7 @@
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
-    # When https://nixpk.gs/pr-tracker.html?pr=391300 goes green we need
-    # to be restored to the folowing line to:
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs.url = "github:NixOS/nixpkgs/master";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     # Remove once the next mim-solvers release reach nixpkgs/nixos-unstable
     mim-solvers = {
