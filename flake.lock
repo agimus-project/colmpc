@@ -1,39 +1,5 @@
 {
   "nodes": {
-    "crocoddyl": {
-      "inputs": {
-        "flake-parts": [
-          "mim-solvers",
-          "flake-parts"
-        ],
-        "nixpkgs": [
-          "mim-solvers",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-<<<<<<< HEAD
-        "lastModified": 1742379804,
-        "narHash": "sha256-oWcclzzuswiR1SaQJd6GnMltJ2vgt7AgJPT0FJzD1Gs=",
-        "owner": "loco-3d",
-        "repo": "crocoddyl",
-        "rev": "02cd028d75fd3ef4b2d88acf57cb951169d85b9b",
-=======
-        "lastModified": 1740349975,
-        "narHash": "sha256-qDM9tgqu5RQ6kWf65uhh+zCLLNY3Xx3D5q+Nsk2D86Y=",
-        "owner": "loco-3d",
-        "repo": "crocoddyl",
-        "rev": "dbf3fbcb45a698012f6231d4f607a75740128756",
->>>>>>> 1f02c5d (flake.lock: Update)
-        "type": "github"
-      },
-      "original": {
-        "owner": "loco-3d",
-        "ref": "master",
-        "repo": "crocoddyl",
-        "type": "github"
-      }
-    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": "nixpkgs-lib"
@@ -54,7 +20,6 @@
     },
     "mim-solvers": {
       "inputs": {
-        "crocoddyl": "crocoddyl",
         "flake-parts": [
           "flake-parts"
         ],
@@ -63,11 +28,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1742466150,
-        "narHash": "sha256-VkSDzYkMPj86qawgXwPd/yNaiwKF6v35c3C92YYBa94=",
+        "lastModified": 1742549501,
+        "narHash": "sha256-4+vhHm0LUA5xme0+KQFpCt1yR+iby85Eh+1CKkb1ThU=",
         "owner": "MaximilienNaveau",
         "repo": "mim_solvers",
-        "rev": "34e8be130015e756fe3da9db1790a641f45f7bf8",
+        "rev": "4c6ebba8352f5ea25247480c421c9995b9d80dcd",
         "type": "github"
       },
       "original": {
@@ -79,24 +44,16 @@
     },
     "nixpkgs": {
       "locked": {
-<<<<<<< HEAD
-        "lastModified": 1742465598,
-        "narHash": "sha256-dgSnZfLrCZzOTs0G/J7BVeB1iGd7iORSYkpANFptS1w=",
+        "lastModified": 1742422364,
+        "narHash": "sha256-mNqIplmEohk5jRkqYqG19GA8MbQ/D4gQSK0Mu4LvfRQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "262d03879b9020ea2c3879492e7b5d3ace7addfb",
-=======
-        "lastModified": 1741851582,
-        "narHash": "sha256-cPfs8qMccim2RBgtKGF+x9IBCduRvd/N5F4nYpU0TVE=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "6607cf789e541e7873d40d3a8f7815ea92204f32",
->>>>>>> 1f02c5d (flake.lock: Update)
+        "rev": "a84ebe20c6bc2ecbcfb000a50776219f48d134cc",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
-        "ref": "master",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
