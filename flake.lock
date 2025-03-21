@@ -28,19 +28,11 @@
         ]
       },
       "locked": {
-<<<<<<< HEAD
-        "lastModified": 1742549501,
-        "narHash": "sha256-4+vhHm0LUA5xme0+KQFpCt1yR+iby85Eh+1CKkb1ThU=",
-        "owner": "MaximilienNaveau",
-        "repo": "mim_solvers",
-        "rev": "4c6ebba8352f5ea25247480c421c9995b9d80dcd",
-=======
         "lastModified": 1742555430,
         "narHash": "sha256-t+P+unfbyG12mN3SyT1urKOfJrZ/TQTyhL7DDKT3W5M=",
         "owner": "machines-in-motion",
         "repo": "mim_solvers",
         "rev": "4bea37dd71e7c20ebd9874b01ad3ce5ded426f8c",
->>>>>>> e35562a (Update flake to use the mim_solvers devel branch with the nix)
         "type": "github"
       },
       "original": {
@@ -52,19 +44,11 @@
     },
     "nixpkgs": {
       "locked": {
-<<<<<<< HEAD
         "lastModified": 1742422364,
         "narHash": "sha256-mNqIplmEohk5jRkqYqG19GA8MbQ/D4gQSK0Mu4LvfRQ=",
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "a84ebe20c6bc2ecbcfb000a50776219f48d134cc",
-=======
-        "lastModified": 1742555601,
-        "narHash": "sha256-Sy8FK8tILJQWCH+8ftFtpLL/TfenGW/4la4p0jdjZps=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "b9c6e32b340d43cba2f6a0c524a5648a3b08c6cf",
->>>>>>> e35562a (Update flake to use the mim_solvers devel branch with the nix)
         "type": "github"
       },
       "original": {
