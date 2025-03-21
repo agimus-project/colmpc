@@ -12,11 +12,19 @@
         ]
       },
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1742379804,
         "narHash": "sha256-oWcclzzuswiR1SaQJd6GnMltJ2vgt7AgJPT0FJzD1Gs=",
         "owner": "loco-3d",
         "repo": "crocoddyl",
         "rev": "02cd028d75fd3ef4b2d88acf57cb951169d85b9b",
+=======
+        "lastModified": 1740349975,
+        "narHash": "sha256-qDM9tgqu5RQ6kWf65uhh+zCLLNY3Xx3D5q+Nsk2D86Y=",
+        "owner": "loco-3d",
+        "repo": "crocoddyl",
+        "rev": "dbf3fbcb45a698012f6231d4f607a75740128756",
+>>>>>>> 1f02c5d (flake.lock: Update)
         "type": "github"
       },
       "original": {
@@ -71,11 +79,19 @@
     },
     "nixpkgs": {
       "locked": {
+<<<<<<< HEAD
         "lastModified": 1742465598,
         "narHash": "sha256-dgSnZfLrCZzOTs0G/J7BVeB1iGd7iORSYkpANFptS1w=",
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "262d03879b9020ea2c3879492e7b5d3ace7addfb",
+=======
+        "lastModified": 1741851582,
+        "narHash": "sha256-cPfs8qMccim2RBgtKGF+x9IBCduRvd/N5F4nYpU0TVE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "6607cf789e541e7873d40d3a8f7815ea92204f32",
+>>>>>>> 1f02c5d (flake.lock: Update)
         "type": "github"
       },
       "original": {
