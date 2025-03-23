@@ -28,11 +28,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1742555430,
-        "narHash": "sha256-t+P+unfbyG12mN3SyT1urKOfJrZ/TQTyhL7DDKT3W5M=",
+        "lastModified": 1742575276,
+        "narHash": "sha256-jUL/kyXKODpcCURG7e7/qNarvwm4+EnzZRL2Wix5Jbs=",
         "owner": "machines-in-motion",
         "repo": "mim_solvers",
-        "rev": "4bea37dd71e7c20ebd9874b01ad3ce5ded426f8c",
+        "rev": "26c203be9a77361a33203acd9829e74fe4fa25d9",
         "type": "github"
       },
       "original": {
