@@ -8,7 +8,7 @@
     # Remove once the next mim-solvers release reach nixpkgs/nixos-unstable
     mim-solvers = {
       # Move to master once https://github.com/machines-in-motion/mim_solvers/pull/48 is merged.
-      url = "github:machines-in-motion/mim_solvers/devel";
+      url = "github:machines-in-motion/mim_solvers/main";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         flake-parts.follows = "flake-parts";
