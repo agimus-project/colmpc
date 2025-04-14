@@ -195,9 +195,15 @@ def create_ocp_distance(
         if use_distance_in_cost:
             # Add the distance residual to the cost
             assert obstacleDistanceResidual.nr == 1
-            activation = col.ActivationModelQuadExp(
-                1, param_parser.get_distance_threshold() ** 2
+            # activation = col.ActivationModelQuadExp(
+            #     1, param_parser.get_distance_threshold()
+            # )
+            activation = col.ActivationModelExp(
+                1, param_parser.get_distance_threshold()
             )
+            # activation = col.ActivationModelDistanceQuad(
+            #     1, param_parser.get_distance_threshold()
+            # )
             cost = crocoddyl.CostModelResidual(
                 state, activation, obstacleDistanceResidual
             )
