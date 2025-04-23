@@ -12,7 +12,10 @@
   outputs =
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
+      systems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
       imports = [ inputs.treefmt-nix.flakeModule ];
       perSystem =
         {
@@ -48,9 +51,7 @@
             in
             {
               default = self'.packages.py-colmpc;
-              colmpc =
-                pkgs.colmpc.overrideAttrs
-                  { inherit src; };
+              colmpc = pkgs.colmpc.overrideAttrs { inherit src; };
               py-colmpc = pkgs.python3Packages.colmpc.overrideAttrs {
                 inherit src;
               };
