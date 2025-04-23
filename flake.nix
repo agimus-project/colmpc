@@ -26,13 +26,25 @@
           ...
         }:
         {
-          _module.args.pkgs = import inputs.nixpkgs {
-            inherit system;
-            overlays = [
-              inputs.nix-ros-overlay.overlays.default
-              inputs.gepetto.overlays.default
-            ];
-          };
+          # Drop this once crocoddyl >= 3.0.1 reaches nix-ros-overlay
+          _module.args.pkgs =
+            let
+              pkgsForPatching = inputs.nixpkgs.legacyPackages.x86_64-linux;
+              patchedNixpkgs = (
+                pkgsForPatching.applyPatches {
+                  inherit (inputs.gepetto) patches;
+                  name = "patched nixpkgs";
+                  src = inputs.nixpkgs;
+                }
+              );
+            in
+            import patchedNixpkgs {
+              inherit system;
+              overlays = [
+                inputs.nix-ros-overlay.overlays.default
+                inputs.gepetto.overlays.default
+              ];
+            };
           checks = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") self'.packages;
           packages =
             let
