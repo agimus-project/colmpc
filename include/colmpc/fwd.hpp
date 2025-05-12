@@ -26,12 +26,20 @@ template <typename Scalar>
 class ResidualDataVelocityAvoidanceTpl;
 typedef ResidualDataVelocityAvoidanceTpl<double> ResidualDataVelocityAvoidance;
 
+template <typename Scalar, int N>
+class ActivationModelExpTpl;
+typedef ActivationModelExpTpl<double, 1> ActivationModelExp;
+typedef ActivationModelExpTpl<double, 2> ActivationModelQuadExp;
 template <typename Scalar>
-class ActivationModelQuadExpTpl;
-typedef ActivationModelQuadExpTpl<double> ActivationModelQuadExp;
+class ActivationDataExpTpl;
+typedef ActivationDataExpTpl<double> ActivationDataExp;
+
 template <typename Scalar>
-class ActivationDataQuadExpTpl;
-typedef ActivationDataQuadExpTpl<double> ActivationDataQuadExp;
+class ActivationModelDistanceQuadTpl;
+typedef ActivationModelDistanceQuadTpl<double> ActivationModelDistanceQuad;
+template <typename Scalar>
+class ActivationDataDistanceQuadTpl;
+typedef ActivationDataDistanceQuadTpl<double> ActivationDataDistanceQuad;
 
 }  // namespace colmpc
 
