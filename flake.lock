@@ -46,7 +46,6 @@
           "nix-ros-overlay",
           "nixpkgs"
         ],
-        "patch-hpp": "patch-hpp",
         "src-agimus-controller": "src-agimus-controller",
         "src-agimus-msgs": "src-agimus-msgs",
         "src-colmpc": "src-colmpc",
@@ -58,11 +57,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1746926571,
-        "narHash": "sha256-kC9Ew6TNJm3qElPvAOq7gPTcxtJfhWypy25lW4k+0oY=",
+        "lastModified": 1747531521,
+        "narHash": "sha256-jj15DV534fYwmdQi0zMM//s/yh7iMl91YtdmsRr3A64=",
         "owner": "gepetto",
         "repo": "nix",
-        "rev": "b111658c176f39fa438fd226044d25ac08b97e2a",
+        "rev": "69f69f197f76fa0d517fb577a29d683e583b236d",
         "type": "github"
       },
       "original": {
@@ -143,18 +142,6 @@
         "type": "github"
       }
     },
-    "patch-hpp": {
-      "flake": false,
-      "locked": {
-        "narHash": "sha256-8kApZVQPyqGJ++E+PVkOatWqozcY5bar9YexrdOUZws=",
-        "type": "file",
-        "url": "https://github.com/nim65s/nixpkgs/pull/3.patch"
-      },
-      "original": {
-        "type": "file",
-        "url": "https://github.com/nim65s/nixpkgs/pull/3.patch"
-      }
-    },
     "root": {
       "inputs": {
         "flake-parts": [
@@ -179,11 +166,11 @@
     "src-agimus-controller": {
       "flake": false,
       "locked": {
-        "lastModified": 1745935919,
-        "narHash": "sha256-9jSZVXl0gUUV+dznvGUyHYM5g5xwakGg8cgZTx72h9s=",
+        "lastModified": 1747336691,
+        "narHash": "sha256-tUjjl4ILFETJDzCVyylp94BRKFn6RMhXg2yE3FTdqhQ=",
         "owner": "agimus-project",
         "repo": "agimus_controller",
-        "rev": "65bb507f9104bd26998d70b3f8c511cd6a92ce38",
+        "rev": "47156eba266bf86f88c9f08d1d3a75e43e19d6aa",
         "type": "github"
       },
       "original": {
@@ -211,11 +198,11 @@
     "src-colmpc": {
       "flake": false,
       "locked": {
-        "lastModified": 1746332198,
-        "narHash": "sha256-GOhyF7JDdpT4pQQOe8llR8K1H8FJEzPTUrkU3hHtcjw=",
+        "lastModified": 1747073059,
+        "narHash": "sha256-C4SACupF0/iQBASpsiQRxgNw0yokfYDE8KVv7nf0jvo=",
         "owner": "agimus-project",
         "repo": "colmpc",
-        "rev": "ca69e0c13cdcf52dcccbcaf178d81154f977c0f2",
+        "rev": "4304c7334ab0877ecc0e9aab62ccdbf5a65053bf",
         "type": "github"
       },
       "original": {
@@ -227,11 +214,11 @@
     "src-example-parallel-robots": {
       "flake": false,
       "locked": {
-        "lastModified": 1746477898,
-        "narHash": "sha256-VQM92gt62kLPn9c27I4wMYBi22Qw7gqnG4dt8y0sAbw=",
+        "lastModified": 1747437593,
+        "narHash": "sha256-Q4iR34K/K/Onba+LJBVSEZ8SGUiWvSebPq1hVgunr78=",
         "owner": "gepetto",
         "repo": "example-parallel-robots",
-        "rev": "10b088f2386171e6430899c75c8a7b2fe4010f80",
+        "rev": "a5aabd11ac4af3f9517c73a1917187126306e66d",
         "type": "github"
       },
       "original": {
@@ -276,11 +263,11 @@
     "src-toolbox-parallel-robots": {
       "flake": false,
       "locked": {
-        "lastModified": 1746478029,
-        "narHash": "sha256-8FF4/8zgrCNHhLL3WbyhoRzKRFZH/pgqTgJcIC5Q+y0=",
+        "lastModified": 1747081801,
+        "narHash": "sha256-Vy2dVkincWNjpb6PhbwFZyW4yMN4CKTTbmGi/z1if58=",
         "owner": "gepetto",
         "repo": "toolbox-parallel-robots",
-        "rev": "5b58db61191db1fefe64f881398a956a15ca60ff",
+        "rev": "69177cdc0d0399677421fe5d51c012064cb86e72",
         "type": "github"
       },
       "original": {
@@ -333,11 +320,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1746216483,
-        "narHash": "sha256-4h3s1L/kKqt3gMDcVfN8/4v2jqHrgLIe4qok4ApH5x4=",
+        "lastModified": 1747469671,
+        "narHash": "sha256-bo1ptiFoNqm6m1B2iAhJmWCBmqveLVvxom6xKmtuzjg=",
         "owner": "numtide",
         "repo": "treefmt-nix",
-        "rev": "29ec5026372e0dec56f890e50dbe4f45930320fd",
+        "rev": "ab0378b61b0d85e73a8ab05d5c6029b5bd58c9fb",
         "type": "github"
       },
       "original": {
