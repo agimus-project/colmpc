@@ -82,7 +82,7 @@ class ActivationModelDistanceQuadTpl
 
     d->dd = r * d0inv_;
     d->one_minus_dd = 1 - d->dd;
-    data->a_value = d->one_minus_dd.max(0).square().sum();
+    data->a_value = d->one_minus_dd.cwiseMax(0).square().sum();
   };
 
   /*
@@ -101,7 +101,7 @@ class ActivationModelDistanceQuadTpl
     std::shared_ptr<Data> d = std::static_pointer_cast<Data>(data);
     typedef Eigen::Array<Scalar, Eigen::Dynamic, 1> Array;
 
-    data->Ar = Scalar(-2.0) * d0inv_ * d->one_minus_dd.max(0);
+    data->Ar = Scalar(-2.0) * d0inv_ * d->one_minus_dd.cwiseMax(0);
     data->Arr.diagonal() =
         (d->one_minus_dd > 0)
             .select(Array::Constant(nr_, Scalar(2.0) * d0inv_ * d0inv_),
