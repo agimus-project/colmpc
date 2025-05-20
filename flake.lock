@@ -54,18 +54,25 @@
         "src-gepetto-viewer": "src-gepetto-viewer",
         "src-toolbox-parallel-robots": "src-toolbox-parallel-robots",
         "system-manager": "system-manager",
+        "systems": [
+          "gepetto",
+          "nix-ros-overlay",
+          "flake-utils",
+          "systems"
+        ],
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1747531521,
-        "narHash": "sha256-jj15DV534fYwmdQi0zMM//s/yh7iMl91YtdmsRr3A64=",
+        "lastModified": 1747323449,
+        "narHash": "sha256-bIxE/kG0n4s0D4Z7kpbYJSL8QWnEFilfCgCFH9Nb6JQ=",
         "owner": "gepetto",
         "repo": "nix",
-        "rev": "69f69f197f76fa0d517fb577a29d683e583b236d",
+        "rev": "8ede0277f198e36948ca19722bf92be32adcb4a6",
         "type": "github"
       },
       "original": {
         "owner": "gepetto",
+        "ref": "module",
         "repo": "nix",
         "type": "github"
       }
@@ -156,6 +163,10 @@
         "nixpkgs": [
           "gepetto",
           "nixpkgs"
+        ],
+        "systems": [
+          "gepetto",
+          "systems"
         ],
         "treefmt-nix": [
           "gepetto",

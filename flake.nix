@@ -2,50 +2,28 @@
   description = "Collision avoidance for MPC";
 
   inputs = {
-    gepetto.url = "github:gepetto/nix";
+    # TODO: drop `/module` after https://github.com/Gepetto/nix/pull/54
+    gepetto.url = "github:gepetto/nix/module";
     flake-parts.follows = "gepetto/flake-parts";
     nixpkgs.follows = "gepetto/nixpkgs";
     nix-ros-overlay.follows = "gepetto/nix-ros-overlay";
+    systems.follows = "gepetto/systems";
     treefmt-nix.follows = "gepetto/treefmt-nix";
   };
 
   outputs =
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "x86_64-linux"
-        "aarch64-darwin"
-      ];
-      imports = [ inputs.treefmt-nix.flakeModule ];
+      systems = import inputs.systems;
+      imports = [ inputs.gepetto.flakeModule ];
       perSystem =
         {
           lib,
           pkgs,
-          system,
           self',
           ...
         }:
         {
-          # Drop this once crocoddyl >= 3.0.1 reaches nix-ros-overlay
-          _module.args.pkgs =
-            let
-              pkgsForPatching = inputs.nixpkgs.legacyPackages.x86_64-linux;
-              patchedNixpkgs = (
-                pkgsForPatching.applyPatches {
-                  inherit (inputs.gepetto) patches;
-                  name = "patched nixpkgs";
-                  src = inputs.nixpkgs;
-                }
-              );
-            in
-            import patchedNixpkgs {
-              inherit system;
-              overlays = [
-                inputs.nix-ros-overlay.overlays.default
-                inputs.gepetto.overlays.default
-              ];
-            };
-          checks = lib.mapAttrs' (n: lib.nameValuePair "package-${n}") self'.packages;
           packages =
             let
               src = lib.fileset.toSource {
@@ -68,10 +46,6 @@
                 inherit src;
               };
             };
-          treefmt.programs = {
-            deadnix.enable = true;
-            nixfmt.enable = true;
-          };
         };
     };
 }
