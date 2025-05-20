@@ -17,5 +17,4 @@ BOOST_PYTHON_MODULE(colmpc) {
   colmpc::python::exposeActivationModelQuadExp();
   colmpc::python::exposeResidualDistanceCollision();
   colmpc::python::exposeResidualVelocityAvoidance();
-  colmpc::python::exposeActivationModelDistanceQuad();
 }

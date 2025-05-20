@@ -15,7 +15,6 @@ namespace colmpc {
 namespace python {
 
 void exposeActivationModelQuadExp();
-void exposeActivationModelDistanceQuad();
 void exposeResidualDistanceCollision();
 void exposeResidualVelocityAvoidance();
 
