@@ -1,6 +1,13 @@
 set(${PY_NAME}_SOURCES
-    main.cpp residual-distance-collision.cpp residual-velocity-avoidance.cpp
-    activation-distance-quadratic.cpp quadratic-exp.cpp)
+    main.cpp
+    residual-distance-collision.cpp
+    residual-velocity-avoidance.cpp
+    activation-distance-quadratic.cpp
+    quadratic-exp.cpp
+    free-fwddyn.cpp
+    state-multibody.cpp
+    free-fwddyn-instantiation.cpp
+    residual-distance-collision-2.cpp)
 
 add_library(${PY_NAME} SHARED ${${PY_NAME}_SOURCES})
 target_link_libraries(${PY_NAME} PUBLIC ${PROJECT_NAME} eigenpy::eigenpy)

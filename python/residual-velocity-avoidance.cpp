@@ -18,7 +18,7 @@ void exposeResidualVelocityAvoidance() {
 
   bp::class_<ResidualModelVelocityAvoidance, bp::bases<ResidualModelAbstract>>(
       "ResidualModelVelocityAvoidance",
-      bp::init<std::shared_ptr<StateMultibody>,
+      bp::init<std::shared_ptr<crocoddyl::StateMultibody>,
                std::shared_ptr<pinocchio::GeometryModel>,
                const pinocchio::PairIndex,
                bp::optional<const double, const double, const double>>(

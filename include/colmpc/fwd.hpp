@@ -19,12 +19,31 @@ class ResidualDataDistanceCollisionTpl;
 typedef ResidualDataDistanceCollisionTpl<double> ResidualDataDistanceCollision;
 
 template <typename Scalar>
+class ResidualDistanceCollision2Tpl;
+typedef ResidualDistanceCollision2Tpl<double> ResidualDistanceCollision2;
+template <typename Scalar>
+class ResidualDataDistanceCollision2Tpl;
+typedef ResidualDataDistanceCollision2Tpl<double>
+    ResidualDataDistanceCollision2;
+
+template <typename Scalar>
 class ResidualModelVelocityAvoidanceTpl;
 typedef ResidualModelVelocityAvoidanceTpl<double>
     ResidualModelVelocityAvoidance;
 template <typename Scalar>
 class ResidualDataVelocityAvoidanceTpl;
 typedef ResidualDataVelocityAvoidanceTpl<double> ResidualDataVelocityAvoidance;
+
+template <typename Scalar>
+class StateMultibodyTpl;
+typedef StateMultibodyTpl<double> StateMultibody;
+
+template <typename Scalar>
+class DifferentialActionModelFreeFwdDynamicsTpl;
+template <typename Scalar>
+class DifferentialActionDataFreeFwdDynamicsTpl;
+typedef DifferentialActionModelFreeFwdDynamicsTpl<double>
+    DifferentialActionModelFreeFwdDynamics;
 
 template <typename Scalar, int N>
 class ActivationModelExpTpl;

@@ -14,8 +14,11 @@ BOOST_PYTHON_MODULE(colmpc) {
   // Enabling eigenpy support, i.e. numpy/eigen compatibility.
   eigenpy::enableEigenPy();
   eigenpy::enableEigenPySpecific<Eigen::VectorXi>();
+  colmpc::python::exposeStateMultibody();
+  colmpc::python::exposeDynamicFreeFwd();
   colmpc::python::exposeActivationModelQuadExp();
   colmpc::python::exposeResidualDistanceCollision();
+  colmpc::python::exposeResidualDistanceCollision2();
   colmpc::python::exposeResidualVelocityAvoidance();
   colmpc::python::exposeActivationModelDistanceQuad();
 }

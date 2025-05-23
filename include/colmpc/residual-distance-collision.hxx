@@ -15,7 +15,7 @@ using namespace crocoddyl;
 
 template <typename Scalar>
 ResidualDistanceCollisionTpl<Scalar>::ResidualDistanceCollisionTpl(
-    std::shared_ptr<StateMultibody> state, const std::size_t nu,
+    std::shared_ptr<crocoddyl::StateMultibody> state, const std::size_t nu,
     std::shared_ptr<GeometryModel> geom_model,
     const pinocchio::PairIndex pair_id)
     : Base(state, 1, nu, true, false, false),

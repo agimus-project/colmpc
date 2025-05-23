@@ -14,9 +14,12 @@
 namespace colmpc {
 namespace python {
 
+void exposeStateMultibody();
+void exposeDynamicFreeFwd();
 void exposeActivationModelQuadExp();
 void exposeActivationModelDistanceQuad();
 void exposeResidualDistanceCollision();
+void exposeResidualDistanceCollision2();
 void exposeResidualVelocityAvoidance();
 
 }  // namespace python

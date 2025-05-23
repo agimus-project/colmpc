@@ -81,7 +81,7 @@ if args.velocity:
     ocp, objects = create_ocp.create_ocp_velocity(rmodel, cmodel, pp)
 else:
     # OCP with distance constraints
-    ocp, objects = create_ocp.create_ocp_distance(
+    ocp, objects = create_ocp.create_ocp_distance_2(
         rmodel, cmodel, args.distance_in_cost, pp
     )
 
