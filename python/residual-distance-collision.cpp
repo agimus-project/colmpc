@@ -18,7 +18,7 @@ void exposeResidualDistanceCollision() {
 
   bp::class_<ResidualDistanceCollision, bp::bases<ResidualModelAbstract>>(
       "ResidualDistanceCollision",
-      bp::init<std::shared_ptr<StateMultibody>, const std::size_t,
+      bp::init<std::shared_ptr<crocoddyl::StateMultibody>, const std::size_t,
                std::shared_ptr<pinocchio::GeometryModel>,
                const pinocchio::PairIndex>(
           bp::args("self", "state", "nu", "geom_model", "pair_id"),
