@@ -22,7 +22,7 @@ using namespace crocoddyl;
 
 template <typename Scalar>
 ResidualModelVelocityAvoidanceTpl<Scalar>::ResidualModelVelocityAvoidanceTpl(
-    std::shared_ptr<StateMultibody> state,
+    std::shared_ptr<crocoddyl::StateMultibody> state,
     std::shared_ptr<GeometryModel> geom_model,
     const pinocchio::PairIndex pair_id, const Scalar di, const Scalar ds,
     const Scalar ksi)

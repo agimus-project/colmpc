@@ -39,7 +39,7 @@ struct ResidualModelVelocityAvoidanceTpl
   typedef ResidualModelAbstractTpl<Scalar> Base;
   typedef ResidualDataVelocityAvoidanceTpl<Scalar> Data;
   typedef ResidualDataAbstractTpl<Scalar> ResidualDataAbstract;
-  typedef StateMultibodyTpl<Scalar> StateMultibody;
+  typedef crocoddyl::StateMultibodyTpl<Scalar> StateMultibody;
   typedef DataCollectorAbstractTpl<Scalar> DataCollectorAbstract;
   typedef pinocchio::GeometryModel GeometryModel;
   typedef typename MathBase::VectorXs VectorXs;
@@ -73,12 +73,11 @@ struct ResidualModelVelocityAvoidanceTpl
    * @param[in] ksi         Convergence speed coefficient
    */
 
-  ResidualModelVelocityAvoidanceTpl(std::shared_ptr<StateMultibody> state,
-                                    std::shared_ptr<GeometryModel> geom_model,
-                                    const pinocchio::PairIndex pair_id,
-                                    const Scalar di = 1.0e-2,
-                                    const Scalar ds = 1.0e-5,
-                                    const Scalar ksi = 1.0e-2);
+  ResidualModelVelocityAvoidanceTpl(
+      std::shared_ptr<crocoddyl::StateMultibody> state,
+      std::shared_ptr<GeometryModel> geom_model,
+      const pinocchio::PairIndex pair_id, const Scalar di = 1.0e-2,
+      const Scalar ds = 1.0e-5, const Scalar ksi = 1.0e-2);
   virtual ~ResidualModelVelocityAvoidanceTpl();
 
   /**
@@ -186,7 +185,7 @@ struct ResidualDataVelocityAvoidanceTpl
   typedef _Scalar Scalar;
   typedef MathBaseTpl<Scalar> MathBase;
   typedef ResidualDataAbstractTpl<Scalar> Base;
-  typedef StateMultibodyTpl<Scalar> StateMultibody;
+  typedef crocoddyl::StateMultibodyTpl<Scalar> StateMultibody;
   typedef DataCollectorAbstractTpl<Scalar> DataCollectorAbstract;
 
   typedef pinocchio::DataTpl<Scalar> PinocchioData;

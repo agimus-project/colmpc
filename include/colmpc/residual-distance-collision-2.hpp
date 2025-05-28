@@ -4,8 +4,8 @@
 // Copyright note valid unless otherwise stated in individual files.
 // All rights reserved.
 
-#ifndef COLMPC_RESIDUAL_DISTANCE_COLLISION_HPP_
-#define COLMPC_RESIDUAL_DISTANCE_COLLISION_HPP_
+#ifndef COLMPC_RESIDUAL_DISTANCE_COLLISION_2_HPP_
+#define COLMPC_RESIDUAL_DISTANCE_COLLISION_2_HPP_
 
 #include "colmpc/fwd.hpp"
 // include fwd first
@@ -14,9 +14,10 @@
 #include <coal/distance.h>
 
 #include <Eigen/Core>
+#include <colmpc/data/geometry-data.hpp>
+#include <colmpc/multibody.hpp>
 #include <crocoddyl/core/residual-base.hpp>
 #include <crocoddyl/multibody/data/multibody.hpp>
-#include <crocoddyl/multibody/fwd.hpp>
 #include <crocoddyl/multibody/states/multibody.hpp>
 #include <pinocchio/algorithm/frames-derivatives.hpp>
 #include <pinocchio/algorithm/frames.hpp>
@@ -30,15 +31,16 @@ namespace colmpc {
 using namespace crocoddyl;
 
 template <typename _Scalar>
-struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
+struct ResidualDistanceCollision2Tpl
+    : public ResidualModelAbstractTpl<_Scalar> {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
   typedef _Scalar Scalar;
   typedef MathBaseTpl<Scalar> MathBase;
   typedef ResidualModelAbstractTpl<Scalar> Base;
-  typedef ResidualDataDistanceCollisionTpl<Scalar> Data;
+  typedef ResidualDataDistanceCollision2Tpl<Scalar> Data;
   typedef ResidualDataAbstractTpl<Scalar> ResidualDataAbstract;
-  typedef crocoddyl::StateMultibodyTpl<Scalar> StateMultibody;
+  typedef StateMultibodyTpl<Scalar> StateMultibody;
   typedef DataCollectorAbstractTpl<Scalar> DataCollectorAbstract;
   typedef pinocchio::GeometryModel GeometryModel;
   typedef typename MathBase::VectorXs VectorXs;
@@ -50,16 +52,13 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
    *
    * @param[in] state       State of the multibody system
    * @param[in] nu          Dimension of the control vector
-   * @param[in] geom_model  Pinocchio geometry model containing the collision
-   * pair
    * @param[in] pair_id     Index of the collision pair in the geometry model
    */
 
-  ResidualDistanceCollisionTpl(std::shared_ptr<crocoddyl::StateMultibody> state,
-                               const std::size_t nu,
-                               std::shared_ptr<GeometryModel> geom_model,
-                               const pinocchio::PairIndex pair_id);
-  virtual ~ResidualDistanceCollisionTpl();
+  ResidualDistanceCollision2Tpl(std::shared_ptr<StateMultibody> state,
+                                const std::size_t nu,
+                                const pinocchio::PairIndex pair_id);
+  virtual ~ResidualDistanceCollision2Tpl();
 
   /**
    * @brief Compute the pair collision residual
@@ -87,11 +86,6 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
       DataCollectorAbstract *const data);
 
   /**
-   * @brief Return the Pinocchio geometry model
-   */
-  const pinocchio::GeometryModel &get_geometry() const;
-
-  /**
    * @brief Return the reference collision pair id
    */
   pinocchio::PairIndex get_pair_id() const;
@@ -108,10 +102,6 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
   using Base::v_dependent_;
 
  private:
-  typename StateMultibody::PinocchioModel
-      pin_model_;  //!< Pinocchio model used for internal computations
-  std::shared_ptr<pinocchio::GeometryModel>
-      geom_model_;  //!< Pinocchio geometry model containing collision pair
   pinocchio::PairIndex
       pair_id_;  //!< Index of the collision pair in geometry model
   pinocchio::JointIndex joint_id_;  //!< Index of joint on which the collision
@@ -122,40 +112,25 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
 };
 
 template <typename _Scalar>
-struct ResidualDataDistanceCollisionTpl
-    : public ResidualDataAbstractTpl<_Scalar> {
+struct ResidualDataDistanceCollision2Tpl
+    : public ResidualDataAbstractTpl<_Scalar>,
+      public GeometryDataWrapper {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
   typedef _Scalar Scalar;
   typedef MathBaseTpl<Scalar> MathBase;
   typedef ResidualDataAbstractTpl<Scalar> Base;
-  typedef crocoddyl::StateMultibodyTpl<Scalar> StateMultibody;
+  typedef StateMultibodyTpl<Scalar> StateMultibody;
   typedef DataCollectorAbstractTpl<Scalar> DataCollectorAbstract;
 
   typedef typename MathBase::VectorXs VectorXs;
   typedef typename MathBase::Matrix6xs Matrix6xs;
   typedef typename MathBase::Vector3s Vector3s;
 
-  template <template <typename Scalar> class Model>
-  static hpp::fcl::ComputeDistance buildComputeDistance(
-      Model<Scalar> *const model) {
-    const pinocchio::GeometryModel &geom_model = model->get_geometry();
-    const pinocchio::PairIndex pair_id = model->get_pair_id();
-
-    const auto &cp = geom_model.collisionPairs[pair_id];
-    const auto &geom_1 = geom_model.geometryObjects[cp.first].geometry;
-    const auto &geom_2 = geom_model.geometryObjects[cp.second].geometry;
-
-    return hpp::fcl::ComputeDistance(geom_1.get(), geom_2.get());
-  }
-
-  template <template <typename Scalar> class Model>
-  ResidualDataDistanceCollisionTpl(Model<Scalar> *const model,
-                                   DataCollectorAbstract *const data)
+  ResidualDataDistanceCollision2Tpl(
+      ResidualDistanceCollision2Tpl<Scalar> *const model,
+      DataCollectorAbstract *const data)
       : Base(model, data),
-        distance(buildComputeDistance(model)),
-        req(),
-        res(),
         J1(6, model->get_state()->get_nv()),
         J2(6, model->get_state()->get_nv()) {
     // Check that proper shared data has been passed
@@ -182,14 +157,6 @@ struct ResidualDataDistanceCollisionTpl
   using Base::Rx;
   using Base::shared;
 
-  coal::ComputeDistance
-      distance;  //!< Compute Distance from hppfcl,
-                 //!< used to compute the distance between shapes
-
-  coal::DistanceRequest req;  //!< Distance Request from coal,
-                              //!< used to compute the distance between shapes
-  coal::DistanceResult res;   //!< Distance Result from coal
-
   Matrix6xs J1;
   Matrix6xs J2;
   Vector3s cp1;
@@ -210,5 +177,5 @@ struct ResidualDataDistanceCollisionTpl
 /* --- Details -------------------------------------------------------------- */
 /* --- Details -------------------------------------------------------------- */
 /* --- Details -------------------------------------------------------------- */
-#include "colmpc/residual-distance-collision.hxx"
-#endif  // COLMPC_RESIDUAL_DISTANCE_COLLISION_HPP_
+#include "colmpc/residual-distance-collision-2.hxx"
+#endif  // COLMPC_RESIDUAL_DISTANCE_COLLISION_2_HPP_
