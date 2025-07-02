@@ -65,16 +65,15 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1750322110,
-        "narHash": "sha256-i/gI7riF4NfaMGwH6GQM039Yo4TAYmZi1ZmmOLNQC20=",
+        "lastModified": 1750555941,
+        "narHash": "sha256-tSPxE0UBktm65N3AUdV6EfSlK9coVY/jsa4mWSz8pHs=",
         "owner": "gepetto",
         "repo": "nix",
-        "rev": "9551cbf6785fa7f621e2cc57a1134aade1c5d459",
+        "rev": "1de55d21146bbad2d9c22f024483daa97fb81241",
         "type": "github"
       },
       "original": {
         "owner": "gepetto",
-        "ref": "module",
         "repo": "nix",
         "type": "github"
       }
@@ -179,11 +178,11 @@
     "src-agimus-controller": {
       "flake": false,
       "locked": {
-        "lastModified": 1749731028,
-        "narHash": "sha256-bIr3xoTh17c8VUdKRaqBTeiAB95BW7Bg90y+5SV7DNQ=",
+        "lastModified": 1750407651,
+        "narHash": "sha256-8vrtZpi0TamtsXPGFxc6hjFvidkloI2gt46G7Vz4SZk=",
         "owner": "agimus-project",
         "repo": "agimus_controller",
-        "rev": "50f01adc08403edc4547b8b1669cf68b5dbc2213",
+        "rev": "0ba32dbfd4cf7c5b2c2b65799baacd315ce9f1b8",
         "type": "github"
       },
       "original": {
@@ -195,11 +194,11 @@
     "src-agimus-msgs": {
       "flake": false,
       "locked": {
-        "lastModified": 1749650498,
-        "narHash": "sha256-B57+3R1FbltUcvhWc/yvI1osAk53W5+2NIJenVb7v6I=",
+        "lastModified": 1750320872,
+        "narHash": "sha256-Ua5LnKImbGCt/kyf4eBenjcl9+Sum50bZUogddgTA+w=",
         "owner": "agimus-project",
         "repo": "agimus_msgs",
-        "rev": "5797b82a06c3783f3ca4df61ceab855dbf408ed2",
+        "rev": "dac341cf486321d634f12493ee2b8b52b8478037",
         "type": "github"
       },
       "original": {
@@ -211,11 +210,11 @@
     "src-colmpc": {
       "flake": false,
       "locked": {
-        "lastModified": 1749492298,
-        "narHash": "sha256-Xwwax093FfO/fE68mTXDJF72VhjiQ4sAWPbJOse0Yq4=",
+        "lastModified": 1750096412,
+        "narHash": "sha256-Jv2Wi0Q/KuROSutSYrJCf9bxanSGzpOILBOdlom2Db4=",
         "owner": "agimus-project",
         "repo": "colmpc",
-        "rev": "88af86baff68f7ea547ea02104b65d43f3f96cf2",
+        "rev": "b0a412e1ce3bbb43253d442509329fcf0d486e18",
         "type": "github"
       },
       "original": {
@@ -276,11 +275,11 @@
     "src-odri-control-interface": {
       "flake": false,
       "locked": {
-        "lastModified": 1748957655,
-        "narHash": "sha256-YhZ8yzgUiN/ZeU/j1cGUEnKycjSD9WOJjMbkqmr+cag=",
+        "lastModified": 1749138911,
+        "narHash": "sha256-+x+1NxiTwyg5Pwd1oBUMG3Z+eIj+VtVIRFvdPpXStU8=",
         "owner": "gwennlbh",
         "repo": "odri_control_interface",
-        "rev": "6cfbb67f0d2764d84bdeb91dcf7698bf67799e03",
+        "rev": "1137873714fd326fd3ab86cc5632bae72f965866",
         "type": "github"
       },
       "original": {
@@ -293,11 +292,11 @@
     "src-odri-masterboard-sdk": {
       "flake": false,
       "locked": {
-        "lastModified": 1748957693,
-        "narHash": "sha256-Z1u12eXOw7mabincVOTmmlVCNPbQubuVMyqQ+INSqww=",
+        "lastModified": 1749026399,
+        "narHash": "sha256-0VhxOdC2cQwAJfAdHfeHovXrj9jrWb56F35rPN/u+eA=",
         "owner": "gwennlbh",
         "repo": "master-board",
-        "rev": "75eadd8649f0a13248d6e8a0913213ca80c52ea3",
+        "rev": "facc7f954294523a0f4b8389ac89fabad4c536db",
         "type": "github"
       },
       "original": {
