@@ -71,8 +71,8 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
     const std::shared_ptr<ResidualDataAbstract> &data,
     const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
   Data *d = static_cast<Data *>(data.get());
-  
-  if (d->r[0] > dist_threshold){
+
+  if (d->r[0] > dist_threshold) {
     d->Rx.fill(0);
     return;
   }
