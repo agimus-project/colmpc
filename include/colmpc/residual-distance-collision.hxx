@@ -35,17 +35,17 @@ ResidualDistanceCollisionTpl<Scalar>::~ResidualDistanceCollisionTpl() {}
 
 template <typename Scalar>
 void ResidualDistanceCollisionTpl<Scalar>::calc(
-    const std::shared_ptr<ResidualDataAbstract> &data,
-    const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
-  Data *d = static_cast<Data *>(data.get());
+    const std::shared_ptr<ResidualDataAbstract>& data,
+    const Eigen::Ref<const VectorXs>& x, const Eigen::Ref<const VectorXs>&) {
+  Data* d = static_cast<Data*>(data.get());
 
   // clear the coal results
   d->res.clear();
 
   // computes the distance for the collision pair pair_id_
-  const auto &cp = geom_model_->collisionPairs[pair_id_];
-  const auto &geom_1 = geom_model_->geometryObjects[cp.first];
-  const auto &geom_2 = geom_model_->geometryObjects[cp.second];
+  const auto& cp = geom_model_->collisionPairs[pair_id_];
+  const auto& geom_1 = geom_model_->geometryObjects[cp.first];
+  const auto& geom_2 = geom_model_->geometryObjects[cp.second];
   const pinocchio::Model::JointIndex joint_id_1 = geom_1.parentJoint;
   const pinocchio::Model::JointIndex joint_id_2 = geom_2.parentJoint;
 
@@ -68,15 +68,15 @@ void ResidualDistanceCollisionTpl<Scalar>::calc(
 
 template <typename Scalar>
 void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
-    const std::shared_ptr<ResidualDataAbstract> &data,
-    const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
-  Data *d = static_cast<Data *>(data.get());
+    const std::shared_ptr<ResidualDataAbstract>& data,
+    const Eigen::Ref<const VectorXs>& x, const Eigen::Ref<const VectorXs>&) {
+  Data* d = static_cast<Data*>(data.get());
 
   const std::size_t nv = state_->get_nv();
 
-  const auto &cp = geom_model_->collisionPairs[pair_id_];
-  const auto &geom_1 = geom_model_->geometryObjects[cp.first];
-  const auto &geom_2 = geom_model_->geometryObjects[cp.second];
+  const auto& cp = geom_model_->collisionPairs[pair_id_];
+  const auto& geom_1 = geom_model_->geometryObjects[cp.first];
+  const auto& geom_2 = geom_model_->geometryObjects[cp.second];
 
   pinocchio::getFrameJacobian(pin_model_, *d->pinocchio, geom_1.parentFrame,
                               pinocchio::LOCAL_WORLD_ALIGNED, d->J1);
@@ -85,8 +85,8 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
                               pinocchio::LOCAL_WORLD_ALIGNED, d->J2);
 
   // getting the nearest points belonging to the collision shapes
-  const Vector3s &cp1 = d->res.nearest_points[0];
-  const Vector3s &cp2 = d->res.nearest_points[1];
+  const Vector3s& cp1 = d->res.nearest_points[0];
+  const Vector3s& cp2 = d->res.nearest_points[1];
   d->cp1 = cp1;
   d->cp2 = cp2;
   // Transport the jacobian of frame 1 into the jacobian associated to cp1
@@ -112,13 +112,13 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
 template <typename Scalar>
 std::shared_ptr<ResidualDataAbstractTpl<Scalar> >
 ResidualDistanceCollisionTpl<Scalar>::createData(
-    DataCollectorAbstract *const data) {
+    DataCollectorAbstract* const data) {
   return std::allocate_shared<Data>(Eigen::aligned_allocator<Data>(), this,
                                     data);
 }
 
 template <typename Scalar>
-const pinocchio::GeometryModel &
+const pinocchio::GeometryModel&
 ResidualDistanceCollisionTpl<Scalar>::get_geometry() const {
   return *geom_model_.get();
 }

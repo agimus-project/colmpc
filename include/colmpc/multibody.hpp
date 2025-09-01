@@ -32,7 +32,7 @@ class StateMultibodyTpl : public crocoddyl::StateMultibodyTpl<_Scalar> {
   StateMultibodyTpl() = default;
   virtual ~StateMultibodyTpl() = default;
 
-  const std::shared_ptr<GeometryModel> &get_geometry() const {
+  const std::shared_ptr<GeometryModel>& get_geometry() const {
     return geometry_;
   }
 

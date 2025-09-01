@@ -50,16 +50,16 @@ ResidualModelVelocityAvoidanceTpl<
 
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
-    const std::shared_ptr<ResidualDataAbstract> &data,
-    const Eigen::Ref<const VectorXs> &, const Eigen::Ref<const VectorXs> &) {
-  Data *d = static_cast<Data *>(data.get());
+    const std::shared_ptr<ResidualDataAbstract>& data,
+    const Eigen::Ref<const VectorXs>&, const Eigen::Ref<const VectorXs>&) {
+  Data* d = static_cast<Data*>(data.get());
 
   // clear the coal results
   d->res.clear();
 
-  const auto &cp = geom_model_->collisionPairs[pair_id_];
-  const auto &geom_1 = geom_model_->geometryObjects[cp.first];
-  const auto &geom_2 = geom_model_->geometryObjects[cp.second];
+  const auto& cp = geom_model_->collisionPairs[pair_id_];
+  const auto& geom_1 = geom_model_->geometryObjects[cp.first];
+  const auto& geom_2 = geom_model_->geometryObjects[cp.second];
   const pinocchio::Model::JointIndex joint_id_1 = geom_1.parentJoint;
   const pinocchio::Model::JointIndex joint_id_2 = geom_2.parentJoint;
 
@@ -90,15 +90,15 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
                                   pinocchio::LOCAL_WORLD_ALIGNED);
 
   // Crate labels for points
-  const Vector3s &x1 = d->res.nearest_points[0];
-  const Vector3s &x2 = d->res.nearest_points[1];
-  const Vector3s &c1 = d->oMg_id_1.translation();
-  const Vector3s &c2 = d->oMg_id_2.translation();
+  const Vector3s& x1 = d->res.nearest_points[0];
+  const Vector3s& x2 = d->res.nearest_points[1];
+  const Vector3s& c1 = d->oMg_id_1.translation();
+  const Vector3s& c2 = d->oMg_id_2.translation();
   // Create labels for velocities
-  const Vector3s &v1 = d->m1.linear();
-  const Vector3s &v2 = d->m2.linear();
-  const Vector3s &w1 = d->m1.angular();
-  const Vector3s &w2 = d->m2.angular();
+  const Vector3s& v1 = d->m1.linear();
+  const Vector3s& v2 = d->m2.linear();
+  const Vector3s& w1 = d->m1.angular();
+  const Vector3s& w2 = d->m2.angular();
 
   // Precompute differences as they are often used;
   d->x_diff = x1 - x2;
@@ -118,9 +118,9 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calc(
 
 template <typename Scalar>
 void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
-    const std::shared_ptr<ResidualDataAbstract> &data,
-    const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
-  Data *d = static_cast<Data *>(data.get());
+    const std::shared_ptr<ResidualDataAbstract>& data,
+    const Eigen::Ref<const VectorXs>& x, const Eigen::Ref<const VectorXs>&) {
+  Data* d = static_cast<Data*>(data.get());
 
   const std::size_t nq = state_->get_nq();
   const std::size_t nv = state_->get_nv();
@@ -128,21 +128,21 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   d->v = x.tail(nv);
 
   // Create labels for geometries
-  const auto &cp = geom_model_->collisionPairs[pair_id_];
-  const auto &geom_1 = geom_model_->geometryObjects[cp.first];
-  const auto &geom_2 = geom_model_->geometryObjects[cp.second];
+  const auto& cp = geom_model_->collisionPairs[pair_id_];
+  const auto& geom_1 = geom_model_->geometryObjects[cp.first];
+  const auto& geom_2 = geom_model_->geometryObjects[cp.second];
   // Crate labels for points
-  const Vector3s &x1 = d->res.nearest_points[0];
-  const Vector3s &x2 = d->res.nearest_points[1];
+  const Vector3s& x1 = d->res.nearest_points[0];
+  const Vector3s& x2 = d->res.nearest_points[1];
   // Create labels for velocities
-  const Vector3s &v1 = d->m1.linear();
-  const Vector3s &v2 = d->m2.linear();
-  const Vector3s &w1 = d->m1.angular();
-  const Vector3s &w2 = d->m2.angular();
+  const Vector3s& v1 = d->m1.linear();
+  const Vector3s& v2 = d->m2.linear();
+  const Vector3s& w1 = d->m1.angular();
+  const Vector3s& w2 = d->m2.angular();
 
   // Store rotations of geometries in matrices
-  const Matrix3s &R1 = d->oMg_id_1.rotation();
-  const Matrix3s &R2 = d->oMg_id_2.rotation();
+  const Matrix3s& R1 = d->oMg_id_1.rotation();
+  const Matrix3s& R2 = d->oMg_id_2.rotation();
 
   const Matrix3s A1 = R1 * D1_inv_pow_ * R1.transpose();
   const Matrix3s A2 = R2 * D2_inv_pow_ * R2.transpose();
@@ -196,18 +196,18 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   const Matrix3s M1_M2_inv_inv = (M1 - M2_inv).inverse();
   const Matrix3s M2_M1_inv_inv = (M2 - M1_inv).inverse();
   // Compute upper left, upper right, lower left and lower right block of M^-1
-  const Matrix3s &M_up_l = M1_M2_inv_inv;
+  const Matrix3s& M_up_l = M1_M2_inv_inv;
   const Matrix3s M_up_r = M1_M2_inv_inv * M2_inv;
   const Matrix3s M_lw_l = M2_M1_inv_inv * M1_inv;
-  const Matrix3s &M_lw_r = M2_M1_inv_inv;
+  const Matrix3s& M_lw_r = M2_M1_inv_inv;
   // Compose final M inverse matrix
   const Matrix6s M_inv =
       (Matrix6s() << M_up_l, M_up_r, M_lw_l, M_lw_r).finished();
   // Compose final inverse of Lyy.
   // b vector is block sparse, hence full matrix dot product can be composed of
   // series of smaller vector X matrix X vector products.
-  const Vector3s &b1 = A1_x1_c1_diff;  // First non zero vector of b
-  const Vector3s &b2 = A2_x2_c2_diff;  // Second non zero vector of b
+  const Vector3s& b1 = A1_x1_c1_diff;  // First non zero vector of b
+  const Vector3s& b2 = A2_x2_c2_diff;  // Second non zero vector of b
   // Precompute M^-1 b
   const Matrix62s M_inv_b =
       (Matrix62s() << M_up_l * b1, M_up_r * b2, M_lw_l * b1, M_lw_r * b2)
@@ -232,8 +232,8 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
 
   const Matrix812s yth = -Lyy_inv * Lyth;
 
-  const Matrix312s &dx1 = yth.template topRows<3>();
-  const Matrix312s &dx2 = yth.template middleRows<3>(3);
+  const Matrix312s& dx1 = yth.template topRows<3>();
+  const Matrix312s& dx2 = yth.template middleRows<3>(3);
 
   // Precompute difference of vectors
   const Matrix312s dx_diff = dx1 - dx2;
@@ -296,11 +296,11 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
       d_dist_dot_dtheta_dot.transpose() * d->d_theta_dot_dq;
 
   // Transport the jacobian of frame 1 into the jacobian associated to x1
-  const Vector3s &p1 = d->pinocchio->oMf[geom_1.parentFrame].translation();
+  const Vector3s& p1 = d->pinocchio->oMf[geom_1.parentFrame].translation();
   d->f1Mp1.translation(x1 - p1);
   d->jacobian1.noalias() = d->f1Mp1.toActionMatrixInverse() * d->J1;
 
-  const Vector3s &p2 = d->pinocchio->oMf[geom_2.parentFrame].translation();
+  const Vector3s& p2 = d->pinocchio->oMf[geom_2.parentFrame].translation();
   d->f2Mp2.translation(x2 - p2);
   d->jacobian2.noalias() = d->f2Mp2.toActionMatrixInverse() * d->J2;
 
@@ -311,7 +311,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   d->ddistdot_dq_val.topRows(nq) =
       d->d_dist_dot_dq - (d->J * ksi_ / (di_ - ds_));
   // Compute and store d_dist_dot_dqdot
-  const Matrix12xLike &dtheta_dot_dqdot = d->d_theta_dq;
+  const Matrix12xLike& dtheta_dot_dqdot = d->d_theta_dq;
   d->ddistdot_dq_val.bottomRows(nv).noalias() =
       d_dist_dot_dtheta_dot.transpose() * dtheta_dot_dqdot;
 
@@ -320,13 +320,13 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
 template <typename Scalar>
 std::shared_ptr<ResidualDataAbstractTpl<Scalar> >
 ResidualModelVelocityAvoidanceTpl<Scalar>::createData(
-    DataCollectorAbstract *const data) {
+    DataCollectorAbstract* const data) {
   return std::allocate_shared<Data>(Eigen::aligned_allocator<Data>(), this,
                                     data);
 }
 
 template <typename Scalar>
-const pinocchio::GeometryModel &
+const pinocchio::GeometryModel&
 ResidualModelVelocityAvoidanceTpl<Scalar>::get_geometry() const {
   return *geom_model_.get();
 }
@@ -347,18 +347,18 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::set_pair_id(
                  << "(it does not exist in the geometry model!)");
   }
 
-  const auto &cp = geom_model_->collisionPairs[pair_id];
+  const auto& cp = geom_model_->collisionPairs[pair_id];
   try {
-    const auto &geom_1 = geom_model_->geometryObjects[cp.first];
+    const auto& geom_1 = geom_model_->geometryObjects[cp.first];
     D1_inv_pow_ = cast_geom_to_d(geom_1.geometry);
-  } catch (const std::runtime_error &e) {
+  } catch (const std::runtime_error& e) {
     throw_pretty("Error for geometry 1 in collision pair number '"
                  << pair_id << "'! " << e.what());
   }
   try {
-    const auto &geom_2 = geom_model_->geometryObjects[cp.second];
+    const auto& geom_2 = geom_model_->geometryObjects[cp.second];
     D2_inv_pow_ = cast_geom_to_d(geom_2.geometry);
-  } catch (const std::runtime_error &e) {
+  } catch (const std::runtime_error& e) {
     throw_pretty("Error for geometry 2 in collision pair number '"
                  << pair_id << "'! " << e.what());
   }
@@ -406,7 +406,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::set_ksi(const Scalar ksi) {
 template <typename Scalar>
 inline typename ResidualModelVelocityAvoidanceTpl<Scalar>::DiagonalMatrix3s
 ResidualModelVelocityAvoidanceTpl<Scalar>::cast_geom_to_d(
-    const std::shared_ptr<coal::CollisionGeometry> &geom) {
+    const std::shared_ptr<coal::CollisionGeometry>& geom) {
   Vector3s D;
   if (std::dynamic_pointer_cast<coal::Ellipsoid>(geom) != nullptr) {
     // Check for Ellipsoid

@@ -86,9 +86,9 @@ struct ResidualModelVelocityAvoidanceTpl
    * @param[in] data  Pair collision residual data
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    */
-  virtual void calc(const std::shared_ptr<ResidualDataAbstract> &data,
-                    const Eigen::Ref<const VectorXs> &x,
-                    const Eigen::Ref<const VectorXs> &u);
+  virtual void calc(const std::shared_ptr<ResidualDataAbstract>& data,
+                    const Eigen::Ref<const VectorXs>& x,
+                    const Eigen::Ref<const VectorXs>& u);
 
   /**
    * @brief Compute the derivatives of the pair collision residual
@@ -96,17 +96,17 @@ struct ResidualModelVelocityAvoidanceTpl
    * @param[in] data  Pair collision residual data
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    */
-  virtual void calcDiff(const std::shared_ptr<ResidualDataAbstract> &data,
-                        const Eigen::Ref<const VectorXs> &x,
-                        const Eigen::Ref<const VectorXs> &u);
+  virtual void calcDiff(const std::shared_ptr<ResidualDataAbstract>& data,
+                        const Eigen::Ref<const VectorXs>& x,
+                        const Eigen::Ref<const VectorXs>& u);
 
   virtual std::shared_ptr<ResidualDataAbstract> createData(
-      DataCollectorAbstract *const data);
+      DataCollectorAbstract* const data);
 
   /**
    * @brief Return the Pinocchio geometry model
    */
-  const GeometryModel &get_geometry() const;
+  const GeometryModel& get_geometry() const;
 
   /**
    * @brief Return the reference collision pair id
@@ -160,7 +160,7 @@ struct ResidualModelVelocityAvoidanceTpl
    * @param[in] geom Collision geometry object to obtain D matrix
    */
   inline DiagonalMatrix3s cast_geom_to_d(
-      const std::shared_ptr<coal::CollisionGeometry> &geom);
+      const std::shared_ptr<coal::CollisionGeometry>& geom);
 
   typename StateMultibody::PinocchioModel
       pin_model_;  //!< Pinocchio model used for internal computations
@@ -200,8 +200,8 @@ struct ResidualDataVelocityAvoidanceTpl
   typedef Eigen::Matrix<Scalar, 12, Eigen::Dynamic> Matrix12xLike;
 
   template <template <typename Scalar> class Model>
-  ResidualDataVelocityAvoidanceTpl(Model<Scalar> *const model,
-                                   DataCollectorAbstract *const data)
+  ResidualDataVelocityAvoidanceTpl(Model<Scalar>* const model,
+                                   DataCollectorAbstract* const data)
       : Base(model, data),
         geometry(pinocchio::GeometryData(model->get_geometry())),
         req(),
@@ -223,8 +223,8 @@ struct ResidualDataVelocityAvoidanceTpl
         d_theta_dq(12, model->get_state()->get_nq()),
         d_theta_dot_dq(12, model->get_state()->get_nq()) {
     // Check that proper shared data has been passed
-    DataCollectorMultibodyTpl<Scalar> *d =
-        dynamic_cast<DataCollectorMultibodyTpl<Scalar> *>(shared);
+    DataCollectorMultibodyTpl<Scalar>* d =
+        dynamic_cast<DataCollectorMultibodyTpl<Scalar>*>(shared);
     if (d == NULL) {
       throw_pretty(
           "Invalid argument: the shared data should be derived from "
@@ -260,7 +260,7 @@ struct ResidualDataVelocityAvoidanceTpl
     Lyr.setZero();
   }
   pinocchio::GeometryData geometry;       //!< Pinocchio geometry data
-  pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
+  pinocchio::DataTpl<Scalar>* pinocchio;  //!< Pinocchio data
 
   using Base::r;
   using Base::Ru;

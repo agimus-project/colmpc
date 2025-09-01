@@ -29,26 +29,26 @@ ResidualDistanceCollision2Tpl<Scalar>::~ResidualDistanceCollision2Tpl() {}
 
 template <typename Scalar>
 void ResidualDistanceCollision2Tpl<Scalar>::calc(
-    const std::shared_ptr<ResidualDataAbstract> &data,
-    const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
-  Data *d = static_cast<Data *>(data.get());
+    const std::shared_ptr<ResidualDataAbstract>& data,
+    const Eigen::Ref<const VectorXs>& x, const Eigen::Ref<const VectorXs>&) {
+  Data* d = static_cast<Data*>(data.get());
   d->r[0] = d->geometry->distanceResults[pair_id_].min_distance;
 }
 
 template <typename Scalar>
 void ResidualDistanceCollision2Tpl<Scalar>::calcDiff(
-    const std::shared_ptr<ResidualDataAbstract> &data,
-    const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &) {
-  Data *d = static_cast<Data *>(data.get());
+    const std::shared_ptr<ResidualDataAbstract>& data,
+    const Eigen::Ref<const VectorXs>& x, const Eigen::Ref<const VectorXs>&) {
+  Data* d = static_cast<Data*>(data.get());
 
   const std::size_t nv = state_->get_nv();
   auto state = std::static_pointer_cast<StateMultibody>(state_);
-  auto const &gmodel = state->get_geometry();
-  auto const &res = d->geometry->distanceResults[pair_id_];
+  auto const& gmodel = state->get_geometry();
+  auto const& res = d->geometry->distanceResults[pair_id_];
 
-  const auto &cp = gmodel->collisionPairs[pair_id_];
-  const auto &geom_1 = gmodel->geometryObjects[cp.first];
-  const auto &geom_2 = gmodel->geometryObjects[cp.second];
+  const auto& cp = gmodel->collisionPairs[pair_id_];
+  const auto& geom_1 = gmodel->geometryObjects[cp.first];
+  const auto& geom_2 = gmodel->geometryObjects[cp.second];
 
   pinocchio::getFrameJacobian(*state->get_pinocchio(), *d->pinocchio,
                               geom_1.parentFrame,
@@ -59,8 +59,8 @@ void ResidualDistanceCollision2Tpl<Scalar>::calcDiff(
                               pinocchio::LOCAL_WORLD_ALIGNED, d->J2);
 
   // getting the nearest points belonging to the collision shapes
-  const Vector3s &cp1 = res.nearest_points[0];
-  const Vector3s &cp2 = res.nearest_points[1];
+  const Vector3s& cp1 = res.nearest_points[0];
+  const Vector3s& cp2 = res.nearest_points[1];
   d->cp1 = cp1;
   d->cp2 = cp2;
   // Transport the jacobian of frame 1 into the jacobian associated to cp1
@@ -86,7 +86,7 @@ void ResidualDistanceCollision2Tpl<Scalar>::calcDiff(
 template <typename Scalar>
 std::shared_ptr<ResidualDataAbstractTpl<Scalar> >
 ResidualDistanceCollision2Tpl<Scalar>::createData(
-    DataCollectorAbstract *const data) {
+    DataCollectorAbstract* const data) {
   return std::allocate_shared<Data>(Eigen::aligned_allocator<Data>(), this,
                                     data);
 }

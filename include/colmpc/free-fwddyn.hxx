@@ -30,8 +30,8 @@ DifferentialActionModelFreeFwdDynamicsTpl<
 
 template <typename Scalar>
 void DifferentialActionModelFreeFwdDynamicsTpl<Scalar>::calc(
-    const std::shared_ptr<DifferentialActionDataAbstract> &data,
-    const Eigen::Ref<const VectorXs> &x, const Eigen::Ref<const VectorXs> &u) {
+    const std::shared_ptr<DifferentialActionDataAbstract>& data,
+    const Eigen::Ref<const VectorXs>& x, const Eigen::Ref<const VectorXs>& u) {
   if (static_cast<std::size_t>(x.size()) != state_->get_nx()) {
     throw_pretty(
         "Invalid argument: " << "x has wrong dimension (it should be " +
@@ -43,7 +43,7 @@ void DifferentialActionModelFreeFwdDynamicsTpl<Scalar>::calc(
                                     std::to_string(nu_) + ")");
   }
 
-  Data *d = static_cast<Data *>(data.get());
+  Data* d = static_cast<Data*>(data.get());
   const Eigen::VectorBlock<const Eigen::Ref<const VectorXs>, Eigen::Dynamic> q =
       x.head(state_->get_nq());
   pinocchio::computeDistances(this->get_pinocchio(), d->pinocchio, geometry_,
@@ -53,15 +53,15 @@ void DifferentialActionModelFreeFwdDynamicsTpl<Scalar>::calc(
 
 template <typename Scalar>
 void DifferentialActionModelFreeFwdDynamicsTpl<Scalar>::calc(
-    const std::shared_ptr<DifferentialActionDataAbstract> &data,
-    const Eigen::Ref<const VectorXs> &x) {
+    const std::shared_ptr<DifferentialActionDataAbstract>& data,
+    const Eigen::Ref<const VectorXs>& x) {
   if (static_cast<std::size_t>(x.size()) != state_->get_nx()) {
     throw_pretty(
         "Invalid argument: " << "x has wrong dimension (it should be " +
                                     std::to_string(state_->get_nx()) + ")");
   }
 
-  Data *d = static_cast<Data *>(data.get());
+  Data* d = static_cast<Data*>(data.get());
   const Eigen::VectorBlock<const Eigen::Ref<const VectorXs>, Eigen::Dynamic> q =
       x.head(state_->get_nq());
 
@@ -78,7 +78,7 @@ DifferentialActionModelFreeFwdDynamicsTpl<Scalar>::createData() {
 
 template <typename Scalar>
 bool DifferentialActionModelFreeFwdDynamicsTpl<Scalar>::checkData(
-    const std::shared_ptr<DifferentialActionDataAbstract> &data) {
+    const std::shared_ptr<DifferentialActionDataAbstract>& data) {
   std::shared_ptr<Data> d = std::dynamic_pointer_cast<Data>(data);
   if (d != NULL) {
     return true;
@@ -89,7 +89,7 @@ bool DifferentialActionModelFreeFwdDynamicsTpl<Scalar>::checkData(
 
 template <typename Scalar>
 void DifferentialActionModelFreeFwdDynamicsTpl<Scalar>::print(
-    std::ostream &os) const {
+    std::ostream& os) const {
   os << "DifferentialActionModelFreeFwdDynamics {nx=" << state_->get_nx()
      << ", ndx=" << state_->get_ndx() << ", nu=" << nu_
      << ", ncolpairs=" << geometry_.collisionPairs.size() << "}";
@@ -98,9 +98,9 @@ void DifferentialActionModelFreeFwdDynamicsTpl<Scalar>::print(
 template <typename Scalar>
 DifferentialActionDataFreeFwdDynamicsTpl<Scalar>::
     DifferentialActionDataFreeFwdDynamicsTpl(
-        DifferentialActionModelFreeFwdDynamicsTpl<Scalar> *const model)
+        DifferentialActionModelFreeFwdDynamicsTpl<Scalar>* const model)
     : Base(model), geometry(model->get_geometry()) {
-  for (auto &name_cost : this->costs->costs) {
+  for (auto& name_cost : this->costs->costs) {
     auto w = std::dynamic_pointer_cast<GeometryDataWrapper>(
         name_cost.second->residual);
     if (w) {
@@ -108,7 +108,7 @@ DifferentialActionDataFreeFwdDynamicsTpl<Scalar>::
     }
   }
 
-  for (auto &name_constraints : this->constraints->constraints) {
+  for (auto& name_constraints : this->constraints->constraints) {
     auto w = std::dynamic_pointer_cast<GeometryDataWrapper>(
         name_constraints.second->residual);
     if (w) {

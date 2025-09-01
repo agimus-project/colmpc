@@ -54,8 +54,8 @@ class ActivationModelDistanceQuadTpl
    * @param[in] alpha  Width of quadratic basin (default: 1.)
    */
 
-  explicit ActivationModelDistanceQuadTpl(const std::size_t &nr,
-                                          const Scalar &d0 = Scalar(1.))
+  explicit ActivationModelDistanceQuadTpl(const std::size_t& nr,
+                                          const Scalar& d0 = Scalar(1.))
       : Base(nr) {
     if (d0 <= Scalar(0.)) {
       throw_pretty(
@@ -71,8 +71,8 @@ class ActivationModelDistanceQuadTpl
    * @param[in] data  Quadratic activation data
    * @param[in] r     Residual vector \f$\mathbf{r}\in\mathbb{R}^{nr}\f$
    */
-  virtual void calc(const std::shared_ptr<ActivationDataAbstract> &data,
-                    const Eigen::Ref<const VectorXs> &r) {
+  virtual void calc(const std::shared_ptr<ActivationDataAbstract>& data,
+                    const Eigen::Ref<const VectorXs>& r) {
     if (static_cast<std::size_t>(r.size()) != nr_) {
       throw_pretty(
           "Invalid argument: " << "r has wrong dimension (it should be " +
@@ -91,8 +91,8 @@ class ActivationModelDistanceQuadTpl
    * @param[in] data  Quadratic activation data
    * @param[in] r     Residual vector \f$\mathbf{r}\in\mathbb{R}^{nr}\f$
    */
-  virtual void calcDiff(const std::shared_ptr<ActivationDataAbstract> &data,
-                        const Eigen::Ref<const VectorXs> &r) {
+  virtual void calcDiff(const std::shared_ptr<ActivationDataAbstract>& data,
+                        const Eigen::Ref<const VectorXs>& r) {
     if (static_cast<std::size_t>(r.size()) != nr_) {
       throw_pretty(
           "Invalid argument: " << "r has wrong dimension (it should be " +
@@ -130,7 +130,7 @@ class ActivationModelDistanceQuadTpl
    *
    * @param[out] os  Output stream object
    */
-  virtual void print(std::ostream &os) const {
+  virtual void print(std::ostream& os) const {
     os << "ActivationModelDistanceQuad {nr=" << nr_ << ", d0=" << d0_ << "}";
   }
 
@@ -157,7 +157,7 @@ struct ActivationDataDistanceQuadTpl
   typedef ActivationDataAbstractTpl<Scalar> Base;
 
   template <typename Activation>
-  explicit ActivationDataDistanceQuadTpl(Activation *const activation)
+  explicit ActivationDataDistanceQuadTpl(Activation* const activation)
       : Base(activation),
         dd(activation->get_nr()),
         one_minus_dd(activation->get_nr()) {}
