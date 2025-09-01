@@ -68,9 +68,9 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    * @param[in] u     Control input \f$\mathbf{u}\in\mathbb{R}^{nu}\f$
    */
-  virtual void calc(const std::shared_ptr<ResidualDataAbstract> &data,
-                    const Eigen::Ref<const VectorXs> &x,
-                    const Eigen::Ref<const VectorXs> &u);
+  virtual void calc(const std::shared_ptr<ResidualDataAbstract>& data,
+                    const Eigen::Ref<const VectorXs>& x,
+                    const Eigen::Ref<const VectorXs>& u);
 
   /**
    * @brief Compute the derivatives of the pair collision residual
@@ -79,17 +79,17 @@ struct ResidualDistanceCollisionTpl : public ResidualModelAbstractTpl<_Scalar> {
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    * @param[in] u     Control input \f$\mathbf{u}\in\mathbb{R}^{nu}\f$
    */
-  virtual void calcDiff(const std::shared_ptr<ResidualDataAbstract> &data,
-                        const Eigen::Ref<const VectorXs> &x,
-                        const Eigen::Ref<const VectorXs> &u);
+  virtual void calcDiff(const std::shared_ptr<ResidualDataAbstract>& data,
+                        const Eigen::Ref<const VectorXs>& x,
+                        const Eigen::Ref<const VectorXs>& u);
 
   virtual std::shared_ptr<ResidualDataAbstract> createData(
-      DataCollectorAbstract *const data);
+      DataCollectorAbstract* const data);
 
   /**
    * @brief Return the Pinocchio geometry model
    */
-  const pinocchio::GeometryModel &get_geometry() const;
+  const pinocchio::GeometryModel& get_geometry() const;
 
   /**
    * @brief Return the reference collision pair id
@@ -138,20 +138,20 @@ struct ResidualDataDistanceCollisionTpl
 
   template <template <typename Scalar> class Model>
   static hpp::fcl::ComputeDistance buildComputeDistance(
-      Model<Scalar> *const model) {
-    const pinocchio::GeometryModel &geom_model = model->get_geometry();
+      Model<Scalar>* const model) {
+    const pinocchio::GeometryModel& geom_model = model->get_geometry();
     const pinocchio::PairIndex pair_id = model->get_pair_id();
 
-    const auto &cp = geom_model.collisionPairs[pair_id];
-    const auto &geom_1 = geom_model.geometryObjects[cp.first].geometry;
-    const auto &geom_2 = geom_model.geometryObjects[cp.second].geometry;
+    const auto& cp = geom_model.collisionPairs[pair_id];
+    const auto& geom_1 = geom_model.geometryObjects[cp.first].geometry;
+    const auto& geom_2 = geom_model.geometryObjects[cp.second].geometry;
 
     return hpp::fcl::ComputeDistance(geom_1.get(), geom_2.get());
   }
 
   template <template <typename Scalar> class Model>
-  ResidualDataDistanceCollisionTpl(Model<Scalar> *const model,
-                                   DataCollectorAbstract *const data)
+  ResidualDataDistanceCollisionTpl(Model<Scalar>* const model,
+                                   DataCollectorAbstract* const data)
       : Base(model, data),
         distance(buildComputeDistance(model)),
         req(),
@@ -159,8 +159,8 @@ struct ResidualDataDistanceCollisionTpl
         J1(6, model->get_state()->get_nv()),
         J2(6, model->get_state()->get_nv()) {
     // Check that proper shared data has been passed
-    DataCollectorMultibodyTpl<Scalar> *d =
-        dynamic_cast<DataCollectorMultibodyTpl<Scalar> *>(shared);
+    DataCollectorMultibodyTpl<Scalar>* d =
+        dynamic_cast<DataCollectorMultibodyTpl<Scalar>*>(shared);
     if (d == NULL) {
       throw_pretty(
           "Invalid argument: the shared data should be derived from "
@@ -176,7 +176,7 @@ struct ResidualDataDistanceCollisionTpl
     f1p1.fill(0);
     f2p2.fill(0);
   }
-  pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
+  pinocchio::DataTpl<Scalar>* pinocchio;  //!< Pinocchio data
   using Base::r;
   using Base::Ru;
   using Base::Rx;

@@ -67,9 +67,9 @@ struct ResidualDistanceCollision2Tpl
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    * @param[in] u     Control input \f$\mathbf{u}\in\mathbb{R}^{nu}\f$
    */
-  virtual void calc(const std::shared_ptr<ResidualDataAbstract> &data,
-                    const Eigen::Ref<const VectorXs> &x,
-                    const Eigen::Ref<const VectorXs> &u);
+  virtual void calc(const std::shared_ptr<ResidualDataAbstract>& data,
+                    const Eigen::Ref<const VectorXs>& x,
+                    const Eigen::Ref<const VectorXs>& u);
 
   /**
    * @brief Compute the derivatives of the pair collision residual
@@ -78,12 +78,12 @@ struct ResidualDistanceCollision2Tpl
    * @param[in] x     State point \f$\mathbf{x}\in\mathbb{R}^{ndx}\f$
    * @param[in] u     Control input \f$\mathbf{u}\in\mathbb{R}^{nu}\f$
    */
-  virtual void calcDiff(const std::shared_ptr<ResidualDataAbstract> &data,
-                        const Eigen::Ref<const VectorXs> &x,
-                        const Eigen::Ref<const VectorXs> &u);
+  virtual void calcDiff(const std::shared_ptr<ResidualDataAbstract>& data,
+                        const Eigen::Ref<const VectorXs>& x,
+                        const Eigen::Ref<const VectorXs>& u);
 
   virtual std::shared_ptr<ResidualDataAbstract> createData(
-      DataCollectorAbstract *const data);
+      DataCollectorAbstract* const data);
 
   /**
    * @brief Return the reference collision pair id
@@ -128,14 +128,14 @@ struct ResidualDataDistanceCollision2Tpl
   typedef typename MathBase::Vector3s Vector3s;
 
   ResidualDataDistanceCollision2Tpl(
-      ResidualDistanceCollision2Tpl<Scalar> *const model,
-      DataCollectorAbstract *const data)
+      ResidualDistanceCollision2Tpl<Scalar>* const model,
+      DataCollectorAbstract* const data)
       : Base(model, data),
         J1(6, model->get_state()->get_nv()),
         J2(6, model->get_state()->get_nv()) {
     // Check that proper shared data has been passed
-    DataCollectorMultibodyTpl<Scalar> *d =
-        dynamic_cast<DataCollectorMultibodyTpl<Scalar> *>(shared);
+    DataCollectorMultibodyTpl<Scalar>* d =
+        dynamic_cast<DataCollectorMultibodyTpl<Scalar>*>(shared);
     if (d == NULL) {
       throw_pretty(
           "Invalid argument: the shared data should be derived from "
@@ -151,7 +151,7 @@ struct ResidualDataDistanceCollision2Tpl
     f1p1.fill(0);
     f2p2.fill(0);
   }
-  pinocchio::DataTpl<Scalar> *pinocchio;  //!< Pinocchio data
+  pinocchio::DataTpl<Scalar>* pinocchio;  //!< Pinocchio data
   using Base::r;
   using Base::Ru;
   using Base::Rx;

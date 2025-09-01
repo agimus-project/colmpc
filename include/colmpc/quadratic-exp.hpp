@@ -54,8 +54,8 @@ class ActivationModelExpTpl : public ActivationModelAbstractTpl<_Scalar> {
    * @param[in] alpha  Width of quadratic basin (default: 1.)
    */
 
-  explicit ActivationModelExpTpl(const std::size_t &nr,
-                                 const Scalar &alpha = Scalar(1.))
+  explicit ActivationModelExpTpl(const std::size_t& nr,
+                                 const Scalar& alpha = Scalar(1.))
       : Base(nr), alpha_(alpha) {
     static_assert(N > 0 && N < 3,
                   "N should be strictly positive. Value of 3 and above have "
@@ -73,8 +73,8 @@ class ActivationModelExpTpl : public ActivationModelAbstractTpl<_Scalar> {
    * @param[in] data  Quadratic activation data
    * @param[in] r     Residual vector \f$\mathbf{r}\in\mathbb{R}^{nr}\f$
    */
-  virtual void calc(const std::shared_ptr<ActivationDataAbstract> &data,
-                    const Eigen::Ref<const VectorXs> &r) {
+  virtual void calc(const std::shared_ptr<ActivationDataAbstract>& data,
+                    const Eigen::Ref<const VectorXs>& r) {
     if (static_cast<std::size_t>(r.size()) != nr_) {
       throw_pretty(
           "Invalid argument: " << "r has wrong dimension (it should be " +
@@ -106,8 +106,8 @@ class ActivationModelExpTpl : public ActivationModelAbstractTpl<_Scalar> {
    * @param[in] data  Quadratic activation data
    * @param[in] r     Residual vector \f$\mathbf{r}\in\mathbb{R}^{nr}\f$
    */
-  virtual void calcDiff(const std::shared_ptr<ActivationDataAbstract> &data,
-                        const Eigen::Ref<const VectorXs> &r) {
+  virtual void calcDiff(const std::shared_ptr<ActivationDataAbstract>& data,
+                        const Eigen::Ref<const VectorXs>& r) {
     if (static_cast<std::size_t>(r.size()) != nr_) {
       throw_pretty(
           "Invalid argument: " << "r has wrong dimension (it should be " +
@@ -155,7 +155,7 @@ class ActivationModelExpTpl : public ActivationModelAbstractTpl<_Scalar> {
    *
    * @param[out] os  Output stream object
    */
-  virtual void print(std::ostream &os) const {
+  virtual void print(std::ostream& os) const {
     os << "ActivationModelExp<" << N << "> {nr=" << nr_ << ", a=" << alpha_
        << "}";
   }
@@ -182,8 +182,8 @@ struct ActivationDataExpTpl : public ActivationDataAbstractTpl<_Scalar> {
   typedef ActivationDataAbstractTpl<Scalar> Base;
 
   template <typename Activation>
-  explicit ActivationDataExpTpl(Activation *const activation)
-      : Base(static_cast<ActivationModelAbstract *>(activation)),
+  explicit ActivationDataExpTpl(Activation* const activation)
+      : Base(static_cast<ActivationModelAbstract*>(activation)),
         v(activation->get_nr()),
         vn(activation->get_nr()),
         exp_minus_vn(activation->get_nr()) {}

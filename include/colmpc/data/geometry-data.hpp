@@ -3,9 +3,9 @@
 namespace colmpc {
 
 struct GeometryDataWrapper {
-  pinocchio::GeometryData *geometry = nullptr;
+  pinocchio::GeometryData* geometry = nullptr;
 
-  void setGeometry(pinocchio::GeometryData *g) {
+  void setGeometry(pinocchio::GeometryData* g) {
     if (geometry != nullptr && g != geometry) {
       // This is not strictly required. However, setting the geom data twice
       // might indicate a bug.
