@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package format="3">
   <name>colmpc</name>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
   <description>Collision Residual for Crocoddyl</description>
   <maintainer email="guilhem.saurel@laas.fr">Guilhem Saurel</maintainer>
   <author>Arthur Haffemayer</author>
