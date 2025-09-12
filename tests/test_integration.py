@@ -53,7 +53,7 @@ class TestBenchmark(unittest.TestCase):
 
             # Creating the scene
             robot_wrapper = PandaWrapper(capsule=False)
-            rmodel, cmodel, vmodel = robot_wrapper()
+            rmodel, cmodel, _vmodel = robot_wrapper()
             scene = Scene()
 
             cmodel, TARGET, q0 = scene.create_scene(rmodel, cmodel, test)
