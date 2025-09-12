@@ -1,7 +1,6 @@
 pull_request_rules:
   - name: merge [bot] PRs when CI pass
     conditions:
-      - check-success = "check-macos-linux-cmeel"
       - check-success = "check-macos-linux-nix"
       - check-success = "pre-commit.ci - pr"
       - or:
