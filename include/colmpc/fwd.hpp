@@ -49,9 +49,10 @@ template <typename Scalar, int N>
 class ActivationModelExpTpl;
 typedef ActivationModelExpTpl<double, 1> ActivationModelExp;
 typedef ActivationModelExpTpl<double, 2> ActivationModelQuadExp;
-template <typename Scalar>
+template <typename Scalar, int N>
 class ActivationDataExpTpl;
-typedef ActivationDataExpTpl<double> ActivationDataExp;
+typedef ActivationDataExpTpl<double, 1> ActivationDataExp;
+typedef ActivationDataExpTpl<double, 2> ActivationDataQuadExp;
 
 template <typename Scalar>
 class ActivationModelDistanceQuadTpl;
