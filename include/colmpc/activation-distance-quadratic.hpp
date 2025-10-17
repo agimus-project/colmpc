@@ -108,6 +108,20 @@ class ActivationModelDistanceQuadTpl
                     Array::Zero(nr_));
   };
 
+  // Explicit template instanciation
+  std::shared_ptr<crocoddyl::ActivationModelBase> cloneAsDouble()
+      const override {
+    return std::make_shared<ActivationModelDistanceQuadTpl<double>>(
+        this->get_nr(), this->get_d0());
+  }
+
+  // Explicit template instanciation
+  std::shared_ptr<crocoddyl::ActivationModelBase> cloneAsFloat()
+      const override {
+    return std::make_shared<ActivationModelDistanceQuadTpl<float>>(
+        this->get_nr(), this->get_d0());
+  }
+
   /**
    * @brief Create the quadratic-exp activation data
    *
