@@ -65,6 +65,11 @@ class ActivationModelExpTpl : public ActivationModelAbstractTpl<_Scalar> {
           "Invalid argument: " << "alpha should be a strictly positive value");
     }
   };
+  template <typename OtherScalar>
+  explicit ActivationModelExpTpl(
+      const ActivationModelExpTpl<OtherScalar, N>& other)
+      : crocoddyl::ActivationModelAbstractTpl<_Scalar>(other.get_nr()) {}
+
   virtual ~ActivationModelExpTpl() {};
 
   /*
@@ -136,6 +141,18 @@ class ActivationModelExpTpl : public ActivationModelAbstractTpl<_Scalar> {
     }
   };
 
+  // Explicit template instanciation
+  std::shared_ptr<crocoddyl::ActivationModelBase> cloneAsDouble()
+      const override {
+    return std::make_shared<ActivationModelExpTpl<double, N>>(*this);
+  }
+
+  // Explicit template instanciation
+  std::shared_ptr<crocoddyl::ActivationModelBase> cloneAsFloat()
+      const override {
+    return std::make_shared<ActivationModelExpTpl<float, N>>(*this);
+  }
+
   /**
    * @brief Create the quadratic-exp activation data
    *
@@ -181,9 +198,10 @@ struct ActivationDataExpTpl : public ActivationDataAbstractTpl<_Scalar> {
   typedef MathBaseTpl<Scalar> MathBase;
   typedef ActivationDataAbstractTpl<Scalar> Base;
 
-  template <typename Activation>
-  explicit ActivationDataExpTpl(Activation* const activation)
-      : Base(static_cast<ActivationModelAbstract*>(activation)),
+  template <template <typename> class Activation>
+  explicit ActivationDataExpTpl(Activation<Scalar>* const activation)
+      : Base(static_cast<crocoddyl::ActivationModelAbstractTpl<Scalar>*>(
+            activation)),
         v(activation->get_nr()),
         vn(activation->get_nr()),
         exp_minus_vn(activation->get_nr()) {}
