@@ -48,12 +48,10 @@
         ],
         "src-agimus-controller": "src-agimus-controller",
         "src-agimus-msgs": "src-agimus-msgs",
-        "src-example-parallel-robots": "src-example-parallel-robots",
         "src-franka-description": "src-franka-description",
         "src-gepetto-viewer": "src-gepetto-viewer",
         "src-odri-control-interface": "src-odri-control-interface",
         "src-odri-masterboard-sdk": "src-odri-masterboard-sdk",
-        "src-toolbox-parallel-robots": "src-toolbox-parallel-robots",
         "system-manager": "system-manager",
         "systems": [
           "gepetto",
@@ -64,11 +62,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1760233259,
-        "narHash": "sha256-MxIsSnJ70zqZTmNX9dNornfLJziB2lgJ53vcQopc8OE=",
+        "lastModified": 1760441384,
+        "narHash": "sha256-Cgm1/MG6byLI5iBgG5z3zu3Sc32nmJnt0xcpU5hf1ZA=",
         "owner": "gepetto",
         "repo": "nix",
-        "rev": "14f5e0b740be2961830ccd9b3afcb30953964b3b",
+        "rev": "e0a279406e3ffe6c245b334c67e40e1b3d25516d",
         "type": "github"
       },
       "original": {
@@ -206,22 +204,6 @@
         "type": "github"
       }
     },
-    "src-example-parallel-robots": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1747686798,
-        "narHash": "sha256-UXtJkwoKXYTw90moFr5E1sHHhc1czdHuq2r3wxDIBAE=",
-        "owner": "gepetto",
-        "repo": "example-parallel-robots",
-        "rev": "56fefa6437a4554c81c3b5db7efdc91bea292fdc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gepetto",
-        "repo": "example-parallel-robots",
-        "type": "github"
-      }
-    },
     "src-franka-description": {
       "flake": false,
       "locked": {
@@ -286,22 +268,6 @@
         "owner": "gwennlbh",
         "ref": "nix",
         "repo": "master-board",
-        "type": "github"
-      }
-    },
-    "src-toolbox-parallel-robots": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1755590729,
-        "narHash": "sha256-NCpzhD12kXrxAwsufxZbtjw1Vrs1Usfpo/iXeQoTT94=",
-        "owner": "gepetto",
-        "repo": "toolbox-parallel-robots",
-        "rev": "280a9868a346ed1631272512dac02c96f9f24c2d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "gepetto",
-        "repo": "toolbox-parallel-robots",
         "type": "github"
       }
     },
