@@ -29,14 +29,16 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
+  ]
+  ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
 
   buildInputs = lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  propagatedBuildInputs =
-    [ ipopt ]
-    ++ lib.optional pythonSupport python3Packages.crocoddyl
-    ++ lib.optional (!pythonSupport) crocoddyl;
+  propagatedBuildInputs = [
+    ipopt
+  ]
+  ++ lib.optional pythonSupport python3Packages.crocoddyl
+  ++ lib.optional (!pythonSupport) crocoddyl;
 
   checkInputs = lib.optionals pythonSupport [
     python3Packages.mim-solvers
