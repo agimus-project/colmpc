@@ -40,9 +40,13 @@
             in
             {
               default = self'.packages.py-colmpc;
-              colmpc = pkgs.colmpc.overrideAttrs { inherit src; };
+              colmpc = pkgs.colmpc.overrideAttrs {
+                inherit src;
+                patches = [ ];
+              };
               py-colmpc = pkgs.python3Packages.colmpc.overrideAttrs {
                 inherit src;
+                patches = [ ];
               };
             };
         };
