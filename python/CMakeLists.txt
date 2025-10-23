@@ -10,7 +10,8 @@ set(${PY_NAME}_SOURCES
     residual-distance-collision-2.cpp)
 
 add_library(${PY_NAME} SHARED ${${PY_NAME}_SOURCES})
-target_link_libraries(${PY_NAME} PUBLIC ${PROJECT_NAME} eigenpy::eigenpy)
+target_link_libraries(${PY_NAME} PUBLIC ${PROJECT_NAME}::${PROJECT_NAME}
+                                        eigenpy::eigenpy)
 set_target_properties(
   ${PY_NAME}
   PROPERTIES PREFIX ""

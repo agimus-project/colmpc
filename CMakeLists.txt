@@ -6,7 +6,6 @@ set(PROJECT_DESCRIPTION "Collision avoidance for MPC")
 set(PROJECT_URL https://github.com/agimus-project/${PROJECT_NAME})
 
 # Project options
-option(BUILD_PYTHON_INTERFACE "Build the python binding" ON)
 option(SUFFIX_SO_VERSION "Suffix library name with its version" ON)
 option(GENERATE_PYTHON_STUBS
        "Generate the Python stubs associated to the Python library" OFF)
@@ -62,28 +61,35 @@ add_project_dependency(OpenMP REQUIRED)
 add_project_dependency(crocoddyl REQUIRED)
 
 # Main Library
-set(${PROJECT_NAME}_HEADERS
-    include/${PROJECT_NAME}/fwd.hpp
-    include/${PROJECT_NAME}/residual-distance-collision.hpp
-    include/${PROJECT_NAME}/residual-distance-collision.hxx
-    include/${PROJECT_NAME}/residual-velocity-avoidance.hpp
-    include/${PROJECT_NAME}/residual-velocity-avoidance.hxx
-    include/${PROJECT_NAME}/activation-distance-quadratic.hpp
-    include/${PROJECT_NAME}/quadratic-exp.hpp)
+if(BUILD_STANDALONE_PYTHON_INTERFACE)
+  add_project_dependency(${PROJECT_NAME} REQUIRED CONFIG)
+else()
+  set(${PROJECT_NAME}_HEADERS
+      include/${PROJECT_NAME}/fwd.hpp
+      include/${PROJECT_NAME}/residual-distance-collision.hpp
+      include/${PROJECT_NAME}/residual-distance-collision.hxx
+      include/${PROJECT_NAME}/residual-velocity-avoidance.hpp
+      include/${PROJECT_NAME}/residual-velocity-avoidance.hxx
+      include/${PROJECT_NAME}/activation-distance-quadratic.hpp
+      include/${PROJECT_NAME}/quadratic-exp.hpp)
 
-add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_HEADERS})
-set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-target_include_directories(
-  ${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-target_link_libraries(${PROJECT_NAME} PUBLIC crocoddyl::crocoddyl)
-if(UNIX)
-  get_relative_rpath(${CMAKE_INSTALL_LIBDIR} ${PROJECT_NAME}_INSTALL_RPATH)
-  set_target_properties(
-    ${PROJECT_NAME} PROPERTIES INSTALL_RPATH "${${PROJECT_NAME}_INSTALL_RPATH}")
-endif()
+  add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_HEADERS})
+  add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+  set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
+  target_include_directories(
+    ${PROJECT_NAME} PUBLIC $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+  target_link_libraries(${PROJECT_NAME} PUBLIC crocoddyl::crocoddyl)
+  if(UNIX)
+    get_relative_rpath(${CMAKE_INSTALL_LIBDIR} ${PROJECT_NAME}_INSTALL_RPATH)
+    set_target_properties(
+      ${PROJECT_NAME} PROPERTIES INSTALL_RPATH
+                                 "${${PROJECT_NAME}_INSTALL_RPATH}")
+  endif()
 
-if(SUFFIX_SO_VERSION)
-  set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${PROJECT_VERSION})
+  if(SUFFIX_SO_VERSION)
+    set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION
+                                                     ${PROJECT_VERSION})
+  endif()
 endif()
 
 # Python Bindings
@@ -98,7 +104,9 @@ if(BUILD_TESTING)
 endif()
 
 # Installation
-install(
-  TARGETS ${PROJECT_NAME}
-  EXPORT ${TARGETS_EXPORT_NAME}
-  DESTINATION ${CMAKE_INSTALL_LIBDIR})
+if(NOT BUILD_STANDALONE_PYTHON_INTERFACE)
+  install(
+    TARGETS ${PROJECT_NAME}
+    EXPORT ${TARGETS_EXPORT_NAME}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR})
+endif()
