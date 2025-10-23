@@ -43,5 +43,5 @@ abstract: >
   demonstrate the efficiency of our approach by performing
   dynamic tasks in an obstacle field while reacting to
   non-modeled perturbations.
-version: 0.3.0
+version: 1.1.0
 license: BSD-2-Clause
