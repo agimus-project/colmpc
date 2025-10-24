@@ -12,40 +12,38 @@
 
   outputs =
     inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = import inputs.systems;
-      imports = [ inputs.gepetto.flakeModule ];
-      perSystem =
-        {
-          lib,
-          pkgs,
-          self',
-          ...
-        }:
-        {
-          packages =
-            let
-              override = {
-                src = lib.fileset.toSource {
-                  root = ./.;
-                  fileset = lib.fileset.unions [
-                    ./examples
-                    ./include
-                    ./python
-                    ./tests
-                    ./CMakeLists.txt
-                    ./package.xml
-                    ./pyproject.toml
-                  ];
-                };
-                patches = [ ];
-              };
-            in
-            {
-              default = self'.packages.py-colmpc;
-              colmpc = pkgs.colmpc.overrideAttrs override;
-              py-colmpc = pkgs.python3Packages.colmpc.overrideAttrs override;
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } (
+      { lib, self, ... }:
+      {
+        systems = import inputs.systems;
+        imports = [
+          inputs.gepetto.flakeModule
+          { gepetto-pkgs.overlays = [ self.overlays.default ]; }
+        ];
+        flake.overlays.default = _final: prev: {
+          colmpc = prev.colmpc.overrideAttrs {
+            src = lib.fileset.toSource {
+              root = ./.;
+              fileset = lib.fileset.unions [
+                ./examples
+                ./include
+                ./python
+                ./tests
+                ./CMakeLists.txt
+                ./package.xml
+                ./pyproject.toml
+              ];
             };
+          };
         };
-    };
+        perSystem =
+          { pkgs, self', ... }:
+          {
+            packages = {
+              default = self'.packages.colmpc;
+              colmpc = pkgs.python3Packages.colmpc.override { standalone = false; };
+            };
+          };
+      }
+    );
 }
