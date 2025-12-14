@@ -61,11 +61,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1764471654,
-        "narHash": "sha256-+NJdpWqgjBTqaYAI79Ne2c5Jd1KlRfGlPqq2Y+xChXs=",
+        "lastModified": 1765613884,
+        "narHash": "sha256-/kuN0F5qciGkWMNlroG8ecq91DEDNy75gYe0lTueqRc=",
         "owner": "gepetto",
         "repo": "nix",
-        "rev": "758268eaeeb5b70fb586080d5a55496a4f83f2b0",
+        "rev": "a6b0691748591a6ae5e07dbbc5abd94ab97cdfa1",
         "type": "github"
       },
       "original": {
@@ -80,11 +80,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1764436969,
-        "narHash": "sha256-jGf6ilFTbGR7TVe/isunXDTMnIj4pMcVutqe+r2GZDw=",
+        "lastModified": 1764665924,
+        "narHash": "sha256-ncGeWPiK6BawJdDZc0ugfeG2yPIGAYsdOFwpXBZ193k=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "a63afe36c70182c32be8d183465147a9de55b394",
+        "rev": "804d2ee3fd89898fb7b1a02952aa5682e9725ce4",
         "type": "github"
       },
       "original": {
@@ -174,11 +174,11 @@
     "src-agimus-controller": {
       "flake": false,
       "locked": {
-        "lastModified": 1762802227,
-        "narHash": "sha256-3zoexliRe6DYmk3EPmfi1eD6FiE7UY/qIo1P2x4Xil4=",
+        "lastModified": 1764844076,
+        "narHash": "sha256-GFsuPVDy3TBwTRkDCMn+VcTYN7JQ5zlpSFfxUgAmnkc=",
         "owner": "agimus-project",
         "repo": "agimus_controller",
-        "rev": "94c6fda89acf0971636e66ba978189b4b57bbdb0",
+        "rev": "95aac68307eab0ec1a85b255b33e79868d53914c",
         "type": "github"
       },
       "original": {
