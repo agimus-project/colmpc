@@ -42,7 +42,7 @@ jobs:
 
       - name: Build Docker image
         if: ${{ (github.ref != 'refs/heads/main') && !startsWith(github.event.ref, 'refs/tags/v') }}
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./docker/base.Dockerfile
@@ -51,7 +51,7 @@ jobs:
 
       - name: Build and Push Docker image
         if: ${{ (github.ref == 'refs/heads/main') || startsWith(github.event.ref, 'refs/tags/v') }}
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ./docker/base.Dockerfile
