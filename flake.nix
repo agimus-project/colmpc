@@ -15,35 +15,26 @@
     inputs.flake-parts.lib.mkFlake { inherit inputs; } (
       { lib, ... }:
       {
-        systems = [ "x86_64-linux" ];
+        systems = import inputs.systems;
         imports = [
           inputs.gazebros2nix.flakeModule
           {
-            gazebros2nix = {
-              packages = {
-                colmpc = _final: {
-                  src = lib.fileset.toSource {
-                    root = ./.;
-                    fileset = lib.fileset.unions [
-                      ./examples
-                      ./include
-                      ./python
-                      ./tests
-                      ./CMakeLists.txt
-                      ./package.xml
-                      ./pyproject.toml
-                    ];
-                  };
-                };
+            gazebros2nix.overrides.colmpc = _final: {
+              src = lib.fileset.toSource {
+                root = ./.;
+                fileset = lib.fileset.unions [
+                  ./examples
+                  ./include
+                  ./python
+                  ./tests
+                  ./CMakeLists.txt
+                  ./package.xml
+                  ./pyproject.toml
+                ];
               };
             };
           }
         ];
-        perSystem =
-          { pkgs, ... }:
-          {
-            packages.default = pkgs.python3Packages.colmpc;
-          };
       }
     );
 }
