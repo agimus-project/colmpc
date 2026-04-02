@@ -222,6 +222,10 @@
           "gazebros2nix",
           "flake-parts"
         ],
+        "flakoboros": [
+          "gazebros2nix",
+          "flakoboros"
+        ],
         "gazebros2nix": "gazebros2nix",
         "nix-ros-overlay": [
           "gazebros2nix",
