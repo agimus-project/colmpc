@@ -8,6 +8,8 @@
 #define COLMPC_RESIDUAL_HXX_
 #ifdef PINOCCHIO_WITH_HPP_FCL
 
+#include <pinocchio/collision/fcl-pinocchio-conversions.hpp>
+
 #include "colmpc/residual-distance-collision.hpp"
 
 namespace colmpc {
@@ -110,7 +112,7 @@ void ResidualDistanceCollisionTpl<Scalar>::calcDiff(
       (d->J1.template topRows<3>() - d->J2.template topRows<3>());
 }
 template <typename Scalar>
-std::shared_ptr<ResidualDataAbstractTpl<Scalar> >
+std::shared_ptr<ResidualDataAbstractTpl<Scalar>>
 ResidualDistanceCollisionTpl<Scalar>::createData(
     DataCollectorAbstract* const data) {
   return std::allocate_shared<Data>(Eigen::aligned_allocator<Data>(), this,

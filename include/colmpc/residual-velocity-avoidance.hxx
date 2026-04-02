@@ -15,6 +15,8 @@
                                    << " Has to be positive!");           \
   }
 
+#include <pinocchio/collision/fcl-pinocchio-conversions.hpp>
+
 #include "colmpc/residual-velocity-avoidance.hpp"
 
 namespace colmpc {
@@ -318,7 +320,7 @@ void ResidualModelVelocityAvoidanceTpl<Scalar>::calcDiff(
   data->Rx = d->ddistdot_dq_val.transpose();
 }
 template <typename Scalar>
-std::shared_ptr<ResidualDataAbstractTpl<Scalar> >
+std::shared_ptr<ResidualDataAbstractTpl<Scalar>>
 ResidualModelVelocityAvoidanceTpl<Scalar>::createData(
     DataCollectorAbstract* const data) {
   return std::allocate_shared<Data>(Eigen::aligned_allocator<Data>(), this,
