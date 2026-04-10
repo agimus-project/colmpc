@@ -17,6 +17,7 @@
           inputs.gepetto.flakeModule
           {
             flakoboros = {
+              extraDevPyPackages = [ "colmpc" ];
               overrideAttrs.colmpc = _: {
                 src = lib.fileset.toSource {
                   root = ./.;
