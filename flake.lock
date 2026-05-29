@@ -199,11 +199,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779588828,
-        "narHash": "sha256-tzd0NGhfL3pNoVnyDhmBXt6z4CeRRU3971bwkPfo73M=",
+        "lastModified": 1779992262,
+        "narHash": "sha256-snAb4ERvTrGTLOUUxI+rgLMfyfZBhTts8akLsIdsn84=",
         "owner": "gepetto",
         "repo": "nix",
-        "rev": "6eb994f00ac907082049c48e7edee3ea42183a0f",
+        "rev": "c08c9eb0e5cb34fd604752d50eb862dae788007f",
         "type": "github"
       },
       "original": {
