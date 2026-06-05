@@ -22,7 +22,7 @@
 #include <pinocchio/algorithm/frames.hpp>
 #include <pinocchio/algorithm/geometry.hpp>
 #include <pinocchio/algorithm/jacobian.hpp>
-#include <pinocchio/multibody/fcl.hpp>
+#include <pinocchio/multibody/coal.hpp>
 
 #include "crocoddyl/core/utils/exception.hpp"
 

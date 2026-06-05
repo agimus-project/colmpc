@@ -8,7 +8,7 @@
 #define COLMPC_RESIDUAL_HXX_
 #ifdef PINOCCHIO_WITH_HPP_FCL
 
-#include <pinocchio/collision/fcl-pinocchio-conversions.hpp>
+#include <pinocchio/collision/coal-pinocchio-conversions.hpp>
 
 #include "colmpc/residual-distance-collision.hpp"
 

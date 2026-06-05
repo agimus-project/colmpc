@@ -15,7 +15,7 @@
                                    << " Has to be positive!");           \
   }
 
-#include <pinocchio/collision/fcl-pinocchio-conversions.hpp>
+#include <pinocchio/collision/coal-pinocchio-conversions.hpp>
 
 #include "colmpc/residual-velocity-avoidance.hpp"
 
