@@ -97,11 +97,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1781324212,
-        "narHash": "sha256-lqIEMqeuJ450S7JdWTo8JjF3YlahGNR2FCz/AlA9ZhM=",
+        "lastModified": 1782042109,
+        "narHash": "sha256-oDCl/rcvJVTcf6G2ag3YdZSMHDVBBmoXTysY5yzq+Dk=",
         "owner": "gepetto",
         "repo": "flakoboros",
-        "rev": "78aa318051a5345d82931df66c5c8d0844edcb2a",
+        "rev": "fc7d44063fa05f1a78c97c63b124c1da2862331c",
         "type": "github"
       },
       "original": {
@@ -133,6 +133,12 @@
         ],
         "pyproject-build-systems": "pyproject-build-systems",
         "pyproject-nix": "pyproject-nix",
+        "rosdistro": [
+          "gepetto",
+          "gazebros2nix",
+          "nix-ros-overlay",
+          "rosdistro"
+        ],
         "systems": [
           "gepetto",
           "gazebros2nix",
@@ -148,11 +154,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1781963444,
-        "narHash": "sha256-9fEMuyYVv+XP3wFU96VeFXyW3QnKnd+yraiEZ1wNB+o=",
+        "lastModified": 1782566589,
+        "narHash": "sha256-vXVLP31bnnk8KUBUV88Ms2R6P06wdQPZzsXgR6iZ5FI=",
         "owner": "gepetto",
         "repo": "gazebros2nix",
-        "rev": "99bd58c3c661a0997b553e0cb41891e1e79e1b5c",
+        "rev": "6e51068e9e9fec8e960f68911127ad64b417bf6b",
         "type": "github"
       },
       "original": {
@@ -199,11 +205,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1782022209,
-        "narHash": "sha256-m/jD09jikMQow8c22ffcNtrbtj2mQLIBgBbZV+e24ro=",
+        "lastModified": 1782629166,
+        "narHash": "sha256-O5VYnyYxzBcL767XrfhJxJr9P7mDPWLecfwgNMjXchI=",
         "owner": "gepetto",
         "repo": "nix",
-        "rev": "833937d012afb6185123622bf654031999b4aa08",
+        "rev": "5038bcd2dd04557299f8cc3e980c8e0b4107de3e",
         "type": "github"
       },
       "original": {
@@ -265,11 +271,11 @@
         "rosdistro": "rosdistro"
       },
       "locked": {
-        "lastModified": 1781297240,
-        "narHash": "sha256-OpYxlrSlcqJyknjgIuvv8dtEEbHuuZoe+fJzclrBgmg=",
+        "lastModified": 1781900693,
+        "narHash": "sha256-4KFk+S9ZbMonItYsdPtZjwESsgrCEpXGDa6rosDxLGs=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "9e9b9a2953a195985e1e6c99e353fbb767380a2d",
+        "rev": "fb296510db68c2e760980ab8c6daf6ded9060213",
         "type": "github"
       },
       "original": {
@@ -380,11 +386,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781807804,
-        "narHash": "sha256-04KFQME8sE1LSywNiYS1B6Ucf5rEiUD7/vxwFMgooXU=",
+        "lastModified": 1782093830,
+        "narHash": "sha256-6gmEVe69+KlRkZD4PEEV5xAlB9CB0Y9TiuEgQjDrKTQ=",
         "owner": "pyproject-nix",
         "repo": "build-system-pkgs",
-        "rev": "b84e03a7870c66033d309e0e00abd513e2299627",
+        "rev": "430680a19bc85a3bda55f12e4cc1a1aadcf2e478",
         "type": "github"
       },
       "original": {
@@ -402,11 +408,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1781812259,
-        "narHash": "sha256-uRqDouxg3b0EuOHQd1HhmFZouHebM7pz+H6EWAXd3FM=",
+        "lastModified": 1782089418,
+        "narHash": "sha256-LRD1SuQWr49fGq3A+8GLXfsLE2xqIpQA440YDZwms3M=",
         "owner": "pyproject-nix",
         "repo": "pyproject.nix",
-        "rev": "d9847acff422152a03764fd60c96ae0dd9f9fa73",
+        "rev": "43f0b40edd0a74c63f66b7b48d969ae6b740d611",
         "type": "github"
       },
       "original": {
@@ -431,11 +437,11 @@
     "rosdistro": {
       "flake": false,
       "locked": {
-        "lastModified": 1780665549,
-        "narHash": "sha256-QzobMKNpcpS4uWETzPxXkt0F66Sji15N+xsK1JcEWDU=",
+        "lastModified": 1781238695,
+        "narHash": "sha256-Sk8KQa9ryFrkdGGZ64sNdqoVqiGmC+IAAi3qzE7zn8s=",
         "owner": "ros",
         "repo": "rosdistro",
-        "rev": "bcec45c05427f0ad6860cb323695995d8cb1e4bd",
+        "rev": "a0e7ccc6f866a081acc0656d9cd03cda7acc6853",
         "type": "github"
       },
       "original": {
