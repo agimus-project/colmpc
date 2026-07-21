@@ -16,30 +16,24 @@ option(
 # Project configuration
 set(PROJECT_USE_CMAKE_EXPORT TRUE)
 
-    find_package(jrl-cmakemodules QUIET CONFIG)
-    if(jrl-cmakemodules_FOUND)
-        get_property(
-            JRL_CMAKE_MODULES
-            TARGET jrl-cmakemodules::jrl-cmakemodules
-            PROPERTY INTERFACE_INCLUDE_DIRECTORIES
-        )
-        message(
-            STATUS
-            "JRL cmakemodules found on system at ${JRL_CMAKE_MODULES}"
-        )
-    else()
-        message(STATUS "JRL cmakemodules not found. Let's fetch it.")
-        include(FetchContent)
-        FetchContent_Declare(
-            "jrl-cmakemodules"
-            GIT_REPOSITORY "https://github.com/jrl-umi3218/jrl-cmakemodules.git"
-        )
-        FetchContent_MakeAvailable("jrl-cmakemodules")
-        FetchContent_GetProperties(
-            "jrl-cmakemodules"
-            SOURCE_DIR JRL_CMAKE_MODULES
-        )
-    endif()
+find_package(jrl-cmakemodules QUIET CONFIG)
+if(jrl-cmakemodules_FOUND)
+    get_property(
+        JRL_CMAKE_MODULES
+        TARGET jrl-cmakemodules::jrl-cmakemodules
+        PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+    )
+    message(STATUS "JRL cmakemodules found on system at ${JRL_CMAKE_MODULES}")
+else()
+    message(STATUS "JRL cmakemodules not found. Let's fetch it.")
+    include(FetchContent)
+    FetchContent_Declare(
+        "jrl-cmakemodules"
+        GIT_REPOSITORY "https://github.com/jrl-umi3218/jrl-cmakemodules.git"
+    )
+    FetchContent_MakeAvailable("jrl-cmakemodules")
+    FetchContent_GetProperties("jrl-cmakemodules" SOURCE_DIR JRL_CMAKE_MODULES)
+endif()
 
 # JRL-cmakemodule setup
 include("${JRL_CMAKE_MODULES}/base.cmake")
