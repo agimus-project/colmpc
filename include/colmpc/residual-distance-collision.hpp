@@ -203,6 +203,9 @@ struct ResidualDataDistanceCollisionTpl
 
   pinocchio::SE3 oMg_id_1;
   pinocchio::SE3 oMg_id_2;
+
+  double dist_threshold = 0.08;  // compute derivatives only if collision
+                                 // distance is below threshold
 };
 
 }  // namespace colmpc
