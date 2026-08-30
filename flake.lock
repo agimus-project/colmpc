@@ -21,11 +21,11 @@
         "nixpkgs-lib": "nixpkgs-lib"
       },
       "locked": {
-        "lastModified": 1785627969,
-        "narHash": "sha256-4dtXQk/NMePegK/nWp5NSeuZKLATItOq61lpEvmXqGw=",
+        "lastModified": 1787559586,
+        "narHash": "sha256-onL0VLf9vPllmT0H/OlURIU5r5t5WIEl7t4tVNKT0Nw=",
         "owner": "hercules-ci",
         "repo": "flake-parts",
-        "rev": "427bf4bd9435fdf21321c8cc628c24efc14c0f7a",
+        "rev": "9d0d87172c374f89da73c1cfe6d81ae62feac1f1",
         "type": "github"
       },
       "original": {
@@ -97,11 +97,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1787681867,
-        "narHash": "sha256-EDS+athZryaXoyyaSGx2CAFubiHjBBv091aO7fWmsQs=",
+        "lastModified": 1787985137,
+        "narHash": "sha256-/pMdG2dw302xs5xJLRWlUVx9jQLOfYuR4ZC1EWqAm+A=",
         "owner": "gepetto",
         "repo": "flakoboros",
-        "rev": "c9263824f07efad4ca8c158c70b0314866bbb4e8",
+        "rev": "acbaf927ab48add4054dce93eb006065de630d1c",
         "type": "github"
       },
       "original": {
@@ -151,11 +151,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787690521,
-        "narHash": "sha256-uFx+F0eEMLfMVB/2ZLioVsf1S6lLqVkPOVt0HvfWjlQ=",
+        "lastModified": 1788026556,
+        "narHash": "sha256-ERbA903Irad2sFEN4jfJfALmyjimyYlnyTNrHCsgSF8=",
         "owner": "gepetto",
         "repo": "gazebros2nix",
-        "rev": "9b81b5a9e2d5230dbf43c50393326e4b8739dbcd",
+        "rev": "cd79ce2406b72acc43d63e407741246e712f446b",
         "type": "github"
       },
       "original": {
@@ -203,11 +203,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787924448,
-        "narHash": "sha256-jdLE5j0NCOpACtyIQa9r2JWrgrxoP0ZWTQ4gDoDPKMI=",
+        "lastModified": 1788056747,
+        "narHash": "sha256-ObCvPuUtNfn2fXQIvBmqjzzoGzIwbY5fB7P7l3Opfh0=",
         "owner": "gepetto",
         "repo": "nix",
-        "rev": "497becbcf9476995d178460bd0be66f438d0d5e9",
+        "rev": "3895ebd60dbc2dd093e8fdc16a9a4da8749afc0c",
         "type": "github"
       },
       "original": {
@@ -248,11 +248,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787680808,
-        "narHash": "sha256-9168tNt0NZdtlx5RM5huEuc9NCWMLACJA9O4UK/l2Zc=",
+        "lastModified": 1787797243,
+        "narHash": "sha256-8+Q7NOB7RPajRjA4pbCDLzqH+MTjnG9x6LUPLfL2joA=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "6840c9a8f50722944eb106ce8bb237c138584f2a",
+        "rev": "99c9ec63390f1d8c14d95d9e8b17cc29cfbd4e11",
         "type": "github"
       },
       "original": {
@@ -268,11 +268,11 @@
         "rosdistro": "rosdistro"
       },
       "locked": {
-        "lastModified": 1787294587,
-        "narHash": "sha256-chIbMlZqzwOyd4SJicJmHG3xmaUlC+7ZQ58yXHXWTrI=",
+        "lastModified": 1787891438,
+        "narHash": "sha256-gOEPcNZraMsG1s/hfjhXMPLR4EZv7e/1eqhaaWq6aDI=",
         "owner": "lopsided98",
         "repo": "nix-ros-overlay",
-        "rev": "9c3b7c38f1084cfff014c41f304d22a618d1def9",
+        "rev": "474dde7872a9bb93a6bfc05855d17c90f41d23f0",
         "type": "github"
       },
       "original": {
@@ -336,11 +336,11 @@
     },
     "nixpkgs-update": {
       "locked": {
-        "lastModified": 1787498568,
-        "narHash": "sha256-9i/VTdusq/+NM/tz+J1Re+ojkMB8MBf0QshnYfzHz30=",
+        "lastModified": 1787900134,
+        "narHash": "sha256-VYXO0XZlgj06dxJZRhrD3WoSsvq/c7+/Akyoa22pefw=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "56c02bc00adcf003215cc4bd996d6efaf4cff188",
+        "rev": "83199d0d373dd3ac2b9a1996b1d0263f76ab7a4c",
         "type": "github"
       },
       "original": {
@@ -396,11 +396,11 @@
     "rosdistro": {
       "flake": false,
       "locked": {
-        "lastModified": 1786735438,
-        "narHash": "sha256-rxCA2+gTQYkpngm9cY3s9gTNtStPbzlts0U3HuTtarg=",
+        "lastModified": 1787326473,
+        "narHash": "sha256-IQOaqN/0BtAmas5MHvo1NTAlEOSzMxcIIm35pqLM8ZU=",
         "owner": "ros",
         "repo": "rosdistro",
-        "rev": "b045bb798698b128867db5a3a81e515ecf32d38e",
+        "rev": "82eefa281fd5702f1869408c66606d395cd635ee",
         "type": "github"
       },
       "original": {
